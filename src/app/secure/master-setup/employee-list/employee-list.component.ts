@@ -15,7 +15,7 @@ import { MasterService } from '../service/master.service';
 })
 export class EmployeeListComponent implements OnInit {
 
-  public columnsToBeDisplayed: string[] = ["empCode", "firstName", "middleName", "lastName", "status", "emailId", "action"];
+  public columnsToBeDisplayed: string[] = ["empCode", "firstName", "lastName", "status", "designation.name", "emailId", "action"];
   public limit: number = 10;
   public offset: number = 0;
   public orgId: any = 1;

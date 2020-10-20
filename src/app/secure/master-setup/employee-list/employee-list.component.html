@@ -37,17 +37,6 @@
                                     </mat-label>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="middleName">
-                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                                    Middle Name
-                                </th>
-                                <td mat-cell *matCellDef="let element">
-                                    <mat-label
-                                        [matTooltip]="element && element.middleName ? element.middleName : '-'">
-                                        {{element && element.middleName ? element.middleName : '-'}}
-                                    </mat-label>
-                                </td>
-                            </ng-container>
                             <ng-container matColumnDef="lastName">
                                 <th mat-header-cell mat-sort-header *matHeaderCellDef>
                                     Last Name
@@ -67,6 +56,17 @@
                                     <mat-label
                                         [matTooltip]="statusMap[element.status]">
                                         {{statusMap[element.status]}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="designation.name">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Designation
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-label
+                                        [matTooltip]="element && element.designation ? element.designation.name : '-'">
+                                        {{element && element.designation ? element.designation.name : '-'}}
                                     </mat-label>
                                 </td>
                             </ng-container>
