@@ -1,0 +1,237 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12 col-md-12">
+            <div class="row">
+                <div class="col-xl-9 col-md-9 col-9 pt-2 pb-2 pl-3 pr-3 d-flex">
+                    <strong>Employee Detail</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 pt-3 pb-1 b-c">
+            <form [formGroup]="employeeForm">
+                <div class="row">
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <div class="row ">
+                            <div class="col-xl-12">
+                                <label for="file-input" class="d-bk">
+                                    <img src={{photo}} />
+                                </label>
+                                <input type="file" accept=".png,.jpeg,.jpg,.gif,.img" style="display:none"
+                                    id="file-input" (change)="uploadPhoto($event)" required>
+                                <mat-error
+                                    matTooltip="{{getErrorMessage(employeeForm.controls.firstName,'employee','firstName')}}"
+                                    *ngIf="employeeForm.controls.imagePath.invalid && employeeForm.controls.imagePath.touched">
+                                    {{getErrorMessage(employeeForm.controls.imagePath,'employee','imagePath')}}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2"
+                        *ngIf="employeeForm.controls.id.value != 0">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Employee Code</mat-label>
+                            <input matInput type="text" formControlName="empCode" required="true" readonly="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.empCode.invalid && employeeForm.controls.empCode.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.empCode,'employee','empCode')}}">
+                                {{getErrorMessage(employeeForm.controls.empCode,'employee','empCode')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>First Name</mat-label>
+                            <input matInput type="text" formControlName="firstName" required="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.firstName.invalid && employeeForm.controls.firstName.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.firstName,'employee','firstName')}}">
+                                {{getErrorMessage(employeeForm.controls.firstName,'employee','firstName')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Middle Name</mat-label>
+                            <input matInput type="text" formControlName="middleName" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.middleName.invalid && employeeForm.controls.middleName.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.middleName,'employee','middleName')}}">
+                                {{getErrorMessage(employeeForm.controls.middleName,'employee','middleName')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput type="text" formControlName="lastName" required="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.lastName.invalid && employeeForm.controls.lastName.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.lastName,'employee','lastName')}}">
+                                {{getErrorMessage(employeeForm.controls.lastName,'employee','lastName')}}</span>
+                        </label>
+                    </div>
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-label>Status</mat-label>
+                        <ng-select [items]="statusList" placeholder="Status *" formControlName="status" bindLabel="name"
+                            bindValue="value" [searchable]="true" [clearable]="false" required="true"
+                            [closeOnSelect]="true">
+                        </ng-select>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.status.invalid && employeeForm.controls.status.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.status,'employee','status')}}">
+                                {{getErrorMessage(employeeForm.controls.status,'employee','status')}}</span>
+                        </label>
+                    </div>
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-label>Role</mat-label>
+                        <ng-select [items]="roleMasterList" placeholder="Role *" formControlName="roleMaster" bindLabel="name"
+                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                            [closeOnSelect]="true">
+                        </ng-select>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.roleMaster.invalid && employeeForm.controls.roleMaster.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.roleMaster,'employee','roleMaster')}}">
+                                {{getErrorMessage(employeeForm.controls.roleMaster,'employee','roleMaster')}}</span>
+                        </label>
+                    </div>
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field>
+                            <mat-label>Date of Joining</mat-label>
+                            <input matInput [matDatepicker]="dateOfJoining" readonly="true" required="true"
+                                [max]="currentDate" formControlName="dateOfJoining">
+                            <mat-datepicker-toggle matSuffix [for]="dateOfJoining">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #dateOfJoining></mat-datepicker>
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.dateOfJoining.invalid && employeeForm.controls.dateOfJoining.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.dateOfJoining,'employee','dateOfJoining')}}">
+                                {{getErrorMessage(employeeForm.controls.dateOfJoining,'employee','dateOfJoining')}}</span>
+                        </label>
+                    </div>
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mobile Number</mat-label>
+                            <input matInput type="text" formControlName="mobileNumber" required="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.mobileNumber.invalid && employeeForm.controls.mobileNumber.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.mobileNumber,'employee','mobileNumber')}}">
+                                {{getErrorMessage(employeeForm.controls.mobileNumber,'employee','mobileNumber')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Email Id</mat-label>
+                            <input matInput type="text" formControlName="emailId" (change)="checkEmailIdIfAlreadyExistsOrNot()" required="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.emailId.invalid && employeeForm.controls.emailId.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.emailId,'employee','emailId')}}">
+                                {{getErrorMessage(employeeForm.controls.emailId,'employee','emailId')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Address Line 1</mat-label>
+                            <input matInput type="text" formControlName="addressLine1" required="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.addressLine1.invalid && employeeForm.controls.addressLine1.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.addressLine1,'employee','addressLine1')}}">
+                                {{getErrorMessage(employeeForm.controls.addressLine1,'employee','addressLine1')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Address Line 2</mat-label>
+                            <input matInput type="text" formControlName="addressLine2" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.addressLine2.invalid && employeeForm.controls.addressLine2.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.addressLine2,'employee','addressLine2')}}">
+                                {{getErrorMessage(employeeForm.controls.addressLine2,'employee','addressLine2')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-label>Country</mat-label>
+                        <ng-select [items]="countryList" (change)="getStateListByCountryId()" placeholder="Country *" formControlName="country" bindLabel="name"
+                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                            [closeOnSelect]="true">
+                        </ng-select>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.country.invalid && employeeForm.controls.country.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.country,'employee','country')}}">
+                                {{getErrorMessage(employeeForm.controls.country,'employee','country')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-label>State</mat-label>
+                        <ng-select [items]="stateList" (change)="getCityListByStateId()" placeholder="State *" formControlName="state" bindLabel="name"
+                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                            [closeOnSelect]="true">
+                        </ng-select>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.state.invalid && employeeForm.controls.state.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.state,'employee','state')}}">
+                                {{getErrorMessage(employeeForm.controls.state,'employee','state')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-label>City</mat-label>
+                        <ng-select [items]="cityList" placeholder="City *" formControlName="city" bindLabel="name"
+                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                            [closeOnSelect]="true">
+                        </ng-select>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.city.invalid && employeeForm.controls.city.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.city,'employee','city')}}">
+                                {{getErrorMessage(employeeForm.controls.city,'employee','city')}}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>PINCODE</mat-label>
+                            <input matInput type="text" formControlName="pincode" required="true" />
+                        </mat-form-field>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.pincode.invalid && employeeForm.controls.pincode.touched">
+                            <span matTooltip="{{getErrorMessage(employeeForm.controls.pincode,'employee','pincode')}}">
+                                {{getErrorMessage(employeeForm.controls.pincode,'employee','pincode')}}</span>
+                        </label>
+                    </div>
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-right pt-2 pb-2">
+                        <button *ngIf="action == 'add'" (click)="saveEmployee()" matTooltip="Save" type="button"
+                            mat-raised-button>Save</button>
+                        <button *ngIf="action == 'edit'" (click)="updateEmployee()" matTooltip="Update" type="button"
+                            mat-raised-button>Update</button>
+                        <button (click)="closePopUp()" matTooltip="Close" type="button" mat-raised-button>Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

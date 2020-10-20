@@ -1,0 +1,84 @@
+<div class="container-fluid">
+    <div class="row btn-heading">
+        <div class="col-xl-6 col-md-6 col-sm-6 col-6 pt-2">
+            <strong>Role Master</strong>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-6 col-6">
+            <button class="e-b mr-2" matTooltip="Add" class="button-right" (click)="openPopUp(0, 'add')">Add</button>
+        </div>
+    </div>
+    <div class="row plr-15">
+        <div class="col-md-12 col-lg-12 col-sm-12 pb-3 bg-white">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="table-responsive">
+                        <table mat-table matSort [dataSource]="roleList" class="mat-elevation-z8" (matSortChange)="sortData($event)"
+                            style="width: 100%">
+                            <tr mat-header-row *matHeaderRowDef="columnsToBeDisplayed;sticky :true"></tr>
+                            <tr mat-row-responsive mat-row *matRowDef="let row; columns: columnsToBeDisplayed;"></tr>
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Name
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-label [matTooltip]="element && element.name ? element.name : '-'">
+                                        {{element && element.name ? element.name : '-'}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                                    Description
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-label
+                                        [matTooltip]="element && element.description ? element.description : '-'">
+                                        {{element && element.description ? element.description : '-'}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div>
+                                        <div>
+                                            Action
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button class="e-b mr-2" (click)="openPopUp(element.id, 'edit')">Edit</button> &nbsp; 
+                                    <button class="e-b mr-2" (click)="openPopUp(element.id, 'delete')">Delete</button>
+                                </td>
+                            </ng-container>
+                        </table>
+                        <div *ngIf="roleList.length===0" class="no-records">
+                            <b>No record found</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <mat-paginator [length]="limit" [pageSize]="offset + 1">
+            </mat-paginator> -->
+
+            <ng-container>
+                <div class="row" *ngIf="roleList.length> 0">
+                    <div class="col-xl-7 col-md-6 col-sm-6 col-12 button-right pt-2">
+                        <div class="pagination shadow">
+                            <button (click)="pageChanges(0)" class="border-right" [disabled]="selectedPage==0"><i
+                                    class="fas fa-angle-double-left"></i></button>
+                            <button class="border-right" (click)="pageChanges(selectedPage-1)"
+                                [disabled]="selectedPage==0">Prev</button>
+                            <button class="page-no" *ngFor="let p of (totalPage | pagination: selectedPage)"
+                                (click)="pageChanges(p)" [ngClass]="{'active':p==selectedPage}"
+                                [disabled]="selectedPage == p"><label>{{p+1}}</label></button>
+                            <button class="border-right border-left" (click)="pageChanges(selectedPage+1)"
+                                [disabled]="selectedPage==(totalPage-1)">Next</button>
+                            <button (click)="pageChanges(totalPage-1)" [disabled]="selectedPage==(totalPage-1)"><i
+                                    class="fas fa-angle-double-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

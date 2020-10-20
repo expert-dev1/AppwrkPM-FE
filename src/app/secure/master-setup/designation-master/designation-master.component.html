@@ -1,0 +1,35 @@
+<h2>Designation</h2>
+<form [formGroup]="designationForm">
+    <div class="input-group">
+        <div class="col-xl-4 col-md-4 pb-3">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" formControlName="name" required="true" />
+            </mat-form-field>
+            <label class="ng-error mat-error"
+                *ngIf="designationForm.controls.name.invalid && designationForm.controls.name.touched">
+                <span matTooltip="{{getErrorMessage(designationForm.controls.name,'designation','name')}}">
+                    {{getErrorMessage(designationForm.controls.name,'designation','name')}}</span>
+            </label>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4 pb-3">
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+        </mat-form-field>
+        <label class="ng-error mat-error"
+            *ngIf="designationForm.controls.description.invalid && designationForm.controls.description.touched">
+            <span matTooltip="{{getErrorMessage(designationForm.controls.designationForm,'designation','description')}}">
+                {{getErrorMessage(designationForm.controls.description,'designation','description')}}</span>
+        </label>
+    </div>
+    <div class="row text-right">
+        <button *ngIf="action =='add'" (click)="save()" matTooltip="Save" type="button" mat-raised-button>Save</button>
+        &nbsp;
+        <button *ngIf="action =='edit'" (click)="update()" matTooltip="Save" type="button"
+            mat-raised-button>Update</button> &nbsp;
+        &nbsp;
+        <button (click)="close()" matTooltip="Close" type="button" mat-raised-button>Cancel</button>
+    </div>
+</form>

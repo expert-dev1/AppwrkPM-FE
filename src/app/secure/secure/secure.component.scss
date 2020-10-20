@@ -1,0 +1,17 @@
+.mainDiv {
+    width: 100%;
+    display: flex;
+    border: 1px solid balck;
+}
+
+.sidebarDiv {
+    
+ 
+    width: 200px;
+}
+
+.dynamicConDiv {
+    width: calc(100% - 200px);
+    margin: 2%;
+    border: 1px solid black;
+}

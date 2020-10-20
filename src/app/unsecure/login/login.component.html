@@ -1,0 +1,46 @@
+<div class="col-md-12">
+    <div class="card card-container">
+        <div class="col-xl-12 text-center pb-2">
+            <h6 class="m-0 pb-2">Welcome to APPWRK</h6>
+            <label>Enter your details below to continue.</label>
+        </div>
+      <form [formGroup]="loginForm">
+        <div class="input-group">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <div class="col-xl-4 col-md-4 pb-3">
+            <mat-form-field appearance="outline">
+              <mat-label>User Name</mat-label>
+              <input matInput type="text" formControlName="userName" (keyup)="hideInvalidCredentailsMessageOnKeyUp()"
+                required="true" />
+            </mat-form-field>
+          
+          <label class="ng-error mat-error"
+            *ngIf="loginForm.controls.userName.invalid && loginForm.controls.userName.touched">
+            <span matTooltip="{{getErrorMessage(loginForm.controls.userName,'login','userName')}}">
+              {{getErrorMessage(loginForm.controls.userName,'login','userName')}}</span>
+          </label>
+        </div>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"
+            (keyup)="hideInvalidCredentailsMessageOnKeyUp()" required="true">
+          <mat-icon matTooltip="View" style="cursor: pointer; pointer-events: all;" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+          </mat-icon>
+        </mat-form-field>
+        <label class="ng-error mat-error"
+          *ngIf="loginForm.controls.password.invalid && loginForm.controls.password.touched">
+          <span matTooltip="{{getErrorMessage(loginForm.controls.password,'login','password')}}">
+            {{getErrorMessage(loginForm.controls.password,'login','password')}}</span>
+        </label>
+        <div class="row">
+          <button (click)="onSubmit()" matTooltip="Login" type="button" mat-raised-button>Login</button> &nbsp;
+          &nbsp;
+        </div>
+        <div class="col-xl-12 col-md-12 col-sm-12 col-12 pt-2" *ngIf="isLoginInvalid">
+          <label class="m-0 ng-error mat-error"><b>Waning : </b> Invalid login Credential. </label>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <router-outlet></router-outlet> -->
