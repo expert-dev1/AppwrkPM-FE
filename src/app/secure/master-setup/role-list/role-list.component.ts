@@ -39,11 +39,11 @@ export class RoleListComponent implements OnInit {
 
   getRoleListByOrgIdWithPagination() {
     this.masterService.getRoleListByOrgIdWithPagination(this.searchModel).subscribe(data => {
-      if (data) {
-        this.roleList = data.content.roles.rows;
-        this.limit =  data.content.limit;
-        this.offset =  data.content.currentPageNumber;
-        this.totalPage =  data.content.totalPages;
+      if (data && data.data && data.data.roleMasterList) {
+        this.roleList = data.data.roleMasterList.content;
+        this.limit =  data.data.roleMasterList.limit;
+        this.offset =  data.data.roleMasterList.currentPageNumber;
+        this.totalPage =  data.data.roleMasterList.totalPages;
         if (this.offset == 0) {
           this.selectedPage = this.offset;
         }
@@ -116,11 +116,11 @@ export class RoleListComponent implements OnInit {
         this.getRoleListByOrgIdWithPagination();
       }
     }, error => {
-      // if (error.error.message.includes("org.hibernate.exception.ConstraintViolationException")) {
-      //   this.toaster.error("Record in use.", "ERROR");
-      // } else {
+      if (error.error.message.includes("Cannot delete or update a parent row: a foreign key constraint fails")) {
+        this.toastr.error("Record in use.", "ERROR");
+      } else {
         console.log("Error in deleteing role master by Id : ", error.error.message);
-      // }
+      }
     });
   }
 }

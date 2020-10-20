@@ -51,8 +51,8 @@ export class RoleMasterComponent implements OnInit {
 
   getRoleMasterDeatilsById() {
     this.masterService.getRoleMasterDeatilsById(this.roleMasterForm.controls.id.value).subscribe(data => {
-      if (data) {
-        this.patchRoleMasterForm(data);
+      if (data && data.data && data.data.roleMaster) {
+        this.patchRoleMasterForm(data && data.data && data.data.roleMaster);
       }
     }, error => {
       console.log('Error in getting Role Master Details : ', error.error.message);
@@ -69,8 +69,7 @@ export class RoleMasterComponent implements OnInit {
   }
 
   markFormAsTouched() {
-    this.roleMasterForm.controls.name.markAsTouched();
-    this.roleMasterForm.controls.description.markAsTouched();
+    this.roleMasterForm.markAllAsTouched();
   }
 
   save() {
@@ -80,7 +79,7 @@ export class RoleMasterComponent implements OnInit {
       console.log('role master form : ', this.roleMasterForm.value);
       this.masterService.saveRoleMaster(this.roleMasterForm.value).subscribe(data => {
         console.log('data inside save : ', data);
-        if (data) {
+        if (data && data.data && data.data.roleMaster) {
           this.dialogRef.close({success: true, action: this.action} );
         }
       }, error => {
@@ -100,7 +99,7 @@ export class RoleMasterComponent implements OnInit {
       console.log('role master form : ', this.roleMasterForm.value);
       this.masterService.updateRoleMaster(this.roleMasterForm.value).subscribe(data => {
         console.log('data inside save : ', data);
-        if (data) {
+        if (data && data.data && data.data.roleMaster) {
           this.dialogRef.close({success: true, action: this.action} );
         }
       }, error => {

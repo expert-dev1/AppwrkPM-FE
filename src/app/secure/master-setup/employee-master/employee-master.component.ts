@@ -79,8 +79,8 @@ export class EmployeeMasterComponent implements OnInit {
   getRoleMasterListByOrgId() {
     if (this.orgId && this.orgId != undefined && this.orgId != null) {
       this.masterService.getRoleMasterListByOrgId(this.orgId).subscribe(data => {
-        if (data) {
-          this.roleMasterList = data.content.roles;
+        if (data && data.data && data.data.roleMasterList) {
+          this.roleMasterList = data.data.roleMasterList;
         }
       }, error => {
         console.log('error in fetching role master list inside employee master component : ', error);
@@ -91,8 +91,8 @@ export class EmployeeMasterComponent implements OnInit {
   getAllCountryList() {
     this.masterService.getAllCountryList().subscribe(data => {
       console.log('data inside coutry list : ', data);
-      if (data && data.length > 0) {
-        this.countryList = data;
+      if (data && data.data && data.data.countryList) {
+        this.countryList = data.data.countryList;
         // this.getStateListByCountryId();
       }
     }, error => {
@@ -109,8 +109,8 @@ export class EmployeeMasterComponent implements OnInit {
     if (countryId && countryId != null && countryId != undefined) {
       this.masterService.getStateListByCountryId(countryId).subscribe(data => {
         console.log('data inside state list : ', data);
-        if (data && data.length > 0) {
-          this.stateList = data;
+        if (data && data.data && data.data.stateList) {
+          this.stateList = data.data.stateList;
           // this.getCityListByStateId();
         }
       }, error => {
@@ -126,8 +126,8 @@ export class EmployeeMasterComponent implements OnInit {
     if (stateId && stateId != null && stateId != undefined) {
       this.masterService.getCityListByStateId(stateId).subscribe(data => {
         console.log('data inside city list : ', data);
-        if (data && data.length > 0) {
-          this.cityList = data;
+        if (data && data.data && data.data.cityList) {
+          this.cityList = data.data.cityList;
         }
       }, error => {
         console.log('Error in getting City list inside Employee Details : ', error.error.message);
@@ -144,7 +144,6 @@ export class EmployeeMasterComponent implements OnInit {
     if (emailId && emailId != undefined && emailId != null && emailId != '') {
       this.masterService.checkEmailIdOfEmployee(emailId).subscribe(data => {
         if (data && data.data && data.data.employee && data.data.employee != undefined && data.data.employee != null) {
-          console.log('data.data.employee : ', data.data.employee);
           this.employeeForm.controls.emailId.setErrors({"emailAlreadyRegistered": true});
           // this.employeeForm.controls.emailId.updateValueAndValidity();
         } else {
@@ -202,8 +201,8 @@ export class EmployeeMasterComponent implements OnInit {
   getEmployeeDeatilsById() {
     this.masterService.getEmployeeDeatilsById(this.employeeForm.controls.id.value).subscribe(data => {
       console.log('data inside get employee details : ', data);
-      if (data && data != undefined && data != null) {
-        this.patchEmployeeForm(data);
+      if (data && data.data && data.data.employee) {
+        this.patchEmployeeForm(data.data.employee);
       }
     }, error => {
       console.log('error inside get employee details by id : ', error);
