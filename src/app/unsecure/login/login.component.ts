@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
-import { ValidatorErrorMessages } from 'src/app/custom-validators/validators-error-message';
+import { ValidatorErrorMessages } from '../../core';
 
 @Component({
   selector: 'app-login',
@@ -21,9 +21,9 @@ export class LoginComponent implements OnInit {
     userName: ['', [Validators.required, Validators.maxLength(50)]],
     password: ['', [Validators.required, Validators.maxLength(50)]],
   });
-  
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, 
+
+  constructor(private formBuilder: FormBuilder, private authService: AuthService,
     private storageService: StorageService, private router: Router, private toaster: ToastrService) { }
 
   ngOnInit() {

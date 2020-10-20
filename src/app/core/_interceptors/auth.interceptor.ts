@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StorageService } from '../core/services/storage/storage.service';
+import { StorageService } from '../services/storage/storage.service';
 
 const TOKEN_HEADER_KEY = 'Authorization'; // for back-end(Spring Boot)
 
