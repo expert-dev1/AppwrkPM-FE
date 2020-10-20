@@ -112,7 +112,7 @@ export class DesignationListComponent implements OnInit {
   deleteDesignationById(designationId) {
     this.masterService.deleteDesignationById(designationId).subscribe(data => {
       console.log('data : ', data);
-      if (data) {
+      if (data && data.data && data.data.designation) {
         this.toastr.success("Record deleted successfully", "SUCCESS");
         this.getDesignationListByOrgIdWithPagination();
       }

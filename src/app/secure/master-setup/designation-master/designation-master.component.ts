@@ -51,8 +51,8 @@ export class DesignationMasterComponent implements OnInit {
 
   getDesignationDeatilsById() {
     this.masterService.getDesignationDeatilsById(this.designationForm.controls.id.value).subscribe(data => {
-      if (data) {
-        this.patchDesignationForm(data);
+      if (data && data.data && data.data.designation) {
+        this.patchDesignationForm(data.data.designation);
       }
     }, error => {
       console.log('Error in getting Designation Details : ', error.error.message);
@@ -77,7 +77,6 @@ export class DesignationMasterComponent implements OnInit {
       this.markFormAsTouched();
     } else {
       this.masterService.saveDesignation(this.designationForm.value).subscribe(data => {
-        console.log('data inside save : ', data);
         if (data && data.data && data.data.designation) {
           this.dialogRef.close({success: true, action: this.action} );
         }
@@ -97,7 +96,6 @@ export class DesignationMasterComponent implements OnInit {
       this.markFormAsTouched();
     } else {
       this.masterService.updateDesignation(this.designationForm.getRawValue()).subscribe(data => {
-        console.log('data inside save : ', data);
         if (data && data.data && data.data.designation) {
           this.dialogRef.close({success: true, action: this.action} );
         }
