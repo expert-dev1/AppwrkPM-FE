@@ -2,8 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { CustomValidator } from 'src/app/custom-validators/custom-validators';
-import { ValidatorErrorMessages } from 'src/app/custom-validators/validators-error-message';
+import { CustomValidator, ValidatorErrorMessages } from '../../../core';
 import { MasterService } from '../service/master.service';
 
 @Component({
@@ -189,12 +188,12 @@ export class EmployeeMasterComponent implements OnInit {
           this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-        
+
         if (error.message == 'EMAIL_ID_ALREADY_REGISTERED') {
           this.toaster.error("E-Mail Id Already Registered.", "ERROR");
         } else {
           console.log('Error in saving designation records : ', error.message);
-        }        
+        }
       })
     }
   }

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { ValidatorErrorMessages } from 'src/app/custom-validators/validators-error-message';
+import { ValidatorErrorMessages } from '../../../core';
 import { MasterService } from '../service/master.service';
 
 @Component({

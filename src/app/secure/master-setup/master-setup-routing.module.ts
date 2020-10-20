@@ -20,6 +20,10 @@ const routes: Routes = [
         path: 'designation',
         component: DesignationListComponent
       },
+      {
+        path: 'projects',
+        loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule)
+      },
     ]
   }
 ];

@@ -30,7 +30,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   declarations: [HeaderComponent, SidebarComponent, PaginationPipe],
   imports: [
     CommonModule,
-    SharedRoutingModule,NgSelectModule, FormsModule,
+    SharedRoutingModule, NgSelectModule, FormsModule,
     ReactiveFormsModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
   exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,

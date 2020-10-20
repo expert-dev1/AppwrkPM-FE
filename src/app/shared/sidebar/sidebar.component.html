@@ -1,8 +1,9 @@
 <div class="sidebar">
-  
+
     <a matTooltip="Role Master" [ngClass]="{'active':selectedItem == 'roles'}" (click)="setAction('roles','secure', 'masterSetup')">Role Master</a>
     <!-- <a matTooltip="Role Master" [ngClass]="{'active':selectedItem == 'permission'}" (click)="setAction('permission','secure', 'masterSetup')">Permission</a> -->
     <a matTooltip="Role Master" [ngClass]="{'active':selectedItem == 'designation'}"
       (click)="setAction('designation','secure', 'masterSetup')">Designation</a>
     <a matTooltip="Employee" [ngClass]="{'active':selectedItem == 'employee'}" (click)="setAction('employee','secure', 'masterSetup')">Employee</a>
+    <a matTooltip="Projects" [ngClass]="{'active':selectedItem == 'projects'}" routerLink="/secure/masterSetup/projects">Projects</a>
   </div>
