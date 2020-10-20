@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
-import { STATUS_MAP } from 'src/app/common/common-files/constants';
-import { ConfirmationComponent } from 'src/app/common/confirmation/confirmation.component';
-import { SearchModel } from 'src/app/common/models/search-model';
+import { STATUS_MAP } from 'src/app/core/modals/constant';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
+import { SearchModel } from 'src/app/shared/models/search-model';
 import { EmployeeMasterComponent } from '../employee-master/employee-master.component';
 import { MasterService } from '../service/master.service';
 

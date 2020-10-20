@@ -22,12 +22,13 @@ import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS } from '@angular/mat
 import { MatDatePickerAdapter, PICK_FORMATS } from './mat-date-picker-date-formats/mat-date-picker-format';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { PaginationPipe } from '../common/pipes/pagination.pipe';
 import { MatSortModule } from '@angular/material/sort';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { PaginationPipe } from './pipes/pagination.pipe';
 
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent, PaginationPipe],
+  declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe],
   imports: [
     CommonModule,
     SharedRoutingModule, NgSelectModule, FormsModule,
@@ -35,7 +36,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
   exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule, PaginationPipe, MatSelectModule, MatBadgeModule, MatSliderModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule,
-    NgSelectModule, FormsModule],
+    NgSelectModule, FormsModule, ConfirmationComponent],
   providers: [
     {
       provide: DateAdapter,

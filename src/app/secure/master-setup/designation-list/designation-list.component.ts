@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmationComponent } from 'src/app/common/confirmation/confirmation.component';
-import { SearchModel } from 'src/app/common/models/search-model';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
+import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
+import { SearchModel } from 'src/app/shared/models/search-model';
 import { DesignationMasterComponent } from '../designation-master/designation-master.component';
 import { MasterService } from '../service/master.service';
 
