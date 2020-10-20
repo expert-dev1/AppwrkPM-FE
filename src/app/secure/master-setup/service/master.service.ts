@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { MASTER_API } from 'src/app/urls';
+import { environment} from '../../../../environments/environment'
+const MASTER_API = environment.MASTER_API;
+
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -12,9 +14,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MasterService {
-  
+
   constructor(private http: HttpClient) { }
-  
+
   errorHandler(error) {
     console.log("error", error)
     try {
@@ -178,7 +180,7 @@ export class MasterService {
       }),
       catchError(this.errorHandler)
     );;
-  } 
+  }
 
   getDesignationListByOrgIdWithPagination(data): Observable<any> {
     let url = MASTER_API + 'designation/getDesignationListByOrgIdWithPage';
@@ -209,7 +211,7 @@ export class MasterService {
       catchError(this.errorHandler)
     );;
   }
-  
+
   saveDesignation(data): Observable<any> {
     let url = MASTER_API + 'designation';
     return this.http.post(url, data, httpOptions).pipe(
