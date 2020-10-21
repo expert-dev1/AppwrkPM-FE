@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MasterService {
-
+  
   constructor(private http: HttpClient) { }
 
   errorHandler(error) {
