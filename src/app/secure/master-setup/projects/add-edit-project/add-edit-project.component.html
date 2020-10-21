@@ -4,80 +4,94 @@
 
 
 <ng-template #mainLayout>
-  <form [formGroup]="projectForm" class="example-form">
-    <mat-form-field appearance="outline" class="example-full-width">
-      <mat-label>Project name</mat-label>
-      <input matInput>
-    </mat-form-field>
+  <form [formGroup]="projectForm" class="example-form row">
 
-    <div>
-      <mat-form-field appearance="outline" class="example-full-width">
-        <mat-label>Project start date</mat-label>
-        <input matInput [matDatepicker]="projectstartdate" readonly="true" required="true" [min]="currentDate"
-          formControlName="start_date">
-        <mat-datepicker-toggle matSuffix [for]="projectstartdate">
-        </mat-datepicker-toggle>
-        <mat-datepicker #projectstartdate></mat-datepicker>
-      </mat-form-field>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div>
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Project name</mat-label>
+          <input type="text" formControlName="name" matInput>
+          <mat-error *ngIf="projectForm.controls.name.invalid">
+            Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Project start date</mat-label>
+          <input matInput [matDatepicker]="projectstartdate" readonly="true" required="true" [min]="currentDate"
+            formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="projectstartdate">
+          </mat-datepicker-toggle>
+          <mat-datepicker #projectstartdate></mat-datepicker>
+          <mat-error *ngIf="projectForm.controls.startDate.invalid">
+            Start date is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Project type (upwork/linkedIn)</mat-label>
+          <mat-select  formControlName="platformTypeId">
+            <mat-option *ngFor="let type of platformList" value="{{type.id}}">{{type.name | titlecase}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="projectForm.controls.platformTypeId.invalid">
+            Project type is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <div>
+          <label id="example-radio-group-label">Project time</label>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+            formControlName="timeType">
+            <mat-radio-button class="example-radio-button" *ngFor="let status of projectTimeType"
+              [value]="status.value">
+              {{status.title}}
+            </mat-radio-button>
+            <mat-error *ngIf="projectForm.controls.timeType.invalid">
+              Project time type is <strong>required</strong>
+            </mat-error>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div *ngIf="projectForm.controls.timeType.value == 'FIXED'">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Amount</mat-label>
+          <input  formControlName="amount" matInput type="number">
+        </mat-form-field>
+      </div>
+      <button mat-raised-button (click)="submitForm()" color="primary">Save</button>
+
     </div>
-    <div>
-      <mat-form-field appearance="outline" class="example-full-width">
-        <mat-label>Project type (upwork/linkedIn)</mat-label>
-        <mat-select>
-          <mat-option value="option1">Upwork</mat-option>
-          <mat-option value="option2">LinkedIn</mat-option>
-          <!-- <mat-option value="option3">Option 3</mat-option> -->
-        </mat-select>
-      </mat-form-field>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div>
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Select Employees</mat-label>
+          <mat-select multiple  formControlName="employeeId">
+            <mat-option *ngFor="let emp of employeeList" value="{{emp.id}}">{{emp.firstName}} ( {{emp.designation.name}} ) </mat-option>
+          </mat-select>
+          <mat-error *ngIf="projectForm.controls.employeeId.invalid">
+            please select atleast one
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <label id="example-radio-group-label">Project current status</label>
+        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+          formControlName="status">
+          <mat-radio-button class="example-radio-button" *ngFor="let type of projectStatusType" [value]="type.title">
+            {{type.title | titlecase}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
     </div>
 
-    <div>
 
-      <mat-form-field appearance="outline" class="example-full-width">
-        <mat-label>Project Time type</mat-label>
-        <mat-select>
-          <mat-option value="option1">Fixed</mat-option>
-          <mat-option value="option2">Hourly</mat-option>
-          <!-- <mat-option value="option3">Option 3</mat-option> -->
-        </mat-select>
-      </mat-form-field>
-    </div>
 
-    <div>
 
-      <mat-form-field appearance="outline" class="example-full-width">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number">
-      </mat-form-field>
 
-    </div>
 
-    <div>
-
-      <mat-form-field appearance="outline" class="example-full-width">
-        <mat-label>Select resources</mat-label>
-        <mat-select multiple>
-
-          <mat-option value="option2">Developer 1</mat-option>
-          <mat-option value="option2">Developer 2</mat-option>
-          <mat-option value="option2">Developer 3</mat-option>
-          <mat-option value="option2">Developer 4</mat-option>
-          <mat-option value="option2">Developer 5</mat-option>
-          <mat-option value="option2">Developer 6</mat-option>
-
-          <!-- <mat-option value="option3">Option 3</mat-option> -->
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <label id="example-radio-group-label">Project current status</label>
-      <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="status">
-        <mat-radio-button class="example-radio-button" *ngFor="let status of projectStatusType" [value]="status">
-          {{status}}
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <button mat-raised-button color="primary">Save</button>
   </form>
 </ng-template>
