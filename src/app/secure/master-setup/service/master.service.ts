@@ -59,7 +59,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   updateRoleMaster(data): Observable<any> {
@@ -69,7 +69,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getRoleMasterDeatilsById(roleMasterId): Observable<any> {
@@ -79,7 +79,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   deleteRoleById(roleId): Observable<any> {
@@ -89,7 +89,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getRoleMasterListByOrgId(orgId): Observable<any> {
@@ -99,7 +99,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getEmployeeListByOrgIdWithPagination(data): Observable<any> {
@@ -109,7 +109,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   checkEmailIdOfEmployee(emailId): Observable<any> {
@@ -119,7 +119,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   saveEmployee(data): Observable<any> {
@@ -129,7 +129,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   updateEmployee(data): Observable<any> {
@@ -139,7 +139,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getEmployeeDeatilsById(employeeId): Observable<any> {
@@ -149,7 +149,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getAllCountryList(): Observable<any> {
@@ -159,7 +159,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getStateListByCountryId(countryId): Observable<any> {
@@ -169,7 +169,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getCityListByStateId(stateId): Observable<any> {
@@ -179,7 +179,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getDesignationListByOrgIdWithPagination(data): Observable<any> {
@@ -189,7 +189,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   deleteDesignationById(designationId): Observable<any> {
@@ -199,7 +199,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   getDesignationDeatilsById(designationId): Observable<any> {
@@ -209,7 +209,17 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
+  }
+
+  getDesignationListByOrgId(orgId: any): Observable<any> {
+    let url = MASTER_API + 'designation/getDesignationListByOrgId?orgId=' + orgId;
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
   }
 
   saveDesignation(data): Observable<any> {
@@ -219,7 +229,7 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 
   updateDesignation(data): Observable<any> {
@@ -229,6 +239,6 @@ export class MasterService {
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
-    );;
+    );
   }
 }

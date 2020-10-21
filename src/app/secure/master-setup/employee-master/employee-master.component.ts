@@ -43,7 +43,8 @@ export class EmployeeMasterComponent implements OnInit {
     imagePath: [null],
     roleMaster: ['', [Validators.required]],
     dateOfJoining: ['', [Validators.required]],
-    organizationId: ['', [Validators.required]]
+    organizationId: ['', [Validators.required]],
+    designationId: ['', [Validators.required]]
   })
 
   constructor(public dialogRef: MatDialogRef<EmployeeMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
@@ -63,6 +64,7 @@ export class EmployeeMasterComponent implements OnInit {
     });
     this.getRoleMasterListByOrgId();
     this.getAllCountryList();
+    this.getDesignationListByOrgId();
     if (this.action == 'add') {
       this.employeeForm.patchValue({
         organizationId: this.orgId,
@@ -80,6 +82,18 @@ export class EmployeeMasterComponent implements OnInit {
       this.masterService.getRoleMasterListByOrgId(this.orgId).subscribe(data => {
         if (data && data.data && data.data.roleMasterList) {
           this.roleMasterList = data.data.roleMasterList;
+        }
+      }, error => {
+        console.log('error in fetching role master list inside employee master component : ', error);
+      })
+    }
+  }
+
+  getDesignationListByOrgId() {
+    if (this.orgId && this.orgId != undefined && this.orgId != null) {
+      this.masterService.getDesignationListByOrgId(this.orgId).subscribe(data => {
+        if (data && data.data && data.data.designationList) {
+          this.designationList = data.data.designationList;
         }
       }, error => {
         console.log('error in fetching role master list inside employee master component : ', error);
@@ -226,6 +240,7 @@ export class EmployeeMasterComponent implements OnInit {
       roleMaster: employeeDetails.roleMaster,
       dateOfJoining: new Date(employeeDetails.dateOfJoining),
       organizationId: employeeDetails.organizationId,
+      designationId: employeeDetails.designationId
     });
     this.getStateListByCountryId();
     this.employeeForm.patchValue({

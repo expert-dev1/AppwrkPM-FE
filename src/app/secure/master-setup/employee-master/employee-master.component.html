@@ -94,6 +94,19 @@
                         </label>
                     </div>
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                        <mat-label>Designation</mat-label>
+                        <ng-select [items]="designationList" placeholder="Designation *" formControlName="designationId" bindLabel="name"
+                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                            [closeOnSelect]="true">
+                        </ng-select>
+                        <label class="ng-error mat-error"
+                            *ngIf="employeeForm.controls.designationId.invalid && employeeForm.controls.designationId.touched">
+                            <span
+                                matTooltip="{{getErrorMessage(employeeForm.controls.designationId,'employee','designationId')}}">
+                                {{getErrorMessage(employeeForm.controls.designationId,'employee','designationId')}}</span>
+                        </label>
+                    </div>
+                    <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                         <mat-label>Role</mat-label>
                         <ng-select [items]="roleMasterList" placeholder="Role *" formControlName="roleMaster" bindLabel="name"
                             bindValue="id" [searchable]="true" [clearable]="false" required="true"
