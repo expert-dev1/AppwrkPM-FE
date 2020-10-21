@@ -1,9 +1,41 @@
-<app-header></app-header>
-<div class="mainDiv">
-    <div class="sidebarDiv">
-        <app-sidebar></app-sidebar>
+
+<mat-sidenav-container class="example-container" fullscreen >
+  <mat-sidenav class="example-sidenav"  #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+    (closed)="events.push('close!')">
+    <mat-toolbar class="navbar2">
+      <img src="https://appwrk.com/wp-content/themes/appwrk_theme/images/logo-dark.png" alt="appwrk logo" class="logo">
+    </mat-toolbar>
+    <mat-list>
+      <mat-list-item>
+        <button (click)="sidenav.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-list-item routerLinkActive="active-link" *ngFor="let item of menuList" routerLink="{{item.routerLink}}">
+        <mat-icon class="sidenav-icon">{{item.icon}}</mat-icon> {{item.title}}
+      </mat-list-item>
+     </mat-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="">
+    <mat-toolbar >
+      <button [hidden]="opened" (click)="sidenav.toggle(); toggleClick();" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="example-spacer"></span>
+      <!-- <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+        <mat-icon>favorite</mat-icon>
+      </button> -->
+      <button [matMenuTriggerFor]="beforeMenu" mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu  #beforeMenu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="logout()">Logout</button>
+        <!-- <button mat-menu-item>Item 2</button> -->
+      </mat-menu>
+    </mat-toolbar>
+    <div class="content-setting">
+      <router-outlet></router-outlet>
     </div>
-    <div class="dynamicConDiv">
-        <router-outlet></router-outlet>
-    </div>    
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

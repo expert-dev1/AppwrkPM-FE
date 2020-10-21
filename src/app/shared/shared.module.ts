@@ -26,17 +26,21 @@ import { MatSortModule } from '@angular/material/sort';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { PaginationPipe } from './pipes/pagination.pipe';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu';
+import { ContentDivComponent } from './components/content-div/content-div.component';
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe],
+  declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe, ContentDivComponent],
   imports: [
     CommonModule,
-    SharedRoutingModule, NgSelectModule, FormsModule,
+    SharedRoutingModule, NgSelectModule, FormsModule,MatToolbarModule,MatMenuModule,
     ReactiveFormsModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
-    MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
+    MatRadioModule,MatListModule,MatSidenavModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
   exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule, PaginationPipe, MatSelectModule, MatBadgeModule, MatSliderModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule,
-    NgSelectModule, FormsModule, ConfirmationComponent],
+    NgSelectModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule,MatToolbarModule,MatMenuModule,ContentDivComponent],
   providers: [
     {
       provide: DateAdapter,
