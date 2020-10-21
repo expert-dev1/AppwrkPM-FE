@@ -21,6 +21,7 @@ export class EmployeeMasterComponent implements OnInit {
   public roleMasterList: any = [];
   public countryList: any = [];
   public stateList: any = [];
+  public selectedListForRoleMaster: any = [];
   public cityList: any = [];
   public currentDate = new Date();
   public file: any;
@@ -41,7 +42,7 @@ export class EmployeeMasterComponent implements OnInit {
     city: ['', [Validators.required]],
     pincode: ['', [Validators.required, Validators.maxLength(6), Validators.minLength(6)]],
     imagePath: [null],
-    roleMaster: ['', [Validators.required]],
+    roleMasterId: ['', [Validators.required]],
     dateOfJoining: ['', [Validators.required]],
     organizationId: ['', [Validators.required]],
     designationId: ['', [Validators.required]]
@@ -152,6 +153,17 @@ export class EmployeeMasterComponent implements OnInit {
     this.employeeForm.markAllAsTouched();
   }
 
+  selectAllChecked(event) {
+    if (event.target.checked) {
+      let allClassesIds = this.roleMasterList.map(item => item.id);
+      this.selectedListForRoleMaster = allClassesIds;
+      this.employeeForm.controls.roleMasterId.setValue(allClassesIds);
+    } else {
+      this.selectedListForRoleMaster = [];
+      this.employeeForm.controls.roleMasterId.setValue('');
+    }
+  }
+
   checkEmailIdIfAlreadyExistsOrNot() {
     let emailId = this.employeeForm.controls.emailId.value;
     if (emailId && emailId != undefined && emailId != null && emailId != '') {
@@ -171,6 +183,7 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   saveEmployee() {
+    console.log('Employee Form : ', this.employeeForm.value);
     if (this.employeeForm.invalid) {
       this.markFormAsTouched();
     } else {
@@ -222,8 +235,10 @@ export class EmployeeMasterComponent implements OnInit {
     })
   }
 
-  patchEmployeeForm(employeeDetails) {
-    console.log('employee details id : ', employeeDetails.id);
+  patchEmployeeForm(employee) {
+    let employeeDetails = employee.employee;
+    let roleMasterId = employee.roleEmployeeList;
+    console.log('roleMasterId : ', roleMasterId);
     this.employeeForm.patchValue({
       id: employeeDetails.id,
       empCode: employeeDetails.empCode,
@@ -250,6 +265,13 @@ export class EmployeeMasterComponent implements OnInit {
     this.employeeForm.patchValue({
       city: employeeDetails.city
     });
+    if (roleMasterId && roleMasterId != null && roleMasterId != undefined && roleMasterId.length > 0) {
+      let sectionsIdsArray = [];
+      roleMasterId.forEach(element => {
+        sectionsIdsArray.push(parseInt(element.roleMasterId));
+      });
+      this.employeeForm.controls.roleMasterId.patchValue(sectionsIdsArray);
+    }    
   }
 
   uploadPhoto(event: any): void {

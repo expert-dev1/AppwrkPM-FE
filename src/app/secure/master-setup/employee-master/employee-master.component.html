@@ -95,8 +95,8 @@
                     </div>
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                         <mat-label>Designation</mat-label>
-                        <ng-select [items]="designationList" placeholder="Designation *" formControlName="designationId" bindLabel="name"
-                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                        <ng-select [items]="designationList" placeholder="Designation *" formControlName="designationId"
+                            bindLabel="name" bindValue="id" [searchable]="true" [clearable]="false" required="true"
                             [closeOnSelect]="true">
                         </ng-select>
                         <label class="ng-error mat-error"
@@ -107,16 +107,26 @@
                         </label>
                     </div>
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
-                        <mat-label>Role</mat-label>
-                        <ng-select [items]="roleMasterList" placeholder="Role *" formControlName="roleMaster" bindLabel="name"
+                        <mat-label>Roles</mat-label>
+                        <!-- <ng-select [items]="roleMasterList" placeholder="Role *" formControlName="roleMaster" bindLabel="name"
                             bindValue="id" [searchable]="true" [clearable]="false" required="true"
                             [closeOnSelect]="true">
+                        </ng-select> -->
+                        <ng-select appendTo="body" [items]="roleMasterList" placeholder="Roles"
+                            formControlName="roleMasterId" bindLabel="name" bindValue="id" [searchable]="true"
+                            [clearable]="false" [(ngModel)]="selectedListForRoleMaster" [multiple]="true">
+                            <ng-template ng-option-tmp let-item="item">
+                                <input
+                                    [checked]="selectedListForRoleMaster && selectedListForRoleMaster.length > 0 && selectedListForRoleMaster.indexOf(item.id) > -1"
+                                    type="checkbox">
+                                {{item.name}}
+                            </ng-template>
                         </ng-select>
                         <label class="ng-error mat-error"
-                            *ngIf="employeeForm.controls.roleMaster.invalid && employeeForm.controls.roleMaster.touched">
+                            *ngIf="employeeForm.controls.roleMasterId.invalid && employeeForm.controls.roleMasterId.touched">
                             <span
-                                matTooltip="{{getErrorMessage(employeeForm.controls.roleMaster,'employee','roleMaster')}}">
-                                {{getErrorMessage(employeeForm.controls.roleMaster,'employee','roleMaster')}}</span>
+                                matTooltip="{{getErrorMessage(employeeForm.controls.roleMasterId,'employee','roleMasterId')}}">
+                                {{getErrorMessage(employeeForm.controls.roleMasterId,'employee','roleMasterId')}}</span>
                         </label>
                     </div>
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
@@ -151,7 +161,8 @@
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Email Id</mat-label>
-                            <input matInput type="text" formControlName="emailId" (change)="checkEmailIdIfAlreadyExistsOrNot()" required="true" />
+                            <input matInput type="text" formControlName="emailId"
+                                (change)="checkEmailIdIfAlreadyExistsOrNot()" required="true" />
                         </mat-form-field>
                         <label class="ng-error mat-error"
                             *ngIf="employeeForm.controls.emailId.invalid && employeeForm.controls.emailId.touched">
@@ -188,9 +199,9 @@
 
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                         <mat-label>Country</mat-label>
-                        <ng-select [items]="countryList" (change)="getStateListByCountryId()" placeholder="Country *" formControlName="country" bindLabel="name"
-                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
-                            [closeOnSelect]="true">
+                        <ng-select [items]="countryList" (change)="getStateListByCountryId()" placeholder="Country *"
+                            formControlName="country" bindLabel="name" bindValue="id" [searchable]="true"
+                            [clearable]="false" required="true" [closeOnSelect]="true">
                         </ng-select>
                         <label class="ng-error mat-error"
                             *ngIf="employeeForm.controls.country.invalid && employeeForm.controls.country.touched">
@@ -201,9 +212,9 @@
 
                     <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                         <mat-label>State</mat-label>
-                        <ng-select [items]="stateList" (change)="getCityListByStateId()" placeholder="State *" formControlName="state" bindLabel="name"
-                            bindValue="id" [searchable]="true" [clearable]="false" required="true"
-                            [closeOnSelect]="true">
+                        <ng-select [items]="stateList" (change)="getCityListByStateId()" placeholder="State *"
+                            formControlName="state" bindLabel="name" bindValue="id" [searchable]="true"
+                            [clearable]="false" required="true" [closeOnSelect]="true">
                         </ng-select>
                         <label class="ng-error mat-error"
                             *ngIf="employeeForm.controls.state.invalid && employeeForm.controls.state.touched">
