@@ -289,18 +289,18 @@ export class MasterService {
   }
 
   getProjectList(params): Observable<any> {
-    if (this.projectList.length) {
-      return of(this.projectList)
-    } else {
+    // if (this.projectList.length) {
+    //   return of(this.projectList)
+    // } else {
       let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
       return this.http.post(url, params, httpOptions).pipe(map(
         (resp:any) => {
           this.projectList = resp.data.data.content
-          return resp.data.data.content
+          return resp.data.data
         }
       ),
         catchError(this.errorHandler)
       );
-    }
+    // }
   }
 }

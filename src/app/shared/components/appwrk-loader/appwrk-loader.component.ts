@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
@@ -12,7 +12,7 @@ export class AppwrkLoaderComponent implements OnInit {
   color: ThemePalette = 'warn';
   mode: ProgressSpinnerMode = 'indeterminate';
   value = 50;
-  diameter = 30;
+  @Input() diameter = 30;
 
   constructor() { }
 
