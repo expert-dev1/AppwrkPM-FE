@@ -21,7 +21,6 @@ export class MasterService {
   employeeList = []
 
   errorHandler(error) {
-    console.log("error", error)
     try {
       return throwError(error);
     } catch (ex) {

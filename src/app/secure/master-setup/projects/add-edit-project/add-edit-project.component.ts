@@ -98,6 +98,7 @@ export class AddEditProjectComponent implements OnInit {
       setTimeout(() => {
         this.loading = false
       },2000)
+      console.log('rthrthrethrthrethreth : ', {resp})
     })
   }
 

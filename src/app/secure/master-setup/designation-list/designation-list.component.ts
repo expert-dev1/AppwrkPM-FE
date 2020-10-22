@@ -40,11 +40,11 @@ export class DesignationListComponent implements OnInit {
   getDesignationListByOrgIdWithPagination() {
     this.masterService.getDesignationListByOrgIdWithPagination(this.searchModel).subscribe(data => {
       console.log('data inside get designation list : ', data);
-      if (data && data.data && data.data.designationList) {
-        this.designationList = data.data.designationList.content;
-        this.limit =  data.data.designationList.limit;
-        this.offset =  data.data.designationList.currentPageNumber;
-        this.totalPage =  data.data.designationList.totalPages;
+      if (data && data.data) {
+        this.designationList = data.data.content;
+        this.limit =  data.data.limit;
+        this.offset =  data.data.currentPageNumber;
+        this.totalPage =  data.data.totalPages;
         if (this.offset == 0) {
           this.selectedPage = this.offset;
         }
@@ -111,8 +111,7 @@ export class DesignationListComponent implements OnInit {
 
   deleteDesignationById(designationId) {
     this.masterService.deleteDesignationById(designationId).subscribe(data => {
-      console.log('data : ', data);
-      if (data && data.data && data.data.designation) {
+      if (data && data.data) {
         this.toastr.success("Record deleted successfully", "SUCCESS");
         this.getDesignationListByOrgIdWithPagination();
       }

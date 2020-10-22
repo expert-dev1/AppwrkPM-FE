@@ -81,8 +81,8 @@ export class EmployeeMasterComponent implements OnInit {
   getRoleMasterListByOrgId() {
     if (this.orgId && this.orgId != undefined && this.orgId != null) {
       this.masterService.getRoleMasterListByOrgId(this.orgId).subscribe(data => {
-        if (data && data.data && data.data.roleMasterList) {
-          this.roleMasterList = data.data.roleMasterList;
+        if (data && data.data) {
+          this.roleMasterList = data.data;
         }
       }, error => {
         console.log('error in fetching role master list inside employee master component : ', error);
@@ -93,8 +93,8 @@ export class EmployeeMasterComponent implements OnInit {
   getDesignationListByOrgId() {
     if (this.orgId && this.orgId != undefined && this.orgId != null) {
       this.masterService.getDesignationListByOrgId(this.orgId).subscribe(data => {
-        if (data && data.data && data.data.designationList) {
-          this.designationList = data.data.designationList;
+        if (data && data.data) {
+          this.designationList = data.data;
         }
       }, error => {
         console.log('error in fetching role master list inside employee master component : ', error);
@@ -104,9 +104,8 @@ export class EmployeeMasterComponent implements OnInit {
 
   getAllCountryList() {
     this.masterService.getAllCountryList().subscribe(data => {
-      console.log('data inside coutry list : ', data);
-      if (data && data.data && data.data.countryList) {
-        this.countryList = data.data.countryList;
+      if (data && data.data) {
+        this.countryList = data.data;
         // this.getStateListByCountryId();
       }
     }, error => {
@@ -122,9 +121,8 @@ export class EmployeeMasterComponent implements OnInit {
     let countryId = this.employeeForm.controls.country.value;
     if (countryId && countryId != null && countryId != undefined) {
       this.masterService.getStateListByCountryId(countryId).subscribe(data => {
-        console.log('data inside state list : ', data);
-        if (data && data.data && data.data.stateList) {
-          this.stateList = data.data.stateList;
+        if (data && data.data) {
+          this.stateList = data.data;
           // this.getCityListByStateId();
         }
       }, error => {
@@ -139,9 +137,8 @@ export class EmployeeMasterComponent implements OnInit {
     let stateId = this.employeeForm.controls.state.value;
     if (stateId && stateId != null && stateId != undefined) {
       this.masterService.getCityListByStateId(stateId).subscribe(data => {
-        console.log('data inside city list : ', data);
-        if (data && data.data && data.data.cityList) {
-          this.cityList = data.data.cityList;
+        if (data && data.data) {
+          this.cityList = data.data;
         }
       }, error => {
         console.log('Error in getting City list inside Employee Details : ', error.error.message);
@@ -168,7 +165,7 @@ export class EmployeeMasterComponent implements OnInit {
     let emailId = this.employeeForm.controls.emailId.value;
     if (emailId && emailId != undefined && emailId != null && emailId != '') {
       this.masterService.checkEmailIdOfEmployee(emailId).subscribe(data => {
-        if (data && data.data && data.data.employee && data.data.employee != undefined && data.data.employee != null) {
+        if (data && data.data && data.data != undefined && data.data != null) {
           this.employeeForm.controls.emailId.setErrors({"emailAlreadyRegistered": true});
           // this.employeeForm.controls.emailId.updateValueAndValidity();
         } else {
@@ -188,8 +185,7 @@ export class EmployeeMasterComponent implements OnInit {
       this.markFormAsTouched();
     } else {
       this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
-        console.log('data inside save : ', data);
-        if (data) {
+        if (data && data.data) {
           this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
@@ -209,12 +205,10 @@ export class EmployeeMasterComponent implements OnInit {
       this.markFormAsTouched();
     } else {
       this.masterService.updateEmployee(this.employeeForm.getRawValue()).subscribe(data => {
-        console.log('data inside save : ', data);
-        if (data) {
+        if (data && data.data) {
           this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-
         if (error.message == 'EMAIL_ID_ALREADY_REGISTERED') {
           this.toaster.error("E-Mail Id Already Registered.", "ERROR");
         } else {
@@ -227,8 +221,8 @@ export class EmployeeMasterComponent implements OnInit {
   getEmployeeDeatilsById() {
     this.masterService.getEmployeeDeatilsById(this.employeeForm.controls.id.value).subscribe(data => {
       console.log('data inside get employee details : ', data);
-      if (data && data.data && data.data.employee) {
-        this.patchEmployeeForm(data.data.employee);
+      if (data && data.data) {
+        this.patchEmployeeForm(data.data);
       }
     }, error => {
       console.log('error inside get employee details by id : ', error);
