@@ -1,0 +1,7 @@
+<div class="posi-rel">
+  <button [disabled]="loader" mat-raised-button [color]="color" (click)="onClick()">
+    {{text}}</button>
+  <div *ngIf="loader" class="loader">
+    <Appwrk-loader></Appwrk-loader>
+  </div>
+</div>

@@ -89,13 +89,13 @@ $appwrk-secondary: (
 // hue. Available color palettes: https://material.io/design/color/
 $candy-app-primary: mat-palette($appwrk-primary);
 $candy-app-accent:  mat-palette($appwrk-secondary, 900);
-
+$background-color: map_get($mat-red, 50);
 // The warn palette is optional (defaults to red).
 $candy-app-warn:    mat-palette($mat-red);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as `color` or `typography`.
-$candy-app-theme: mat-light-theme((
+$appwrk-theme: mat-light-theme((
   color: (
     primary: $candy-app-primary,
     accent: $candy-app-accent,
@@ -103,11 +103,16 @@ $candy-app-theme: mat-light-theme((
   )
 ));
 
+// Insert custom background color
+$background: map-get($appwrk-theme, background);
+$background: map_merge($background, (background: $background-color));
+$theme: map_merge($appwrk-theme, (background: $background));
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($candy-app-theme);
-
+@include angular-material-theme($theme);
+// @include my-app-theme($theme);
 //  ========================================================
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Poppins", sans-serif; }
@@ -155,7 +160,7 @@ body {
   .example-radio-group {
     display: flex;
     flex-direction: column;
-    margin: 15px 0;
+    margin-bottom: 15px;
   }
 
   .example-radio-button {

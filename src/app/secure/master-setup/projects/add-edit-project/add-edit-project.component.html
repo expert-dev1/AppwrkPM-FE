@@ -4,16 +4,46 @@
 
 
 <ng-template #mainLayout>
-  <form [formGroup]="projectForm" class="example-form row">
+  <form *ngIf="projectForm" [formGroup]="projectForm" class="example-form row">
 
     <div class="col-sm-12 col-md-6 col-lg-6">
       <div>
         <mat-form-field appearance="outline" class="example-full-width">
           <mat-label>Project name</mat-label>
           <input type="text" formControlName="name" matInput>
-          <mat-error *ngIf="projectForm.controls.name.invalid">
+          <mat-error *ngIf="projectForm.get('name').errors?.required">
             Name is <strong>required</strong>
           </mat-error>
+          <mat-error *ngIf="projectForm.get('name').errors?.unavailable">
+            <div class="d-flex justify-content-start align-items-center">
+              <span class="material-icons font-s-10 mr-1">
+                warning
+              </span>
+              <span>
+                Project name already in use
+              </span>
+            </div>
+          </mat-error>
+          <mat-hint align="end" *ngIf="projectNameStatus === 'VERIFIED'">
+            <div class="d-flex justify-content-start align-items-center text-success">
+              <span class="material-icons font-s-10 mr-1">
+                check_circle
+              </span>
+              <span class="">
+                Project name available.
+              </span>
+            </div>
+          </mat-hint>
+          <mat-hint align="end" *ngIf="projectNameStatus === 'CHECKING'">
+            <div class="d-flex justify-content-start align-items-center text-warning">
+              <span class="material-icons font-s-10 mr-1">
+                hourglass_top
+              </span>
+              <span class="">
+                checking project name.
+              </span>
+            </div>
+          </mat-hint>
         </mat-form-field>
       </div>
       <div>
@@ -32,7 +62,7 @@
       <div>
         <mat-form-field appearance="outline" class="example-full-width">
           <mat-label>Project type (upwork/linkedIn)</mat-label>
-          <mat-select  formControlName="platformTypeId">
+          <mat-select formControlName="platformTypeId">
             <mat-option *ngFor="let type of platformList" value="{{type.id}}">{{type.name | titlecase}}</mat-option>
           </mat-select>
           <mat-error *ngIf="projectForm.controls.platformTypeId.invalid">
@@ -58,18 +88,18 @@
       <div *ngIf="projectForm.controls.timeType.value == 'FIXED'">
         <mat-form-field appearance="outline" class="example-full-width">
           <mat-label>Amount</mat-label>
-          <input  formControlName="amount" matInput type="number">
+          <input formControlName="amount" matInput type="number">
         </mat-form-field>
       </div>
-      <button mat-raised-button (click)="submitForm()" color="primary">Save</button>
-
+      <Appwrk-loading-button [text]="'Save'" [color]="'primary'" [loading]="loading" (onClickEvent)="submitForm($event)" ></Appwrk-loading-button>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-6">
       <div>
         <mat-form-field appearance="outline" class="example-full-width">
           <mat-label>Select Employees</mat-label>
-          <mat-select multiple  formControlName="employeeId">
-            <mat-option *ngFor="let emp of employeeList" value="{{emp.id}}">{{emp.firstName}} ( {{emp.designation.name}} ) </mat-option>
+          <mat-select multiple formControlName="employeeId">
+            <mat-option *ngFor="let emp of employeeList" value="{{emp.id}}">{{emp.firstName}} ( {{emp.designation.name}}
+              ) </mat-option>
           </mat-select>
           <mat-error *ngIf="projectForm.controls.employeeId.invalid">
             please select atleast one
@@ -77,7 +107,7 @@
         </mat-form-field>
       </div>
 
-      <div>
+      <div class="mt-1">
         <label id="example-radio-group-label">Project current status</label>
         <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
           formControlName="status">

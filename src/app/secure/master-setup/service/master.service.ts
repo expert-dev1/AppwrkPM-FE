@@ -279,6 +279,12 @@ export class MasterService {
 
   addNewProject(data): Observable<any>{
     let url = MASTER_API + 'projects';
-    return this.http.post(url,data, httpOptions)
+    return this.http.post(url,data, httpOptions);
+  }
+
+  verifyProjectName(name): Observable<any>{
+    let orgId = 1
+    let url = MASTER_API + 'projects/checkIfProjectNameAlreadyExists?name=' + name + '&orgId=' + orgId;
+    return this.http.get(url);
   }
 }

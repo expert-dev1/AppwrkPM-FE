@@ -31,16 +31,19 @@ import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { ContentDivComponent } from './components/content-div/content-div.component';
+import { AppwrkLoadingButtonComponent } from './components/appwrk-loading-button/appwrk-loading-button.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { AppwrkLoaderComponent } from './components/appwrk-loader/appwrk-loader.component';
 @NgModule({
-  declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe, ContentDivComponent],
+  declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe, ContentDivComponent, AppwrkLoadingButtonComponent, AppwrkLoaderComponent],
   imports: [
     CommonModule,
-    SharedRoutingModule, NgSelectModule, FormsModule,MatToolbarModule,MatMenuModule,
+    SharedRoutingModule, NgSelectModule, FormsModule,MatToolbarModule,MatMenuModule,MatProgressSpinnerModule,
     ReactiveFormsModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule,MatListModule,MatSidenavModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
   exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule, PaginationPipe, MatSelectModule, MatBadgeModule, MatSliderModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule,
-    NgSelectModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule,MatToolbarModule,MatMenuModule,ContentDivComponent],
+    NgSelectModule,MatProgressSpinnerModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule,MatToolbarModule,AppwrkLoaderComponent,MatMenuModule,ContentDivComponent,AppwrkLoadingButtonComponent],
   providers: [
     {
       provide: DateAdapter,
