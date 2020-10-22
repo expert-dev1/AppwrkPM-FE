@@ -39,11 +39,11 @@ export class RoleListComponent implements OnInit {
 
   getRoleListByOrgIdWithPagination() {
     this.masterService.getRoleListByOrgIdWithPagination(this.searchModel).subscribe(data => {
-      if (data && data.data && data.data.roleMasterList) {
-        this.roleList = data.data.roleMasterList.content;
-        this.limit =  data.data.roleMasterList.limit;
-        this.offset =  data.data.roleMasterList.currentPageNumber;
-        this.totalPage =  data.data.roleMasterList.totalPages;
+      if (data && data.data) {
+        this.roleList = data.data.content;
+        this.limit =  data.data.limit;
+        this.offset =  data.data.currentPageNumber;
+        this.totalPage =  data.data.totalPages;
         if (this.offset == 0) {
           this.selectedPage = this.offset;
         }
@@ -111,7 +111,7 @@ export class RoleListComponent implements OnInit {
   deleteRoleById(roleId) {
     this.masterService.deleteRoleById(roleId).subscribe(data => {
       console.log('data : ', data);
-      if (data) {
+      if (data && data.data) {
         this.toastr.success("Record deleted successfully", "SUCCESS");
         this.getRoleListByOrgIdWithPagination();
       }

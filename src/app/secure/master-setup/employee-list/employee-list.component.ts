@@ -39,11 +39,11 @@ export class EmployeeListComponent implements OnInit {
 
   getEmployeeListByOrgIdWithPagination() {
     this.masterService.getEmployeeListByOrgIdWithPagination(this.searchModel).subscribe(data => {
-      if (data && data.data && data.data.employeeList) {
-        this.employeeList = data.data.employeeList.content;
-        this.limit = data.data.employeeList.limit;
-        this.offset = data.data.employeeList.currentPageNumber;
-        this.totalPage = data.data.employeeList.totalPages;
+      if (data && data.data) {
+        this.employeeList = data.data.content;
+        this.limit = data.data.limit;
+        this.offset = data.data.currentPageNumber;
+        this.totalPage = data.data.totalPages;
         if (this.offset == 0) {
           this.selectedPage = this.offset;
         }

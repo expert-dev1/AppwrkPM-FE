@@ -49,7 +49,7 @@ export class AddEditProjectComponent implements OnInit {
     let data = this.projectForm.value;
     console.log(data)
     this.masterService.addNewProject(data).subscribe(resp => {
-      console.log({resp})
+      console.log('rthrthrethrthrethreth : ', {resp})
     })
   }
 
