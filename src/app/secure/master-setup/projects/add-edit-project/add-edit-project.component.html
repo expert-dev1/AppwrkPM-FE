@@ -4,7 +4,10 @@
 
 
 <ng-template #mainLayout>
-  <form *ngIf="projectForm" [formGroup]="projectForm" class="example-form row">
+  <button routerLink="/secure/masterSetup/projects" mat-button color="primary"><span class="material-icons">
+    keyboard_backspace
+    </span>BACK TO PROJECT LIST</button>
+  <form *ngIf="projectForm" [formGroup]="projectForm" class="example-form row mt-5">
 
     <div class="col-sm-12 col-md-6 col-lg-6">
       <div>

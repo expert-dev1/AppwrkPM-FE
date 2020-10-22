@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment} from '../../../../environments/environment'
+import { environment } from '../../../../environments/environment'
 const MASTER_API = environment.MASTER_API;
 
 
@@ -14,11 +14,12 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MasterService {
-  projectPlatformList=[];
+  projectPlatformList = [];
+  employeeList = [];
+  projectList = [];
 
   constructor(private http: HttpClient) { }
 
-  employeeList = []
 
   errorHandler(error) {
     try {
@@ -65,7 +66,7 @@ export class MasterService {
   }
 
   updateRoleMaster(data): Observable<any> {
-    let url = MASTER_API + 'roleMaster?roleMasterId='+ data.id;
+    let url = MASTER_API + 'roleMaster?roleMasterId=' + data.id;
     return this.http.put(url, data, httpOptions).pipe(
       map(response => {
         return this.successResponse(response);
@@ -245,15 +246,15 @@ export class MasterService {
   }
 
 
-  getEmployeeListWithOrgId(): Observable<any>{
-    if(this.employeeList.length){
+  getEmployeeListWithOrgId(): Observable<any> {
+    if (this.employeeList.length) {
       return of(this.employeeList)
     } else {
       let orgId = 1
       let url = MASTER_API + 'employee/getEmployeeListByOrgId?orgId=' + orgId;
       return this.http.get(url).pipe(
-        map((resp:any)=>{
-          let list = resp.data.data.employeeList
+        map((resp: any) => {
+          let list = resp.data.data
           this.employeeList = list
           return list
         })
@@ -261,14 +262,14 @@ export class MasterService {
     }
   }
 
-  getProjectPlatformTypes(): Observable<any>{
-    if(this.projectPlatformList.length){
+  getProjectPlatformTypes(): Observable<any> {
+    if (this.projectPlatformList.length) {
       return of(this.projectPlatformList)
     } else {
-      let url = MASTER_API +  'seedData/getPlatformTypeList';
+      let url = MASTER_API + 'seedData/getPlatformTypeList';
       return this.http.get(url).pipe(
-        map((resp:any)=>{
-          let list = resp.data.data.platformTypeList
+        map((resp: any) => {
+          let list = resp.data.data
           this.projectPlatformList = list
           return list
         })
@@ -276,14 +277,30 @@ export class MasterService {
     }
   }
 
-  addNewProject(data): Observable<any>{
+  addNewProject(data): Observable<any> {
     let url = MASTER_API + 'projects';
-    return this.http.post(url,data, httpOptions);
+    return this.http.post(url, data, httpOptions);
   }
 
-  verifyProjectName(name): Observable<any>{
+  verifyProjectName(name): Observable<any> {
     let orgId = 1
     let url = MASTER_API + 'projects/checkIfProjectNameAlreadyExists?name=' + name + '&orgId=' + orgId;
     return this.http.get(url);
+  }
+
+  getProjectList(params): Observable<any> {
+    if (this.projectList.length) {
+      return of(this.projectList)
+    } else {
+      let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
+      return this.http.post(url, params, httpOptions).pipe(map(
+        (resp:any) => {
+          this.projectList = resp.data.data.content
+          return resp.data.data.content
+        }
+      ),
+        catchError(this.errorHandler)
+      );
+    }
   }
 }

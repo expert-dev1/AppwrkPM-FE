@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterService } from '../../service/master.service';
-import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 const enum ProjectNameStatus {
   PENDING = 'PENDING',
@@ -43,7 +43,10 @@ export class AddEditProjectComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private masterService: MasterService
+    private masterService: MasterService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private toaster: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -90,15 +93,17 @@ export class AddEditProjectComponent implements OnInit {
 
   submitForm(event) {
     if(this.projectForm.invalid){ return}
-    this.loading=true
+    this.loading=true;
     let data = this.projectForm.value;
-    console.log(data)
     this.masterService.addNewProject(data).subscribe(resp => {
-      console.log({ resp })
-      setTimeout(() => {
-        this.loading = false
-      },2000)
-      console.log('rthrthrethrthrethreth : ', {resp})
+      if(resp.isSuccess){
+        this.toaster.success("Project created successfully.","Saved");
+        this.router.navigate(["/secure/masterSetup/projects"]);
+      } else {
+        this.loading = false;
+      }
+    }, err => {
+      this.loading =false;
     })
   }
 
