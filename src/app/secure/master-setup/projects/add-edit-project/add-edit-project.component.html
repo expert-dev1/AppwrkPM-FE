@@ -1,130 +1,288 @@
-<Appwrk-layout-div>
-  <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+<Appwrk-layout-div [title]="'Add new project'">
+  <ng-container *ngTemplateOutlet="steperLayout"></ng-container>
+  <div rightButton>
+    <button routerLink="/secure/masterSetup/projects" mat-button color="primary"><span class="material-icons">
+        keyboard_backspace
+      </span>BACK TO PROJECT LIST</button>
+  </div>
 </Appwrk-layout-div>
 
 
-<ng-template #mainLayout>
-  <button routerLink="/secure/masterSetup/projects" mat-button color="primary"><span class="material-icons">
-    keyboard_backspace
-    </span>BACK TO PROJECT LIST</button>
-  <form *ngIf="projectForm" [formGroup]="projectForm" class="example-form row mt-5">
 
-    <div class="col-sm-12 col-md-6 col-lg-6">
+<ng-template #steperLayout>
+  <!-- linear -->
+  <mat-horizontal-stepper #stepper>
+    <mat-step [stepControl]="projectInfoForm" [editable]="isEditable">
+      <ng-template matStepLabel>Add project information</ng-template>
+      <!-- <form [formGroup]="projectInfoForm"> -->
+      <ng-container *ngTemplateOutlet="projectInfoLayout"></ng-container>
       <div>
-        <mat-form-field appearance="outline" class="example-full-width">
-          <mat-label>Project name</mat-label>
-          <input type="text" formControlName="name" matInput>
-          <mat-error *ngIf="projectForm.get('name').errors?.required">
-            Name is <strong>required</strong>
-          </mat-error>
-          <mat-error *ngIf="projectForm.get('name').errors?.unavailable">
-            <div class="d-flex justify-content-start align-items-center">
-              <span class="material-icons font-s-10 mr-1">
-                warning
-              </span>
-              <span>
-                Project name already in use
-              </span>
-            </div>
-          </mat-error>
-          <mat-hint align="end" *ngIf="projectNameStatus === 'VERIFIED'">
-            <div class="d-flex justify-content-start align-items-center text-success">
-              <span class="material-icons font-s-10 mr-1">
-                check_circle
-              </span>
-              <span class="">
-                Project name available.
-              </span>
-            </div>
-          </mat-hint>
-          <mat-hint align="end" *ngIf="projectNameStatus === 'CHECKING'">
-            <div class="d-flex justify-content-start align-items-center text-warning">
-              <span class="material-icons font-s-10 mr-1">
-                hourglass_top
-              </span>
-              <span class="">
-                checking project name.
-              </span>
-            </div>
-          </mat-hint>
-        </mat-form-field>
+        <button id="step1next" style="display:none;" mat-button matStepperNext>Next</button>
       </div>
-      <div>
-        <mat-form-field appearance="outline" class="example-full-width">
-          <mat-label>Project start date</mat-label>
-          <input matInput [matDatepicker]="projectstartdate" readonly="true" required="true" [min]="currentDate"
-            formControlName="startDate">
-          <mat-datepicker-toggle matSuffix [for]="projectstartdate">
-          </mat-datepicker-toggle>
-          <mat-datepicker #projectstartdate></mat-datepicker>
-          <mat-error *ngIf="projectForm.controls.startDate.invalid">
-            Start date is <strong>required</strong>
-          </mat-error>
+      <!-- </form> -->
+    </mat-step>
+    <mat-step [stepControl]="clientInfoForm" [editable]="isEditable">
+      <!-- <form [formGroup]="secondFormGroup"> -->
+      <ng-template matStepLabel>Add client information</ng-template>
+      <ng-container *ngTemplateOutlet="clientInfoLayout"></ng-container>
+
+      <!-- <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
         </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field appearance="outline" class="example-full-width">
-          <mat-label>Project type (upwork/linkedIn)</mat-label>
-          <mat-select formControlName="platformTypeId">
-            <mat-option *ngFor="let type of platformList" value="{{type.id}}">{{type.name | titlecase}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="projectForm.controls.platformTypeId.invalid">
-            Project type is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div>
         <div>
-          <label id="example-radio-group-label">Project time</label>
-          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-            formControlName="timeType">
-            <mat-radio-button class="example-radio-button" *ngFor="let status of projectTimeType"
-              [value]="status.value">
-              {{status.title}}
-            </mat-radio-button>
-            <mat-error *ngIf="projectForm.controls.timeType.invalid">
-              Project time type is <strong>required</strong>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div> -->
+      <!-- </form> -->
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Add Employees</ng-template>
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</ng-template>
+
+
+<ng-template #projectInfoLayout>
+  <form [formGroup]="projectInfoForm">
+    <div class="example-form row mt-5">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div>
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Project name</mat-label>
+            <input type="text" formControlName="name" matInput required>
+            <mat-error *ngIf="projectInfoForm.get('name').errors?.required">
+              Name is <strong>required</strong>
             </mat-error>
-          </mat-radio-group>
+            <mat-error *ngIf="projectInfoForm.get('name').errors?.unavailable">
+              <div class="d-flex justify-content-start align-items-center">
+                <span class="material-icons font-s-10 mr-1">
+                  warning
+                </span>
+                <span>
+                  Project name already in use
+                </span>
+              </div>
+            </mat-error>
+            <mat-hint align="end" *ngIf="projectNameStatus === 'VERIFIED'">
+              <div class="d-flex justify-content-start align-items-center text-success">
+                <span class="material-icons font-s-10 mr-1">
+                  check_circle
+                </span>
+                <span class="">
+                  Project name available.
+                </span>
+              </div>
+            </mat-hint>
+            <mat-hint align="end" *ngIf="projectNameStatus === 'CHECKING'">
+              <div class="d-flex justify-content-start align-items-center text-warning">
+                <span class="material-icons font-s-10 mr-1">
+                  hourglass_top
+                </span>
+                <span class="">
+                  checking project name.
+                </span>
+              </div>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="sm-12 col-md-6 col-lg-6">
+            <mat-form-field appearance="outline" class="example-full-width">
+              <mat-label>Project start date</mat-label>
+              <input matInput [matDatepicker]="projectstartdate" readonly="true" required="true" [min]="currentDate"
+                formControlName="startDate">
+              <mat-datepicker-toggle matSuffix [for]="projectstartdate">
+              </mat-datepicker-toggle>
+              <mat-datepicker #projectstartdate></mat-datepicker>
+              <mat-error *ngIf="projectInfoForm.controls.startDate.invalid">
+                Start date is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="sm-12 col-md-6 col-lg-6">
+            <mat-form-field appearance="outline" class="example-full-width">
+              <mat-label>Project start date</mat-label>
+              <input matInput [matDatepicker]="projectenddate" readonly="true" required="true" [min]="currentDate"
+                formControlName="endDate">
+              <mat-datepicker-toggle matSuffix [for]="projectenddate">
+              </mat-datepicker-toggle>
+              <mat-datepicker #projectenddate></mat-datepicker>
+              <mat-error *ngIf="projectInfoForm.controls.endDate.invalid">
+                Start date is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div>
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Project type (upwork/linkedIn)</mat-label>
+            <mat-select formControlName="platformTypeId">
+              <mat-option *ngFor="let type of platformList" value="{{type.id}}">{{type.name | titlecase}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="projectInfoForm.controls.platformTypeId.invalid">
+              Project type is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
         </div>
       </div>
-      <div *ngIf="projectForm.controls.timeType.value == 'FIXED'">
-        <mat-form-field appearance="outline" class="example-full-width">
-          <mat-label>Amount</mat-label>
-          <input formControlName="amount" matInput type="number">
-        </mat-form-field>
-      </div>
-      <Appwrk-loading-button [text]="'Save'" [color]="'primary'" [loading]="loading" (onClickEvent)="submitForm($event)" ></Appwrk-loading-button>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-6">
-      <div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <!-- <div>
         <mat-form-field appearance="outline" class="example-full-width">
           <mat-label>Select Employees</mat-label>
           <mat-select multiple formControlName="employeeId">
             <mat-option *ngFor="let emp of employeeList" value="{{emp.id}}">{{emp.firstName}} ( {{emp.designation.name}}
               ) </mat-option>
           </mat-select>
-          <mat-error *ngIf="projectForm.controls.employeeId.invalid">
+          <mat-error *ngIf="projectInfoForm.controls.employeeId.invalid">
             please select atleast one
           </mat-error>
         </mat-form-field>
-      </div>
+      </div> -->
 
-      <div class="mt-1">
-        <label id="example-radio-group-label">Project current status</label>
-        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-          formControlName="status">
-          <mat-radio-button class="example-radio-button" *ngFor="let type of projectStatusType" [value]="type.title">
-            {{type.title | titlecase}}
-          </mat-radio-button>
-        </mat-radio-group>
+        <div class="row pl-5 ">
+          <div class="sm-12 col-md-6 col-lg-6">
+            <label id="example-radio-group-label">Project current status</label>
+            <mat-radio-group color="primary" aria-labelledby="example-radio-group-label" class="example-radio-group"
+              formControlName="status">
+              <mat-radio-button class="example-radio-button" *ngFor="let type of projectStatusType"
+                [value]="type.title">
+                {{type.title | titlecase}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="sm-12 col-md-6 col-lg-6">
+            <label id="example-radio-group-label">Project time</label>
+            <mat-radio-group color="primary" aria-labelledby="example-radio-group-label" class="example-radio-group"
+              formControlName="timeType">
+              <mat-radio-button class="example-radio-button" *ngFor="let status of projectTimeType"
+                [value]="status.value">
+                {{status.title}}
+              </mat-radio-button>
+              <mat-error *ngIf="projectInfoForm.controls.timeType.invalid">
+                Project time type is <strong>required</strong>
+              </mat-error>
+            </mat-radio-group>
+            <div *ngIf="projectInfoForm.controls.timeType.value == 'FIXED'">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Amount</mat-label>
+                <input formControlName="amount" matInput type="number">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <div>
+      <mat-form-field appearance="outline" class="example-full-width">
+        <mat-label>Project Description</mat-label>
+        <textarea formControlName="desc" rows="12" matInput placeholder=""></textarea>
+        <mat-error *ngIf="projectInfoForm.controls.desc.invalid">
+          Project descpription is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <button class="mt-3" (click)="submitStep1()" mat-button>Next</button>
+  </form>
+</ng-template>
 
 
-
-
-
-
+<ng-template #clientInfoLayout>
+  <form [formGroup]="clientInfoForm">
+    <div class="example-form row mt-5">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div>
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Client name</mat-label>
+            <input type="text" formControlName="name" matInput required>
+            <mat-error *ngIf="clientInfoForm.get('name').errors?.required">
+              Client name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Client email address</mat-label>
+            <input type="text" formControlName="email" matInput>
+            <mat-error *ngIf="clientInfoForm.get('email').errors?.email">
+              Not a valid email
+            </mat-error>
+            <mat-hint *ngIf="!clientInfoForm.controls.showAltEmail.value" (click)="showAlternativeEmail(true)"
+              align="end"><strong class="text-primary pointer">Click</strong> to add alternative email. </mat-hint>
+          </mat-form-field>
+        </div>
+        <div *ngIf="clientInfoForm.controls.showAltEmail.value">
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Client alternative email address</mat-label>
+            <input type="text" formControlName="altEmail" matInput>
+            <mat-error *ngIf="clientInfoForm.get('email').errors?.email">
+              Not a valid email
+            </mat-error>
+            <mat-hint *ngIf="clientInfoForm.controls.showAltEmail.value" (click)="showAlternativeEmail(false)"
+              align="end"><strong class="text-primary pointer">Click</strong> to hide alternative email. </mat-hint>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Client skypeId</mat-label>
+            <input type="text" formControlName="skype" matInput>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>More info about client</mat-label>
+            <textarea formControlName="info" rows="12" matInput placeholder=""></textarea>
+            <!-- <mat-error *ngIf="projectInfoForm.controls.desc.invalid">
+              Project descpription is <strong>required</strong>
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <h3 class="m-auto">Add more info about client <span (click)="addmeta()" class="material-icons mr-2">
+            add
+          </span></h3>
+        <div formArrayName="meta" class="row">
+          <ng-container *ngFor="let metafield of meta.controls; let i=index; last as last" formGroupName="{{i}}">
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Select Info type</mat-label>
+                <mat-select formControlName="key">
+                  <mat-option *ngFor="let metaType of clientMetaArray" [value]="metaType.key">{{metaType.key}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <div>
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>{{metafield.value.key}} info</mat-label>
+                  <input type="text" formControlName="value" matInput>
+                </mat-form-field>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <button class="mt-3" (click)="submitStep2()" mat-button>Next</button>
   </form>
 </ng-template>

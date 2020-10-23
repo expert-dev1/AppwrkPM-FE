@@ -4,6 +4,8 @@ import { MasterService } from '../../service/master.service';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { MatStepper } from '@angular/material/stepper';
+import { FormArray } from '@angular/forms';
 
 const enum ProjectNameStatus {
   PENDING = 'PENDING',
@@ -25,7 +27,8 @@ const enum ProjectStatusType {
 })
 export class AddEditProjectComponent implements OnInit {
 
-  public projectForm: FormGroup;
+  public projectInfoForm: FormGroup;
+  public clientInfoForm: FormGroup;
   public currentDate = new Date();
   projectStatusType = [
     { title: ProjectStatusType.PENDING },
@@ -39,6 +42,18 @@ export class AddEditProjectComponent implements OnInit {
   platformList = [];
   projectNameStatus = ProjectNameStatus.PENDING;
   loading;
+
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  isEditable = true;
+
+  clientMetaArray = [
+    {key:'linkedIn',selected:false},
+    {key:'slack',selected:false},
+    {key:'youtube',selected:false},
+    {key:'phone',selected:false},
+    {key:'address',selected:false},
+  ]
 
 
   constructor(
@@ -58,23 +73,55 @@ export class AddEditProjectComponent implements OnInit {
       this.platformList = resp;
     });
     this.checkProjectName()
+
+    this.firstFormGroup = this.formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this.formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
   }
 
 
   createForm(){
-    this.projectForm = this.formBuilder.group({
+    this.projectInfoForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       startDate: ['', [Validators.required]], //start date of project
+      endDate: ['', [Validators.required]], //start date of project
       platformTypeId: ['', [Validators.required]], // linkedIn/upwork
       timeType: ['HOURLY', [Validators.required]], // fixed/hourly
       amount: ['', [Validators.required]], // fixed/hourly
       status: ['PENDING', [Validators.required]], //yet to start, in process, completed, on hold, delievered
-      employeeId: [[], [Validators.required]], //list of resources working on this project
-      organizationId: ['1']
+      // employeeId: [[], [Validators.required]], //list of resources working on this project
+      organizationId: ['1'],
+      desc:['', Validators.required]
+    });
+    this.clientInfoForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      address: [''],
+      email: ['', Validators.email],
+      showAltEmail:[false],
+      altEmail: [''],
+      skype: [''],
+      info: [''],
+      meta: this.formBuilder.array([]),
     })
   }
+
+  get meta() {
+    return this.clientInfoForm.get('meta') as FormArray;
+  }
+
+  addmeta() {
+    this.meta.push(this.formBuilder.group({
+      key: '',
+      value: ''
+    }));
+    console.log(this.clientInfoForm.controls.meta)
+  }
+
   checkProjectName() {
-    this.projectForm.controls.name.valueChanges.pipe(
+    this.projectInfoForm.controls.name.valueChanges.pipe(
       debounceTime(800),
       distinctUntilChanged(),
     ).subscribe(resp => {
@@ -84,27 +131,44 @@ export class AddEditProjectComponent implements OnInit {
         if(result.data.data == true){
           this.projectNameStatus = ProjectNameStatus.VERIFIED;
         } else {
-          this.projectForm.controls['name'].setErrors({'unavailable': true});
+          this.projectInfoForm.controls['name'].setErrors({'unavailable': true});
           this.projectNameStatus = ProjectNameStatus.UNAVAILABLE;
         }
       })
     })
   }
 
-  submitForm(event) {
-    if(this.projectForm.invalid){ return}
-    this.loading=true;
-    let data = this.projectForm.value;
-    this.masterService.addNewProject(data).subscribe(resp => {
-      if(resp.isSuccess){
-        this.toaster.success("Project created successfully.","Saved");
-        this.router.navigate(["/secure/masterSetup/projects"]);
-      } else {
-        this.loading = false;
-      }
-    }, err => {
-      this.loading =false;
-    })
+  showAlternativeEmail(value){
+    this.clientInfoForm.patchValue({showAltEmail:value});
+    if(!value){
+      this.clientInfoForm.patchValue({altEmail:''})
+    }
+  }
+
+  submitStep1() {
+    if(this.projectInfoForm.invalid){ return}
+    let element: HTMLElement = document.getElementById('step1next') as HTMLElement;
+    console.log(element)
+    element.click();
+    // this.loading=true;
+    // let data = this.projectInfoForm.value;
+    // this.masterService.addNewProject(data).subscribe(resp => {
+    //   if(resp.isSuccess){
+    //     this.toaster.success("Project created successfully.","Saved");
+    //     this.router.navigate(["/secure/masterSetup/projects"]);
+    //   } else {
+    //     this.loading = false;
+    //   }
+    // }, err => {
+    //   this.loading =false;
+    // })
+  }
+
+  submitStep2() {
+    if(this.clientInfoForm.invalid){ return}
+    let element: HTMLElement = document.getElementById('step2next') as HTMLElement;
+    console.log(element)
+    element.click();
   }
 
 }

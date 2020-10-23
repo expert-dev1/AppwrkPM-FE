@@ -303,4 +303,16 @@ export class MasterService {
       );
     // }
   }
+
+  getOrganisationList(params): Observable<any>{
+    let url = MASTER_API + 'organization/getOrganizationListByOrgIdWithPage';
+    return this.http.post(url, params, httpOptions).pipe(map(
+      (resp:any) => {
+        this.projectList = resp.data.data.content
+        return resp.data.data
+      }
+    ),
+      catchError(this.errorHandler)
+    );
+  }
 }

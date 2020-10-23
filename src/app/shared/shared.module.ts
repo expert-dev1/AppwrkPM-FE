@@ -34,16 +34,17 @@ import { ContentDivComponent } from './components/content-div/content-div.compon
 import { AppwrkLoadingButtonComponent } from './components/appwrk-loading-button/appwrk-loading-button.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AppwrkLoaderComponent } from './components/appwrk-loader/appwrk-loader.component';
+import {MatStepperModule} from '@angular/material/stepper';
 @NgModule({
   declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe, ContentDivComponent, AppwrkLoadingButtonComponent, AppwrkLoaderComponent],
   imports: [
-    CommonModule,
+    CommonModule,MatStepperModule,
     SharedRoutingModule, NgSelectModule, FormsModule,MatToolbarModule,MatMenuModule,MatProgressSpinnerModule,
     ReactiveFormsModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule,MatListModule,MatSidenavModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
   exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
     MatRadioModule, PaginationPipe, MatSelectModule, MatBadgeModule, MatSliderModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule,
-    NgSelectModule,MatProgressSpinnerModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule,MatToolbarModule,AppwrkLoaderComponent,MatMenuModule,ContentDivComponent,AppwrkLoadingButtonComponent],
+    NgSelectModule,MatStepperModule,MatProgressSpinnerModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule,MatToolbarModule,AppwrkLoaderComponent,MatMenuModule,ContentDivComponent,AppwrkLoadingButtonComponent],
   providers: [
     {
       provide: DateAdapter,

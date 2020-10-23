@@ -8,36 +8,21 @@ import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 
-export interface ProjectData {
-  amount: string
-  createdAt: string
-  endDate: string
-  id: number
-  name: string
-  organizationId: number
-  platformTypeId: number
-  startDate: string
-  status: string
-  timeType: string
-  updatedAt: string
-}
-
-
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss']
+  selector: 'app-organisation-list',
+  templateUrl: './organisation-list.component.html',
+  styleUrls: ['./organisation-list.component.scss']
 })
-export class ProjectListComponent implements OnInit {
+export class OrganisationListComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'startDate', 'platformType','amount','timeType', 'status'];
-  dataSource: MatTableDataSource<ProjectData>;
+  displayedColumns: string[] = ['orgName', 'orgCode', 'status'];
+  dataSource: MatTableDataSource<any>;
   searchParams:SearchModel = {
     limit:5,
     offset:0,
     orgId:1,
     sortDirection:"ASC",
-    sortField:'startDate',
+    sortField:'id',
   }
   totalItems= 0;
   isLoadingResults=true;
@@ -56,7 +41,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   getProjectList(){
-    this.masterService.getProjectList(this.searchParams).subscribe(resp => {
+    this.masterService.getOrganisationList(this.searchParams).subscribe(resp => {
       this.dataSource = new MatTableDataSource(resp.content);
       this.totalItems = resp.totalItems;
       this.isLoadingResults = false;

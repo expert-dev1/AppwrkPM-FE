@@ -1,23 +1,20 @@
-<Appwrk-layout-div>
+<Appwrk-layout-div [title]="'Project list'">
   <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+  <div rightButton >
+    <button routerLink="add" mat-button color="primary" class="mb-2">
+      <div class="d-flex justify-content-center align-items-center">
+        <span class="material-icons mr-2">
+          add
+        </span>
+        <span>
+          ADD NEW PROJECT
+        </span>
+      </div>
+    </button>
+  </div>
 </Appwrk-layout-div>
 
-
-
-
 <ng-template #mainLayout>
-  <button routerLink="add" mat-button color="primary" class="mb-2">
-    <div class="d-flex justify-content-center align-items-center">
-      <span class="material-icons mr-2">
-        add
-      </span>
-      <span>
-        ADD NEW PROJECT
-      </span>
-    </div>
-  </button>
-
-
   <!-- <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -42,12 +39,22 @@
 
         <ng-container matColumnDef="platformType">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Project platform </th>
-          <td mat-cell *matCellDef="let row"> {{row.platformTypeId}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.platform_type.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount </th>
+          <td mat-cell *matCellDef="let row"> {{row.amount != '' ? row.amount : '-'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
           <td mat-cell *matCellDef="let row" [style.color]="row.status"> {{row.status}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="timeType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Type </th>
+          <td mat-cell *matCellDef="let row" [style.color]="row.status"> {{row.timeType}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -58,10 +65,11 @@
         <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
       </tr> -->
       </table>
-      <div class="d-flex justify-content-center align-items-center" *ngIf="!isLoadingResults && !totalItems">
-        <div class="mt-5 pt-5 mb-5">
+      <div class="d-flex flex-column justify-content-center align-items-center min-height" *ngIf="!isLoadingResults && !totalItems">
+        <div class="mt-5 pt-5 mb-2">
           <img height="200" src="assets/images/nodata.jpg" >
         </div>
+        <h5>No data found!</h5>
       </div>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [length]="totalItems" [pageSize]="searchParams.limit">
       </mat-paginator>

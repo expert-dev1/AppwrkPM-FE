@@ -45,15 +45,24 @@ mat-sidenav-container {
   align-items: center;
   justify-content: center;
   width: 250px;
-  background: #0f58a5;
+  background: transparent;
+}
+
+.list-div{
+  background-color:  #0f58a5;
+}
+
+.top-right-radius{
+  border-top-right-radius: 25px;
 }
 
 .navbar2{
   height: 200px;
+  background-color: #fafafa;
 }
 
 mat-toolbar{
-  background-color: white;
+  background-color: #fafafa;
 }
 
 .mat-drawer-side {

@@ -25,6 +25,9 @@ export class SecureComponent implements OnInit {
     },
     {
       title:'Projects', icon:'assignment_ind' ,routerLink:'/secure/masterSetup/projects'
+    },
+    {
+      title:'Organisation', icon:'business' ,routerLink:'/secure/masterSetup/organisation'
     }
   ]
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'Appwrk-layout-div',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./content-div.component.scss']
 })
 export class ContentDivComponent implements OnInit {
-
+  @Input() title;
   constructor() { }
 
   ngOnInit(): void {
