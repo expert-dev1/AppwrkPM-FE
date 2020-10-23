@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   public hide = true;
 
   public loginForm = this.formBuilder.group({
-    userName: ['', [Validators.required, Validators.maxLength(50)]],
+    username: ['', [Validators.required, Validators.maxLength(50)]],
     password: ['', [Validators.required, Validators.maxLength(50)]],
   });
 
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   }
 
   markLoginFormAsTouched() {
-    this.loginForm.controls.userName.markAsTouched();
+    this.loginForm.controls.username.markAsTouched();
     this.loginForm.controls.password.markAsTouched();
   }
 
@@ -42,19 +42,21 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       this.markLoginFormAsTouched();
     } else {
-      // this.authService.login(this.loginForm.value).subscribe(data => {
-      //     if (data && data.data && data.data.loginDetails) {
-      //       this.isLoginInvalid = false;
-      //       this.storageService.saveToken(data.data.loginDetails.userJwt);
-      //       this.storageService.saveUser(data.data.loginDetails);
+      this.authService.login(this.loginForm.value).subscribe(data => {
+          if (data && data.data) {
+            this.isLoginInvalid = false;
+            console.log('data inside login kkkkkkkkkkkk after login success : ', data.data);
+            this.storageService.saveAccessToken(data.data.accessToken);
+            this.storageService.saveRefereshToken(data.data.refreshToken);
+            this.storageService.saveUser(data.data.user);
             this.afterLoginRouteToRespectiveRoutes();
-      //     }
-      //   }, error => {
-      //     console.log('Error : ', error.error.message);
-      //     this.isLoginInvalid = true;
-      //     this.toaster.error("Invalid login Credential.", "ERROR");
-      //   }
-      // );
+          }
+        }, error => {
+          console.log('Error : ', error.error.message);
+          this.isLoginInvalid = true;
+          this.toaster.error("Invalid login Credential.", "ERROR");
+        }
+      );
     }
   }
 

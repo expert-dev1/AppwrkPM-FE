@@ -10,14 +10,14 @@
           <div class="col-xl-4 col-md-4 pb-3">
             <mat-form-field appearance="outline">
               <mat-label>User Name</mat-label>
-              <input matInput type="text" formControlName="userName" (keyup)="hideInvalidCredentailsMessageOnKeyUp()"
+              <input matInput type="text" formControlName="username" (keyup)="hideInvalidCredentailsMessageOnKeyUp()"
                 required="true" />
             </mat-form-field>
           
           <label class="ng-error mat-error"
-            *ngIf="loginForm.controls.userName.invalid && loginForm.controls.userName.touched">
-            <span matTooltip="{{getErrorMessage(loginForm.controls.userName,'login','userName')}}">
-              {{getErrorMessage(loginForm.controls.userName,'login','userName')}}</span>
+            *ngIf="loginForm.controls.username.invalid && loginForm.controls.username.touched">
+            <span matTooltip="{{getErrorMessage(loginForm.controls.username,'login','username')}}">
+              {{getErrorMessage(loginForm.controls.username,'login','username')}}</span>
           </label>
         </div>
         </div>

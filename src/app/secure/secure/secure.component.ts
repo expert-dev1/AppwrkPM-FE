@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 
 @Component({
   selector: 'app-secure',
@@ -10,8 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class SecureComponent implements OnInit {
   events: string[] = [];
   opened: boolean = true;
-  constructor(private tokenStorageService: StorageService, private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+  constructor(private storageService: StorageService, private router: Router,
+    private authService: AuthService) { }
 
   menuList = [
     {
@@ -39,8 +40,16 @@ export class SecureComponent implements OnInit {
   }
 
   logout() {
-    this.tokenStorageService.signOut();
-    this.router.navigate(["login"]);
+    let userId = this.storageService.getUser().userId;
+    this.authService.signOut(userId).subscribe(data => {
+      if (data && data.data) {
+        this.storageService.signOut();
+        // window.location.reload();
+        this.router.navigate(["login"]);
+      }
+    }, error => {
+      console.log('Errpr in logout : ', error);
+    });
   }
 
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StorageService } from '../services/storage/storage.service';
 
-const TOKEN_HEADER_KEY = 'Authorization'; // for back-end(Spring Boot)
+const TOKEN_HEADER_KEY = 'Authorization'; 
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -12,9 +12,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let authorizedRequest = request;
-        const token = this.storageService.getToken();
+        const token = this.storageService.getAccessToken();
+        console.log('token : ', token);
         if (token != null) {
-            // for Spring Boot back-end
             authorizedRequest = request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
         }
         return next.handle(authorizedRequest);
