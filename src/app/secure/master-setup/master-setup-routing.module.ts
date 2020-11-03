@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DesignationListComponent } from './designation-list/designation-list.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { OrganizationCalenderComponent } from './organization-calender/organization-calender.component';
 import { RoleListComponent } from './role-list/role-list.component';
 
 const routes: Routes = [
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: 'designation',
         component: DesignationListComponent
+      },
+      {
+        path: 'organizationCalender',
+        component: OrganizationCalenderComponent
       },
       {
         path: 'projects',

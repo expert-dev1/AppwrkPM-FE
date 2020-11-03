@@ -1,6 +1,151 @@
-<Appwrk-layout-div [title]="'Project list'">
+<Appwrk-layout-div [title]="'Project'">
   <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
-  <div rightButton >
+  <div rightButton>
+    <button (click)="routeToAddAndEditProject(0, 'add')" mat-button color="primary" class="mb-2">
+      <div class="d-flex justify-content-center align-items-center">
+        <span class="material-icons mr-2">
+          add
+        </span>
+        <span>
+          Add
+        </span>
+      </div>
+    </button>
+  </div>
+</Appwrk-layout-div>
+
+<ng-template #mainLayout>
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (change)="doFilter($event.target.value)" placeholder="Ex. Admin" #input>
+  </mat-form-field>
+  <div class="" style="position: relative;">
+    <div class="example-loading-shade" *ngIf="isLoadingResults">
+      <Appwrk-loader [diameter]="50" *ngIf="isLoadingResults"></Appwrk-loader>
+    </div>
+    <div>
+      <table mat-table matSort [dataSource]="projectList" class="mat-elevation-z8" (matSortChange)="sortData($event)"
+        style="width: 100%">
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky :true"></tr>
+        <tr mat-row-responsive mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Name
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.name ? element.name : '-'">
+              {{element && element.name ? element.name : '-'}}
+            </mat-label>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startDate">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Start date
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element.startDate | date: 'dd MMM, yyyy'">
+              {{element.startDate | date: 'dd MMM, yyyy'}}
+            </mat-label>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="platform_type.name">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Platform Type
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.platform_type ? element.platform_type.name : '-'">
+              {{element && element.platform_type ? element.platform_type.name : '-'}}
+            </mat-label>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Amount
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.amount ? element.amount : '-'">
+              {{element && element.amount ? element.amount : '-'}}
+            </mat-label>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Status
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.status ?projectStatusMap[element.status] : '-'">
+              {{element && element.status ? projectStatusMap[element.status] : '-'}}
+            </mat-label>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="timeType">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Time Type
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.timeType ? projectTimeTypeMap[element.timeType] : '-'">
+              {{element && element.timeType ? projectTimeTypeMap[element.timeType] : '-'}}
+            </mat-label>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>
+              <div>
+                Action
+              </div>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="routeToAddAndEditProject(element.id, 'edit')" mat-button color="primary" class="mb-2">
+              <div class="d-flex justify-content-center align-items-center" [matTooltip]="Edit">
+                <span class="material-icons">
+                  edit
+                </span>
+              </div>
+            </button>
+          </td>
+        </ng-container>
+      </table>
+      <div class="d-flex flex-column justify-content-center align-items-center min-height"
+        *ngIf="projectList.length===0">
+        <div class="mt-5 pt-5 mb-2">
+          <img height="200" src="assets/images/nodata.jpg">
+        </div>
+        <h5>No data found!</h5>
+      </div>
+      <ng-container>
+        <div class="row" *ngIf="projectList.length> 0">
+          <div class="col-xl-7 col-md-6 col-sm-6 col-12 button-right pt-2">
+            <div class="pagination shadow">
+              <button (click)="pageChanges(0)" class="border-right" [disabled]="selectedPage==0"><i
+                  class="fas fa-angle-double-left"></i></button>
+              <button class="border-right" (click)="pageChanges(selectedPage-1)"
+                [disabled]="selectedPage==0">Prev</button>
+              <button class="page-no" *ngFor="let p of (totalPage | pagination: selectedPage)" (click)="pageChanges(p)"
+                [ngClass]="{'active':p==selectedPage}" [disabled]="selectedPage == p"><label>{{p+1}}</label></button>
+              <button class="border-right border-left" (click)="pageChanges(selectedPage+1)"
+                [disabled]="selectedPage==(totalPage-1)">Next</button>
+              <button (click)="pageChanges(totalPage-1)" [disabled]="selectedPage==(totalPage-1)"><i
+                  class="fas fa-angle-double-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<!-- <Appwrk-layout-div [title]="'Project list'">
+  <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+  <div rightButton>
     <button routerLink="add" mat-button color="primary" class="mb-2">
       <div class="d-flex justify-content-center align-items-center">
         <span class="material-icons mr-2">
@@ -15,64 +160,129 @@
 </Appwrk-layout-div>
 
 <ng-template #mainLayout>
-  <!-- <mat-form-field>
+  <mat-form-field>
     <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-  </mat-form-field> -->
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Admin" #input>
+  </mat-form-field>
 
   <div class="" style="position: relative;">
     <div class="example-loading-shade" *ngIf="isLoadingResults">
       <Appwrk-loader [diameter]="50" *ngIf="isLoadingResults"></Appwrk-loader>
     </div>
     <div>
-      <table mat-table [dataSource]="dataSource" matSort>
-
+      <table mat-table [dataSource]="projectList" matSort>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Project name </th>
-          <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Name
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.name ? element.name : '-'">
+              {{element && element.name ? element.name : '-'}}
+            </mat-label>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="startDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Start date </th>
-          <td mat-cell *matCellDef="let row"> {{row.startDate | date:'medium'}} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Start date
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element.startDate | date: 'dd MMM, yyyy'">
+              {{element.startDate | date: 'dd MMM, yyyy'}}
+            </mat-label>
+          </td>
         </ng-container>
 
-        <ng-container matColumnDef="platformType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Project platform </th>
-          <td mat-cell *matCellDef="let row"> {{row.platform_type.name}} </td>
+        <ng-container matColumnDef="platform_type.name">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Platform Type
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.platform_type ? element.platform_type.name : '-'">
+              {{element && element.platform_type ? element.platform_type.name : '-'}}
+            </mat-label>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount </th>
-          <td mat-cell *matCellDef="let row"> {{row.amount != '' ? row.amount : '-'}} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Amount
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.amount ? element.amount : '-'">
+              {{element && element.amount ? element.amount : '-'}}
+            </mat-label>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let row" [style.color]="row.status"> {{row.status}} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Status
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.status ? element.status : '-'">
+              {{element && element.status ? element.status : '-'}}
+            </mat-label>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="timeType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Type </th>
-          <td mat-cell *matCellDef="let row" [style.color]="row.status"> {{row.timeType}} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>
+            Time Type
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-label [matTooltip]="element && element.timeType ? element.timeType : '-'">
+              {{element && element.timeType ? element.timeType : '-'}}
+            </mat-label>
+          </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-        <!-- Row shown when there is no matching data. -->
-        <!-- <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-      </tr> -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>
+              <div>
+                Action
+              </div>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="openPopUp(element.id, 'edit')" mat-button color="primary" class="mb-2">
+              <div class="d-flex justify-content-center align-items-center" [matTooltip]="Edit">
+                <span class="material-icons">
+                  edit
+                </span>
+              </div>
+            </button>
+          </td>
+        </ng-container>
       </table>
-      <div class="d-flex flex-column justify-content-center align-items-center min-height" *ngIf="!isLoadingResults && !totalItems">
+      <div class="d-flex flex-column justify-content-center align-items-center min-height"
+        *ngIf="projectList.length===0">
         <div class="mt-5 pt-5 mb-2">
-          <img height="200" src="assets/images/nodata.jpg" >
+          <img height="200" src="assets/images/nodata.jpg">
         </div>
         <h5>No data found!</h5>
       </div>
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [length]="totalItems" [pageSize]="searchParams.limit">
-      </mat-paginator>
+      <ng-container>
+        <div class="row" *ngIf="projectList.length> 0">
+          <div class="col-xl-7 col-md-6 col-sm-6 col-12 button-right pt-2">
+            <div class="pagination shadow">
+              <button (click)="pageChanges(0)" class="border-right" [disabled]="selectedPage==0"><i
+                  class="fas fa-angle-double-left"></i></button>
+              <button class="border-right" (click)="pageChanges(selectedPage-1)"
+                [disabled]="selectedPage==0">Prev</button>
+              <button class="page-no" *ngFor="let p of (totalPage | pagination: selectedPage)" (click)="pageChanges(p)"
+                [ngClass]="{'active':p==selectedPage}" [disabled]="selectedPage == p"><label>{{p+1}}</label></button>
+              <button class="border-right border-left" (click)="pageChanges(selectedPage+1)"
+                [disabled]="selectedPage==(totalPage-1)">Next</button>
+              <button (click)="pageChanges(totalPage-1)" [disabled]="selectedPage==(totalPage-1)"><i
+                  class="fas fa-angle-double-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
-</ng-template>
+</ng-template> -->

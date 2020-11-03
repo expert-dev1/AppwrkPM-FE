@@ -4,6 +4,7 @@ export class SearchModel {
     public orgId: any;
     public sortDirection: string;
     public sortField: string;
+    public searchString: string;
 
     constructor(limit, offset, orgId, sortDirection, sortField) {
         this.limit = limit;

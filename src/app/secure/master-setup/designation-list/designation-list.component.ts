@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'src/app/core/services/message/message.service';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
 import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
 import { SearchModel } from 'src/app/shared/models/search-model';
@@ -14,7 +15,7 @@ import { MasterService } from '../service/master.service';
   styleUrls: ['./designation-list.component.scss']
 })
 export class DesignationListComponent implements OnInit {
-  
+
   public columnsToBeDisplayed: string[] = ["name", "description", "action"];
   public limit: number = 10;
   public offset: number = 0;
@@ -26,12 +27,13 @@ export class DesignationListComponent implements OnInit {
   public selectedPage: any;
   public totalPage: any;
 
-  constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService) {
+  constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService,
+    private messageService: MessageService) {
     // this.orgId = this.storageService.getUser().employee.organization.id;
     if (this.orgId && this.orgId != null && this.orgId != undefined) {
       this.searchModel = new SearchModel(this.limit, this.offset, this.orgId, this.sortDirection, this.sortField);
       this.getDesignationListByOrgIdWithPagination();
-    }  
+    }
   }
 
   ngOnInit(): void {
@@ -42,9 +44,9 @@ export class DesignationListComponent implements OnInit {
       console.log('data inside get designation list : ', data);
       if (data && data.data) {
         this.designationList = data.data.content;
-        this.limit =  data.data.limit;
-        this.offset =  data.data.currentPageNumber;
-        this.totalPage =  data.data.totalPages;
+        this.limit = data.data.limit;
+        this.offset = data.data.currentPageNumber;
+        this.totalPage = data.data.totalPages;
         if (this.offset == 0) {
           this.selectedPage = this.offset;
         }
@@ -79,7 +81,7 @@ export class DesignationListComponent implements OnInit {
     if (action == 'delete') {
       const dialogRef = this.dialog.open(ConfirmationComponent, {
         width: '500px',
-        data: {designationId: designationId},
+        data: { designationId: designationId },
         disableClose: true
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -90,21 +92,26 @@ export class DesignationListComponent implements OnInit {
     } else {
       const dialogRef = this.dialog.open(DesignationMasterComponent, {
         width: '500px',
-        data: {designationId: designationId, orgId: this.orgId, action: action},
+        data: { designationId: designationId, orgId: this.orgId, action: action },
         disableClose: true
-      });  
+      });
       dialogRef.afterClosed().subscribe(result => {
-        console.log('result after save : ',result)
         if (result) {
           if (result.success) {
             if (result.action == 'add') {
-              this.toastr.success("Record saved successfully", "SUCCESS");
+              let messageObj = this.messageService.getMessage("SAVE");
+              if (messageObj) {
+                this.toastr.success(messageObj.description, messageObj.type);
+              }
             } else {
-              this.toastr.success("Record updated successfully", "SUCCESS");
-            }            
+              let messageObj = this.messageService.getMessage("UPDATE");
+              if (messageObj) {
+                this.toastr.success(messageObj.description, messageObj.type);
+              }
+            }
             this.getDesignationListByOrgIdWithPagination();
           }
-        }        
+        }
       });
     }
   }
@@ -112,15 +119,31 @@ export class DesignationListComponent implements OnInit {
   deleteDesignationById(designationId) {
     this.masterService.deleteDesignationById(designationId).subscribe(data => {
       if (data && data.data) {
-        this.toastr.success("Record deleted successfully", "SUCCESS");
+        let messageObj = this.messageService.getMessage("DELETE");
+        if (messageObj) {
+          this.toastr.success(messageObj.description, messageObj.type);
+        }
         this.getDesignationListByOrgIdWithPagination();
       }
     }, error => {
-      // if (error.error.message.includes("org.hibernate.exception.ConstraintViolationException")) {
-      //   this.toaster.error("Record in use.", "ERROR");
-      // } else {
+      if (error.error.message.includes("Cannot delete or update a parent row: a foreign key constraint fails")) {
+        let messageObj = this.messageService.getMessage("RECORD_ALREADY_USE");
+        if (messageObj) {
+          this.toastr.error(messageObj.description, messageObj.type);
+        }
+      } else {
         console.log("Error in deleteing Designation master by Id : ", error.error.message);
-      // }
+      }
     });
+  }
+
+  doFilter(eventValue) {
+    if (eventValue && eventValue != undefined && eventValue != null) {
+      this.searchModel.searchString = eventValue;
+      this.getDesignationListByOrgIdWithPagination();
+    } else {
+      this.searchModel.searchString = null;
+      this.getDesignationListByOrgIdWithPagination();
+    }
   }
 }

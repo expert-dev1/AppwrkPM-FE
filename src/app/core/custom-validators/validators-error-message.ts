@@ -8,14 +8,6 @@ export class ValidatorErrorMessages {
 
     };
 
-    public static signUpValidationMessage = {
-        'passwordNotMatched': 'Password Not Matched. Please Check the password.',
-        'mobileNumberValidation': 'Enter valid mobile number: eg. 9876543210',
-        'emailValidation': 'Please enter your email in this format: yourname@email.com',
-        'userNameMsg': 'User Name should not contain any space and special character except `.`',
-        'passwordCharactersValidation': 'Atleast one special symbol: - . ( ) _ @ ! *,'
-    }
-
     public static loginValidationMessage = {
         'userNameMsg': 'User Name should not contain any space and special character except `.`',
         'emailValidation': 'Please enter your User Name in this format: yourname@email.com.',
@@ -26,21 +18,29 @@ export class ValidatorErrorMessages {
         'recordAlreadyExists': 'Record already exists',
     }
 
-    public static permissionsValidationMessage = {
-        'recordAlreadyExists': 'Record already exists',
-        'alphabetWithUnderscoreValidate': 'This field only accepts alphabet characters and underscore(_) characters.',
-    }
-
     public static employeeValidationMessage = {
         'alphabetValidate': 'This field only accepts alphabet characters.',
         'emailValidation': 'Please enter your email in this format: yourname@email.com',
-        'emailAlreadyRegistered': 'E-Mail already registered.'
+        'emailAlreadyRegistered': 'Email already exists try different one.'
 
     }
 
-    public static userValidationMessage = {
-        'userNameMsg': 'User Name should not contain any space and special character except `.`',
-        'passwordCharactersValidation': 'Atleast one special symbol: - . ( ) _ @ ! *,'
+    public static organizationValidationMessage = {
+        'recordAlreadyExists': 'Record already exists',
+        'alphabetValidate': 'This field only accepts alphabet characters.',
+        'emailValidation': 'Please enter email in this format: yourname@email.com',
+        'userNameMsg': 'Organization code should not contain any space and special character except `-`',
+        'orgCodeAlreadyExists': 'Organization code already exists.'
+    }
+
+    public static changePasswordValidationMessage = {
+        'passwordCharactersValidation': 'Atleast one special symbol: - . ( ) _ @ ! *,',
+        'passwordToMatches': 'Password not matches. Please check password.'
+    }
+
+    public static clientValidationMessage = {
+        'recordAlreadyExists': 'Record already exists.',
+        // 'passwordToMatches': 'Password not matches. Please check password.'
     }
 
     static getErrorMessage(control: AbstractControl, componentName?: string, fieldName?: string, fieldValue?: string) {
@@ -56,11 +56,14 @@ export class ValidatorErrorMessages {
             case 'employee':
                 errorMessagesMap = ValidatorErrorMessages.employeeValidationMessage;
                 break;
-            case 'user':
-                errorMessagesMap = ValidatorErrorMessages.userValidationMessage;
+            case 'organization':
+                errorMessagesMap = ValidatorErrorMessages.organizationValidationMessage;
                 break;
-            case 'permissions':
-                errorMessagesMap = ValidatorErrorMessages.permissionsValidationMessage;
+            case 'changePassword':
+                errorMessagesMap = ValidatorErrorMessages.changePasswordValidationMessage;
+                break;
+            case 'client':
+                errorMessagesMap = ValidatorErrorMessages.clientValidationMessage;
                 break;
         }
         if (control)

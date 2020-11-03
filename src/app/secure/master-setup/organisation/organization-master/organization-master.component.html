@@ -1,0 +1,174 @@
+<Appwrk-layout-div [title]="'Organization Details'">
+    <ng-container *ngTemplateOutlet="organizationDetailsLayout"></ng-container>
+    <div rightButton>
+        <button (click)="goBack()" mat-button color="primary"><span class="material-icons">
+                keyboard_backspace
+            </span>Back</button>
+    </div>
+</Appwrk-layout-div>
+
+<ng-template #organizationDetailsLayout>
+    <form [formGroup]="organizationForm">
+        <div class="row pt-3">
+            <div class="col-xl-12">
+                <div class="border-box ">
+                    <label>Basic Detail</label>
+                    <div class="example-form row mt-5">
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                                <mat-label>Organization Code</mat-label>
+                                <input type="text" formControlName="orgCode" (change)="checkOrganizationCode()" matInput required>
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.orgCode.invalid && organizationForm.controls.orgCode.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.orgCode,'organization','orgCode')}}">
+                                    {{getErrorMessage(organizationForm.controls.orgCode,'organization','orgCode')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                                <mat-label>Name</mat-label>
+                                <input type="text" formControlName="orgName" matInput required>
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.orgName.invalid && organizationForm.controls.orgName.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.orgName,'organization','orgName')}}">
+                                    {{getErrorMessage(organizationForm.controls.orgName,'organization','orgName')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-label>Status</mat-label>
+                            <ng-select [items]="statusList" placeholder="Status *" formControlName="status"
+                                bindLabel="name" bindValue="value" [searchable]="true" [clearable]="false"
+                                required="true" [closeOnSelect]="true">
+                            </ng-select>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.status.invalid && organizationForm.controls.status.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.status,'organization','status')}}">
+                                    {{getErrorMessage(organizationForm.controls.status,'organization','status')}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-box ">
+                    <label>Contact Details</label>
+                    <div class="example-form row mt-5">
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                                <mat-label>Email</mat-label>
+                                <input type="text" formControlName="emailId" matInput required>
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.emailId.invalid && organizationForm.controls.emailId.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.emailId,'organization','emailId')}}">
+                                    {{getErrorMessage(organizationForm.controls.emailId,'organization','emailId')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Mobile Number</mat-label>
+                                <input matInput type="text" formControlName="mobileNumber" prefix="+91 " mask="00000 00000" required="true" />
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.mobileNumber.invalid && organizationForm.controls.mobileNumber.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.mobileNumber,'organization','mobileNumber')}}">
+                                    {{getErrorMessage(organizationForm.controls.mobileNumber,'organization','mobileNumber')}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-box">
+                    <label>Address Details</label>
+                    <div class="example-form row mt-5">
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                                <mat-label>Address Line 1</mat-label>
+                                <input type="text" formControlName="addressLine1" matInput required>
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.addressLine1.invalid && organizationForm.controls.addressLine1.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.addressLine1,'organization','addressLine1')}}">
+                                    {{getErrorMessage(organizationForm.controls.addressLine1,'organization','addressLine1')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                                <mat-label>Address Line 2</mat-label>
+                                <input type="text" formControlName="addressLine2" matInput>
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.addressLine2.invalid && organizationForm.controls.addressLine2.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.addressLine2,'organization','addressLine2')}}">
+                                    {{getErrorMessage(organizationForm.controls.addressLine2,'organization','addressLine2')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-label>Country</mat-label>
+                            <ng-select [items]="countryList" (change)="getStateListByCountryId()"
+                                placeholder="Country *" formControlName="country" bindLabel="name" bindValue="id"
+                                [searchable]="true" [clearable]="false" required="true" [closeOnSelect]="true">
+                            </ng-select>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.country.invalid && organizationForm.controls.country.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.country,'organization','country')}}">
+                                    {{getErrorMessage(organizationForm.controls.country,'organization','country')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-label>State</mat-label>
+                            <ng-select [items]="stateList" (change)="getCityListByStateId()" placeholder="State *"
+                                formControlName="state" bindLabel="name" bindValue="id" [searchable]="true"
+                                [clearable]="false" required="true" [closeOnSelect]="true">
+                            </ng-select>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.state.invalid && organizationForm.controls.state.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.state,'organization','state')}}">
+                                    {{getErrorMessage(organizationForm.controls.state,'organization','state')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-label>City</mat-label>
+                            <ng-select [items]="cityList" placeholder="City *" formControlName="city" bindLabel="name"
+                                bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                                [closeOnSelect]="true">
+                            </ng-select>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.city.invalid && organizationForm.controls.city.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.city,'organization','city')}}">
+                                    {{getErrorMessage(organizationForm.controls.city,'organization','city')}}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-4 col-md-3 col-lg-3">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                                <mat-label>PINCODE</mat-label>
+                                <input type="text" formControlName="pincode" mask="000000" matInput required>
+                            </mat-form-field>
+                            <label class="ng-error mat-error"
+                                *ngIf="organizationForm.controls.pincode.invalid && organizationForm.controls.pincode.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(organizationForm.controls.pincode,'organization','pincode')}}">
+                                    {{getErrorMessage(organizationForm.controls.pincode,'organization','pincode')}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 col-sm-12 col-12 text-right pt-2 pb-2">
+                <button *ngIf="action == 'add'" (click)="save()" matTooltip="Save" type="button"
+                    mat-raised-button>Save</button>
+                <button *ngIf="action == 'edit'" (click)="update()" matTooltip="Update" type="button"
+                    mat-raised-button>Update</button>
+            </div>
+        </div>
+    </form>
+</ng-template>

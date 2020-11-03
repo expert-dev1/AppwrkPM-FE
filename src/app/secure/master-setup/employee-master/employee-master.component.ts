@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { STATUS_LIST } from 'src/app/core/modals/constant';
+import { MessageService } from 'src/app/core/services/message/message.service';
 import { CustomValidator, ValidatorErrorMessages } from '../../../core';
 import { MasterService } from '../service/master.service';
 
@@ -16,7 +18,7 @@ export class EmployeeMasterComponent implements OnInit {
   public orgId: any;
   public action: any;
   public getErrorMessage = ValidatorErrorMessages.getErrorMessage;
-  public statusList = [{ value: 'ACTIVE', name: 'Active' }, { value: 'INACTIVE', name: 'Inactive' }];
+  public statusList = STATUS_LIST;
   public designationList: any = [];
   public roleMasterList: any = [];
   public countryList: any = [];
@@ -49,7 +51,7 @@ export class EmployeeMasterComponent implements OnInit {
   })
 
   constructor(public dialogRef: MatDialogRef<EmployeeMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
-    private masterService: MasterService, private toaster: ToastrService) {
+    private masterService: MasterService, private toaster: ToastrService, private messageService: MessageService) {
     this.employeeId = data.employeeId;
     this.orgId = data.orgId;
     this.action = data.action;
@@ -165,13 +167,17 @@ export class EmployeeMasterComponent implements OnInit {
     let emailId = this.employeeForm.controls.emailId.value;
     if (emailId && emailId != undefined && emailId != null && emailId != '') {
       this.masterService.checkEmailIdOfEmployee(emailId).subscribe(data => {
-        if (data && data.data && data.data != undefined && data.data != null) {
-          this.employeeForm.controls.emailId.setErrors({"emailAlreadyRegistered": true});
-          // this.employeeForm.controls.emailId.updateValueAndValidity();
-        } else {
+        if (data && data.data) {
           this.employeeForm.controls.emailId.setErrors(null);
           this.employeeForm.controls.emailId.setValidators([Validators.required, Validators.maxLength(50), CustomValidator.emailIdValidation]);
           this.employeeForm.controls.emailId.updateValueAndValidity();
+        } else {
+          this.employeeForm.controls.emailId.setErrors({ "emailAlreadyRegistered": true });
+          // this.employeeForm.controls.emailId.updateValueAndValidity();
+          let messageObj = this.messageService.getMessage("EMAIL_ALREADY_EXISTS");
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         }
       }, error => {
         console.log('Error in checking employee email id : ', error);
@@ -180,7 +186,6 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   saveEmployee() {
-    console.log('Employee Form : ', this.employeeForm.value);
     if (this.employeeForm.invalid) {
       this.markFormAsTouched();
     } else {
@@ -189,9 +194,11 @@ export class EmployeeMasterComponent implements OnInit {
           this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-        console.log('Error in saving role master records : ', error.message);
-        if (error.message == 'RECORD_ALREADY_EXISTS') {
-          this.toaster.error("Record already exsits.", "ERROR");
+        if (error.message == 'EMAIL_ALREADY_EXISTS') {
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         } else {
           console.log('Error in saving employee records : ', error.message);
         }
@@ -209,8 +216,11 @@ export class EmployeeMasterComponent implements OnInit {
           this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-        if (error.message == 'EMAIL_ID_ALREADY_REGISTERED') {
-          this.toaster.error("E-Mail Id Already Registered.", "ERROR");
+        if (error.error.message == 'EMAIL_ALREADY_EXISTS') {
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         } else {
           console.log('Error in saving designation records : ', error.message);
         }
@@ -220,7 +230,6 @@ export class EmployeeMasterComponent implements OnInit {
 
   getEmployeeDeatilsById() {
     this.masterService.getEmployeeDeatilsById(this.employeeForm.controls.id.value).subscribe(data => {
-      console.log('data inside get employee details : ', data);
       if (data && data.data) {
         this.patchEmployeeForm(data.data);
       }
@@ -232,7 +241,6 @@ export class EmployeeMasterComponent implements OnInit {
   patchEmployeeForm(employee) {
     let employeeDetails = employee.employee;
     let roleMasterId = employee.roleEmployeeList;
-    console.log('roleMasterId : ', roleMasterId);
     this.employeeForm.patchValue({
       id: employeeDetails.id,
       empCode: employeeDetails.empCode,
@@ -265,20 +273,25 @@ export class EmployeeMasterComponent implements OnInit {
         sectionsIdsArray.push(parseInt(element.roleMasterId));
       });
       this.employeeForm.controls.roleMasterId.patchValue(sectionsIdsArray);
-    }    
+    }
   }
 
   uploadPhoto(event: any): void {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       var pattern = /\.(jpeg|jpg|png|img)$/i;
-      // let format = this.file.name.split('.').pop();
       if (!this.file.name.match(pattern)) {
-        this.toaster.warning("Invalid format of file", "WARNING");
+        let messageObj = this.messageService.getMessage("INVALID_FILE_FORMAT");
+        if (messageObj) {
+          this.toaster.warning(messageObj.description, messageObj.type);
+        }
         return;
       }
       else if (this.file.size > '1000000') {
-        this.toaster.warning("Only 1 MB file will be uploaded", "WARNING");
+        let messageObj = this.messageService.getMessage("INVALID_FILE_SIZE");
+        if (messageObj) {
+          this.toaster.warning(messageObj.description, messageObj.type);
+        }
         return;
       }
       let data = new FormData();

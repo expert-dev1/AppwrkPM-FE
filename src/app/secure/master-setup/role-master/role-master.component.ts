@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'src/app/core/services/message/message.service';
 import { ValidatorErrorMessages } from '../../../core';
 import { MasterService } from '../service/master.service';
 
@@ -24,7 +25,7 @@ export class RoleMasterComponent implements OnInit {
   })
 
   constructor(public dialogRef: MatDialogRef<RoleMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
-    private masterService: MasterService, private toaster: ToastrService) {
+    private masterService: MasterService, private toaster: ToastrService, private messageService: MessageService) {
     this.roleMasterId = data.roleMasterId;
     this.orgId = data.orgId;
     this.action = data.action;
@@ -78,11 +79,14 @@ export class RoleMasterComponent implements OnInit {
     } else {
       this.masterService.saveRoleMaster(this.roleMasterForm.value).subscribe(data => {
         if (data && data.data) {
-          this.dialogRef.close({success: true, action: this.action} );
+          this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
         if (error.error.message == 'RECORD_ALREADY_EXISTS') {
-          this.toaster.error("Record already exsits.","ERROR");
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         } else {
           console.log('Error in saving role master records : ', error.error.message);
         }
@@ -96,11 +100,14 @@ export class RoleMasterComponent implements OnInit {
     } else {
       this.masterService.updateRoleMaster(this.roleMasterForm.value).subscribe(data => {
         if (data && data.data) {
-          this.dialogRef.close({success: true, action: this.action} );
+          this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-        if (error == 'RECORD_ALREADY_EXISTS') {
-          this.toaster.error("Record already exsits.","ERROR");
+        if (error.error.message == 'RECORD_ALREADY_EXISTS') {
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         } else {
           console.log('Error in saving role master records : ', error.error.message);
         }

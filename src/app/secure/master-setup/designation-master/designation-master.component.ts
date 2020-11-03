@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'src/app/core/services/message/message.service';
 import { ValidatorErrorMessages } from '../../../core';
 import { MasterService } from '../service/master.service';
 
@@ -24,7 +25,7 @@ export class DesignationMasterComponent implements OnInit {
   })
 
   constructor(public dialogRef: MatDialogRef<DesignationMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
-    private masterService: MasterService, private toaster: ToastrService) {
+    private masterService: MasterService, private toaster: ToastrService, private messageService: MessageService) {
     this.designationId = data.designationId;
     this.orgId = data.orgId;
     this.action = data.action;
@@ -78,12 +79,14 @@ export class DesignationMasterComponent implements OnInit {
     } else {
       this.masterService.saveDesignation(this.designationForm.value).subscribe(data => {
         if (data && data.data) {
-          this.dialogRef.close({success: true, action: this.action} );
+          this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-        console.log('Error in saving designation records : ', error.message);
         if (error.error.message == 'RECORD_ALREADY_EXISTS') {
-          this.toaster.error("Record already exsits.","ERROR");
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         } else {
           console.log('Error in saving designation records : ', error.message);
         }
@@ -97,14 +100,16 @@ export class DesignationMasterComponent implements OnInit {
     } else {
       this.masterService.updateDesignation(this.designationForm.getRawValue()).subscribe(data => {
         if (data && data.data) {
-          this.dialogRef.close({success: true, action: this.action} );
+          this.dialogRef.close({ success: true, action: this.action });
         }
       }, error => {
-        console.log('Error in updating designation records : ', error.error.message);
         if (error.error.message == 'RECORD_ALREADY_EXISTS') {
-          this.toaster.error("Record already exsits.","ERROR");
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
         } else {
-          console.log('Error in updating designation records : ', error);
+          console.log('Error in saving designation records : ', error.message);
         }
       })
     }

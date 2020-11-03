@@ -3,7 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
 import { STATUS_MAP } from 'src/app/core/modals/constant';
+import { MessageService } from 'src/app/core/services/message/message.service';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
+import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
 import { SearchModel } from 'src/app/shared/models/search-model';
 import { EmployeeMasterComponent } from '../employee-master/employee-master.component';
 import { MasterService } from '../service/master.service';
@@ -27,7 +29,8 @@ export class EmployeeListComponent implements OnInit {
   public totalPage: any;
   public statusMap = STATUS_MAP;
 
-  constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService) {
+  constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService,
+    private messageService: MessageService) {
     if (this.orgId && this.orgId != null && this.orgId != undefined) {
       this.searchModel = new SearchModel(this.limit, this.offset, this.orgId, this.sortDirection, this.sortField);
       this.getEmployeeListByOrgIdWithPagination();
@@ -75,25 +78,67 @@ export class EmployeeListComponent implements OnInit {
   }
 
   openPopUp(employeeId, action) {
-    const dialogRef = this.dialog.open(EmployeeMasterComponent, {
-      width: '1200px',
-      height: '600px',
-      data: { employeeId: employeeId, orgId: this.orgId, action: action },
-      disableClose: true
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('result after save : ', result)
-      if (result) {
-        if (result.success) {
-          if (result.action == 'add') {
-            this.toastr.success("Record saved successfully", "SUCCESS");
-          } else {
-            this.toastr.success("Record updated successfully", "SUCCESS");
-          }
-          this.getEmployeeListByOrgIdWithPagination();
+    if (action == 'delete') {
+      const dialogRef = this.dialog.open(ConfirmationComponent, {
+        width: '500px',
+        disableClose: true
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.changeStatusOfEmployee(employeeId);
         }
+      })
+    } else {
+      const dialogRef = this.dialog.open(EmployeeMasterComponent, {
+        width: '1200px',
+        height: '600px',
+        data: { employeeId: employeeId, orgId: this.orgId, action: action },
+        disableClose: true
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('result after save : ', result)
+        if (result) {
+          if (result.success) {
+            if (result.action == 'add') {
+              let messageObj = this.messageService.getMessage("SAVE");
+              if (messageObj) {
+                this.toastr.success(messageObj.description, messageObj.type);
+              }
+            } else {
+              let messageObj = this.messageService.getMessage("UPDATE");
+              if (messageObj) {
+                this.toastr.success(messageObj.description, messageObj.type);
+              }
+            }
+            this.getEmployeeListByOrgIdWithPagination();
+          }
+        }
+      });
+    }
+  }
+
+  changeStatusOfEmployee(employeeId) {
+    this.masterService.changeStatusOfEmployee(employeeId).subscribe(data => {
+      if (data && data.data) {
+        let messageObj = this.messageService.getMessage("DELETE");
+        if (messageObj) {
+          this.toastr.success(messageObj.description, messageObj.type);
+        }
+        this.getEmployeeListByOrgIdWithPagination();
       }
+    }, error => {
+        console.log("Error in change Status Of Employee : ", error);
     });
+  }
+
+  doFilter(eventValue) {
+    if (eventValue && eventValue != undefined && eventValue != null) {
+      this.searchModel.searchString = eventValue;
+      this.getEmployeeListByOrgIdWithPagination();
+    } else {
+      this.searchModel.searchString = null;
+      this.getEmployeeListByOrgIdWithPagination();
+    }    
   }
 
 }

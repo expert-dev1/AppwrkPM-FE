@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MasterService } from '../../service/master.service';
 import { SearchModel } from 'src/app/shared/models/search-model';
-import { merge } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { STATUS_MAP } from 'src/app/core/modals/constant';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,83 +14,79 @@ import { tap } from 'rxjs/operators';
 })
 export class OrganisationListComponent implements OnInit {
 
-  displayedColumns: string[] = ['orgName', 'orgCode', 'status'];
-  dataSource: MatTableDataSource<any>;
-  searchParams:SearchModel = {
-    limit:5,
-    offset:0,
-    orgId:1,
-    sortDirection:"ASC",
-    sortField:'id',
-  }
-  totalItems= 0;
-  isLoadingResults=true;
-  isLoadingError;
+  public displayedColumns: string[] = ['orgCode', 'orgName', 'status', 'action'];
+  public limit: number = 10;
+  public offset: number = 0;
+  public orgId: any = 1;
+  public organizationList: any = [];
+  public sortDirection: any = "DESC";
+  public sortField: any = "id";
+  public searchModel: any;
+  public selectedPage: any;
+  public totalPage: any;
+  public statusMap = STATUS_MAP;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(
-    private masterService: MasterService,
-  ) {
+  constructor(private masterService: MasterService, private router: Router) {
+    this.searchModel = new SearchModel(this.limit, this.offset, 0, this.sortDirection, this.sortField);
+    this.getOrganisationListWithPagination();
   }
 
   ngOnInit(): void {
-    this.getProjectList();
+    
   }
 
-  getProjectList(){
-    this.masterService.getOrganisationList(this.searchParams).subscribe(resp => {
-      this.dataSource = new MatTableDataSource(resp.content);
-      this.totalItems = resp.totalItems;
-      this.isLoadingResults = false;
-    },err=>{
-      this.isLoadingResults = false;
-      this.isLoadingError = "Error in loading result"
+  getOrganisationListWithPagination() {
+    this.masterService.getOrganisationListWithPagination(this.searchModel).subscribe(data => {
+      if (data && data.data) {
+        this.organizationList = data.data.content;
+        this.limit = data.data.limit;
+        this.offset = data.data.currentPageNumber;
+        this.totalPage = data.data.totalPages;
+        if (this.offset == 0) {
+          this.selectedPage = this.offset;
+        }
+      }
+    }, error => {
+      console.log('Error in fetching Employee Master List : ', error.error.message);
     })
   }
-
-  ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    merge(this.sort.sortChange, this.paginator.page)
-        .pipe(
-            tap(() => {
-              this.isLoadingResults = true;
-              this.searchParams = {
-                limit: this.paginator.pageSize,
-                offset: (this.paginator.pageIndex * this.paginator.pageSize) ,
-                orgId:1,
-                sortDirection:this.sort.direction || this.searchParams.sortDirection,
-                sortField:this.sort.active || this.searchParams.sortField
-              }
-              this.getProjectList();
-              console.log(this.paginator.pageIndex,this.sort.direction, this.paginator.pageSize, this.sort )
-            }
-            )).subscribe(resp => {
-
-        })
+  
+  pageChanges(pageIndex: number) {
+    if (pageIndex >= 0 && pageIndex < this.totalPage) {
+      this.selectedPage = pageIndex;
+      this.searchModel.offset = pageIndex;
+      this.getOrganisationListWithPagination();
+    }
   }
 
+  sortData(sort: Sort) {
+    if (sort.direction) {
+      this.searchModel.sortDirection = sort.direction;
+      this.searchModel.sortField = sort.active;
+      this.getOrganisationListWithPagination();
+    }
+    else {
+      this.searchModel.sortDirection = "DESC";
+      this.searchModel.sortField = "id";
+      this.getOrganisationListWithPagination();
+    }
+  }
 
-  // pageChanges(pageIndex: number) {
-  //   if (pageIndex >= 0 && pageIndex < this.totalPage) {
-  //     this.selectedPage = pageIndex;
-  //     this.searchModel.offset = pageIndex;
-  //     this.getEmployeeListByOrgIdWithPagination();
-  //   }
-  // }
+  routeToAddAndEditOrganization(orgId, action) {
+    this.router.navigate(['secure/masterSetup/organisation/'+ action +'/' + orgId]);
+  }
 
-  // sortData(sort: Sort) {
-  //   if (sort.direction) {
-  //     this.searchModel.sortDirection = sort.direction;
-  //     this.searchModel.sortField = sort.active;
-  //     this.getEmployeeListByOrgIdWithPagination();
-  //   }
-  //   else {
-  //     this.searchModel.sortDirection = "DESC";
-  //     this.searchModel.sortField = "id";
-  //     this.getEmployeeListByOrgIdWithPagination();
-  //   }
-  // }
+  doFilter(eventValue) {
+    if (eventValue && eventValue != undefined && eventValue != null) {
+      this.searchModel.searchString = eventValue;
+      this.getOrganisationListWithPagination();
+    } else {
+      this.searchModel.searchString = null;
+      this.getOrganisationListWithPagination();
+    }    
+  }
 
 }

@@ -14,6 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MasterService {
+
   projectPlatformList = [];
   employeeList = [];
   projectList = [];
@@ -277,41 +278,159 @@ export class MasterService {
     }
   }
 
-  addNewProject(data): Observable<any> {
-    let url = MASTER_API + 'projects';
-    return this.http.post(url, data, httpOptions);
-  }
+  // addNewProject(data): Observable<any> {
+  //   let url = MASTER_API + 'projects';
+  //   return this.http.post(url, data, httpOptions);
+  // }
 
-  verifyProjectName(name): Observable<any> {
+  verifyProjectName(name, id): Observable<any> {
     let orgId = 1
-    let url = MASTER_API + 'projects/checkIfProjectNameAlreadyExists?name=' + name + '&orgId=' + orgId;
+    let url = MASTER_API + 'projects/checkIfProjectNameAlreadyExists?name=' + name + '&projectId=' + id;
     return this.http.get(url);
   }
 
-  getProjectList(params): Observable<any> {
-    // if (this.projectList.length) {
-    //   return of(this.projectList)
-    // } else {
-      let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
-      return this.http.post(url, params, httpOptions).pipe(map(
-        (resp:any) => {
-          this.projectList = resp.data.data.content
-          return resp.data.data
-        }
-      ),
-        catchError(this.errorHandler)
-      );
-    // }
+  // getProjectList(params): Observable<any> {
+  //   // if (this.projectList.length) {
+  //   //   return of(this.projectList)
+  //   // } else {
+  //     let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
+  //     return this.http.post(url, params, httpOptions).pipe(map(
+  //       (resp:any) => {
+  //         this.projectList = resp.data.data.content
+  //         return resp.data.data
+  //       }
+  //     ),
+  //       catchError(this.errorHandler)
+  //     );
+  //   // }
+  // }
+
+  getProjectList(data): Observable<any> {
+    let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
   }
 
-  getOrganisationList(params): Observable<any>{
+  getOrganisationListWithPagination(data): Observable<any>{
     let url = MASTER_API + 'organization/getOrganizationListByOrgIdWithPage';
-    return this.http.post(url, params, httpOptions).pipe(map(
-      (resp:any) => {
-        this.projectList = resp.data.data.content
-        return resp.data.data
-      }
-    ),
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  changeStatusOfEmployee(employeeId): Observable<any> {
+    let url = MASTER_API + 'employee?employeeId=' + employeeId;
+    return this.http.delete(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getOrganizationDetailsById(orgId): Observable<any> {
+    let url = MASTER_API + 'organization?orgId=' + orgId;
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+  
+  saveOrganization(data): Observable<any> {
+    let url = MASTER_API + 'organization';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  updateOrganization(data): Observable<any> {
+    let url = MASTER_API + 'organization';
+    return this.http.put(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  checkOrganizationCode(orgCode, orgId): Observable<any> {
+    let url = MASTER_API + 'organization/checkOrganizationCode?orgCode=' + orgCode + "&orgId=" + orgId;
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  saveOrganizationEvent(data): Observable<any> {
+    let url = MASTER_API + 'organizationEvents';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  saveProjectDTO(data): Observable<any> {
+    let url = MASTER_API + 'projects';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  updateProjectDTO(data): Observable<any> {
+    let url = MASTER_API + 'projects';
+    return this.http.put(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getProjectDetailsById(projectId): Observable<any> {
+    let url = MASTER_API + 'projects?projectId=' + projectId;
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  deleteClientMoreInfoById(clientMoreInfoId): Observable<any> {
+    let url = MASTER_API + 'projects/deleteClientMoreInfoById?clientMoreInfoId=' + clientMoreInfoId;
+    return this.http.delete(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  deleteEmployeeProjectById(employeeProjectId): Observable<any> {
+    let url = MASTER_API + 'projects/deleteEmployeeProjectById?employeeProjectId=' + employeeProjectId;
+    return this.http.delete(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
       catchError(this.errorHandler)
     );
   }

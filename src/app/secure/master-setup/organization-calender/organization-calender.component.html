@@ -1,0 +1,18 @@
+<Appwrk-layout-div [title]="'Organization Calender'">
+    <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+    <div rightButton>
+        <button (click)="openPopUp(0, 'add')" mat-button color="primary" class="mb-2">
+            <div class="d-flex justify-content-center align-items-center">
+                <span class="material-icons mr-2">
+                    add
+                </span>
+                <span>
+                    Add Event
+                </span>
+            </div>
+        </button>
+    </div>
+</Appwrk-layout-div>
+<ng-template #mainLayout>
+        <full-calendar [options]='calendarOptions'></full-calendar>
+</ng-template>

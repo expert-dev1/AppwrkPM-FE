@@ -35,16 +35,22 @@ import { AppwrkLoadingButtonComponent } from './components/appwrk-loading-button
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AppwrkLoaderComponent } from './components/appwrk-loader/appwrk-loader.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import { NgxMaskModule } from 'ngx-mask';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FullCalendarModule } from '@fullcalendar/angular';
+
 @NgModule({
   declarations: [HeaderComponent, SidebarComponent, ConfirmationComponent, PaginationPipe, ContentDivComponent, AppwrkLoadingButtonComponent, AppwrkLoaderComponent],
   imports: [
-    CommonModule,MatStepperModule,
-    SharedRoutingModule, NgSelectModule, FormsModule,MatToolbarModule,MatMenuModule,MatProgressSpinnerModule,
+    CommonModule,MatStepperModule,MatDialogModule,
+    SharedRoutingModule, NgSelectModule, FormsModule,MatToolbarModule,MatMenuModule, MatProgressSpinnerModule,
     ReactiveFormsModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
-    MatRadioModule,MatListModule,MatSidenavModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule, MatBadgeModule],
-  exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatInputModule,
-    MatRadioModule, PaginationPipe, MatSelectModule, MatBadgeModule, MatSliderModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, MatPaginatorModule,
-    NgSelectModule,MatStepperModule,MatProgressSpinnerModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule,MatToolbarModule,AppwrkLoaderComponent,MatMenuModule,ContentDivComponent,AppwrkLoadingButtonComponent],
+    MatRadioModule,MatListModule,MatSidenavModule, MatSelectModule, MatSliderModule, MatSortModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, MatTableModule, 
+    MatPaginatorModule, MatBadgeModule, NgxMaskModule, FullCalendarModule],
+  exports: [HeaderComponent, SidebarComponent, ReactiveFormsModule, MatSortModule, HttpClientModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, 
+    MatFormFieldModule, MatInputModule, MatRadioModule, PaginationPipe, MatSelectModule, MatBadgeModule, MatSliderModule, MatSlideToggleModule, MatTooltipModule, MatIconModule, 
+    MatTableModule, MatPaginatorModule, NgSelectModule,MatStepperModule,MatProgressSpinnerModule, FormsModule,MatListModule, ConfirmationComponent,MatSidenavModule, 
+    MatToolbarModule,AppwrkLoaderComponent,MatMenuModule,ContentDivComponent,AppwrkLoadingButtonComponent, NgxMaskModule, MatDialogModule, FullCalendarModule],
   providers: [
     {
       provide: DateAdapter,

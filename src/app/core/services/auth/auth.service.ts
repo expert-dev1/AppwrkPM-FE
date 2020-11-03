@@ -53,7 +53,6 @@ export class AuthService {
   }
 
   refreshToken(): Observable<any> {
-    console.log('inside get referesh token');
     const refreshToken = this.storageService.getRefereshToken();
     const data = {
       "refreshToken": refreshToken,
@@ -63,17 +62,31 @@ export class AuthService {
     let url = AUTH_API + 'getRefreshToken';
     return this.http.post(url, data, httpOptions).pipe(
       map(response => {
-        // this.storageService.saveAccessToken(response);
-        // this.storageService.saveRefereshToken(response);
+        this.setRefershTokenAndJWTInStorage(response);
         return this.successResponse(response);
       }),
       catchError(this.errorHandler)
     );
   }
 
+  setRefershTokenAndJWTInStorage(response) {
+    this.storageService.saveAccessToken(response.data.data.jwtToken);
+    this.storageService.saveRefereshToken(response.data.data.refershToken);
+  }
+
   signOut(userId): Observable<any> {
     let url = AUTH_API + 'logout?userId=' + userId;
     return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  changePassword(data: any): Observable<any> {
+    let url = AUTH_API + 'changePassword';
+    return this.http.post(url,data, httpOptions).pipe(
       map(response => {
         return this.successResponse(response);
       }),

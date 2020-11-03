@@ -1,19 +1,19 @@
-<Appwrk-layout-div [title]="'Add new project'">
+<Appwrk-layout-div [title]="'Project Details'">
   <ng-container *ngTemplateOutlet="steperLayout"></ng-container>
   <div rightButton>
     <button routerLink="/secure/masterSetup/projects" mat-button color="primary"><span class="material-icons">
         keyboard_backspace
-      </span>BACK TO PROJECT LIST</button>
+      </span>Back</button>
   </div>
 </Appwrk-layout-div>
 
 
 
 <ng-template #steperLayout>
-  <!-- linear -->
   <mat-horizontal-stepper #stepper>
+    <!-- linear -->
     <mat-step [stepControl]="projectInfoForm" [editable]="isEditable">
-      <ng-template matStepLabel>Add project information</ng-template>
+      <ng-template matStepLabel>Project information</ng-template>
       <!-- <form [formGroup]="projectInfoForm"> -->
       <ng-container *ngTemplateOutlet="projectInfoLayout"></ng-container>
       <div>
@@ -23,9 +23,11 @@
     </mat-step>
     <mat-step [stepControl]="clientInfoForm" [editable]="isEditable">
       <!-- <form [formGroup]="secondFormGroup"> -->
-      <ng-template matStepLabel>Add client information</ng-template>
+      <ng-template matStepLabel>Client information</ng-template>
       <ng-container *ngTemplateOutlet="clientInfoLayout"></ng-container>
-
+      <div>
+        <button id="step2next" style="display:none;" mat-button matStepperNext>Next</button>
+      </div>
       <!-- <mat-form-field>
           <mat-label>Address</mat-label>
           <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
@@ -37,17 +39,17 @@
       <!-- </form> -->
     </mat-step>
     <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Add Employees</ng-template>
-        <mat-form-field>
+      <ng-template matStepLabel>Employees</ng-template>
+      <ng-container *ngTemplateOutlet="employeeInfoLayout"></ng-container>
+      <!-- <mat-form-field>
           <mat-label>Address</mat-label>
           <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
-        </mat-form-field>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
+
+        </mat-form-field> -->
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
@@ -55,6 +57,8 @@
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button *ngIf="action == 'add'" (click)="save()">Save</button>
+        <button mat-button *ngIf="action == 'edit'" (click)="update()">Update</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>
@@ -67,7 +71,7 @@
       <div class="col-sm-12 col-md-6 col-lg-6">
         <div>
           <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Project name</mat-label>
+            <mat-label>Name</mat-label>
             <input type="text" formControlName="name" matInput required>
             <mat-error *ngIf="projectInfoForm.get('name').errors?.required">
               Name is <strong>required</strong>
@@ -107,39 +111,44 @@
         <div class="row">
           <div class="sm-12 col-md-6 col-lg-6">
             <mat-form-field appearance="outline" class="example-full-width">
-              <mat-label>Project start date</mat-label>
-              <input matInput [matDatepicker]="projectstartdate" readonly="true" required="true" [min]="currentDate"
-                formControlName="startDate">
+              <mat-label>Start date</mat-label>
+              <input matInput [matDatepicker]="projectstartdate" readonly="true" (dateChange)="restrictDate()"
+                required="true" [min]="currentDate" formControlName="startDate">
               <mat-datepicker-toggle matSuffix [for]="projectstartdate">
               </mat-datepicker-toggle>
               <mat-datepicker #projectstartdate></mat-datepicker>
               <mat-error *ngIf="projectInfoForm.controls.startDate.invalid">
-                Start date is <strong>required</strong>
+                <span matTooltip="{{getErrorMessage(projectInfoForm.controls.startDate,'project','startDate')}}">
+                  {{getErrorMessage(projectInfoForm.controls.startDate,'project','startDate')}}</span>
               </mat-error>
             </mat-form-field>
           </div>
           <div class="sm-12 col-md-6 col-lg-6">
             <mat-form-field appearance="outline" class="example-full-width">
-              <mat-label>Project start date</mat-label>
-              <input matInput [matDatepicker]="projectenddate" readonly="true" required="true" [min]="currentDate"
+              <mat-label>End date</mat-label>
+              <input matInput [matDatepicker]="projectenddate" readonly="true" (dateChange)="restrictDate()"
+                [min]="projectInfoForm.controls.startDate.value && projectInfoForm.controls.startDate.value != null ? projectInfoForm.controls.startDate.value : currentDate"
                 formControlName="endDate">
               <mat-datepicker-toggle matSuffix [for]="projectenddate">
               </mat-datepicker-toggle>
               <mat-datepicker #projectenddate></mat-datepicker>
               <mat-error *ngIf="projectInfoForm.controls.endDate.invalid">
-                Start date is <strong>required</strong>
+                <span matTooltip="{{getErrorMessage(projectInfoForm.controls.endDate,'project','endDate')}}">
+                  {{getErrorMessage(projectInfoForm.controls.endDate,'project','endDate')}}</span>
               </mat-error>
             </mat-form-field>
           </div>
         </div>
         <div>
           <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Project type (upwork/linkedIn)</mat-label>
-            <mat-select formControlName="platformTypeId">
+            <mat-label>Platform type (upwork/linkedIn)</mat-label>
+            <mat-select formControlName="platformTypeId" required="true">
               <mat-option *ngFor="let type of platformList" value="{{type.id}}">{{type.name | titlecase}}</mat-option>
             </mat-select>
             <mat-error *ngIf="projectInfoForm.controls.platformTypeId.invalid">
-              Project type is <strong>required</strong>
+              <span
+                matTooltip="{{getErrorMessage(projectInfoForm.controls.platformTypeId,'project','platformTypeId')}}">
+                {{getErrorMessage(projectInfoForm.controls.platformTypeId,'project','platformTypeId')}}</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -160,31 +169,32 @@
 
         <div class="row pl-5 ">
           <div class="sm-12 col-md-6 col-lg-6">
-            <label id="example-radio-group-label">Project current status</label>
-            <mat-radio-group color="primary" aria-labelledby="example-radio-group-label" class="example-radio-group"
-              formControlName="status">
-              <mat-radio-button class="example-radio-button" *ngFor="let type of projectStatusType"
-                [value]="type.title">
-                {{type.title | titlecase}}
+            <label id="example-radio-group-label">Status</label>
+            <mat-radio-group color="primary" aria-labelledby="example-radio-group-label" required="true"
+              class="example-radio-group" formControlName="status">
+              <mat-radio-button class="example-radio-button" *ngFor="let projectStatus of projectStatusList"
+                [value]="projectStatus.value">
+                {{projectStatus.name}}
               </mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="sm-12 col-md-6 col-lg-6">
-            <label id="example-radio-group-label">Project time</label>
-            <mat-radio-group color="primary" aria-labelledby="example-radio-group-label" class="example-radio-group"
-              formControlName="timeType">
-              <mat-radio-button class="example-radio-button" *ngFor="let status of projectTimeType"
-                [value]="status.value">
-                {{status.title}}
+            <label id="example-radio-group-label">Time Type</label>
+            <mat-radio-group color="primary" aria-labelledby="example-radio-group-label" required="true"
+              class="example-radio-group" formControlName="timeType" (change)="onTimeTypeSelection()">
+              <mat-radio-button class="example-radio-button" *ngFor="let projectTimeType of projectTimeTypeList"
+                [value]="projectTimeType.value">
+                {{projectTimeType.title}}
               </mat-radio-button>
-              <mat-error *ngIf="projectInfoForm.controls.timeType.invalid">
-                Project time type is <strong>required</strong>
-              </mat-error>
             </mat-radio-group>
             <div *ngIf="projectInfoForm.controls.timeType.value == 'FIXED'">
               <mat-form-field appearance="outline" class="example-full-width">
                 <mat-label>Amount</mat-label>
-                <input formControlName="amount" matInput type="number">
+                <input formControlName="amount" matInput type="text" required="true">
+                <mat-error *ngIf="projectInfoForm.controls.amount.invalid">
+                  <span matTooltip="{{getErrorMessage(projectInfoForm.controls.amount,'project','amount')}}">
+                    {{getErrorMessage(projectInfoForm.controls.amount,'project','amount')}}</span>
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -193,10 +203,11 @@
     </div>
     <div>
       <mat-form-field appearance="outline" class="example-full-width">
-        <mat-label>Project Description</mat-label>
-        <textarea formControlName="desc" rows="12" matInput placeholder=""></textarea>
-        <mat-error *ngIf="projectInfoForm.controls.desc.invalid">
-          Project descpription is <strong>required</strong>
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description" rows="12" matInput placeholder=""></textarea>
+        <mat-error *ngIf="projectInfoForm.controls.description.invalid">
+          <span matTooltip="{{getErrorMessage(projectInfoForm.controls.description,'project','description')}}">
+            {{getErrorMessage(projectInfoForm.controls.description,'project','description')}}</span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -211,19 +222,21 @@
       <div class="col-sm-12 col-md-6 col-lg-6">
         <div>
           <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Client name</mat-label>
+            <mat-label>Name</mat-label>
             <input type="text" formControlName="name" matInput required>
-            <mat-error *ngIf="clientInfoForm.get('name').errors?.required">
-              Client name is <strong>required</strong>
+            <mat-error *ngIf="clientInfoForm.controls.name.invalid">
+              <span matTooltip="{{getErrorMessage(clientInfoForm.controls.name,'client','name')}}">
+                {{getErrorMessage(clientInfoForm.controls.name,'client','name')}}</span>
             </mat-error>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Client email address</mat-label>
+            <mat-label>E-mail</mat-label>
             <input type="text" formControlName="email" matInput>
-            <mat-error *ngIf="clientInfoForm.get('email').errors?.email">
-              Not a valid email
+            <mat-error *ngIf="clientInfoForm.controls.email.invalid">
+              <span matTooltip="{{getErrorMessage(clientInfoForm.controls.email,'client','email')}}">
+                {{getErrorMessage(clientInfoForm.controls.email,'client','email')}}</span>
             </mat-error>
             <mat-hint *ngIf="!clientInfoForm.controls.showAltEmail.value" (click)="showAlternativeEmail(true)"
               align="end"><strong class="text-primary pointer">Click</strong> to add alternative email. </mat-hint>
@@ -231,7 +244,7 @@
         </div>
         <div *ngIf="clientInfoForm.controls.showAltEmail.value">
           <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Client alternative email address</mat-label>
+            <mat-label>Alternative E-mail</mat-label>
             <input type="text" formControlName="altEmail" matInput>
             <mat-error *ngIf="clientInfoForm.get('email').errors?.email">
               Not a valid email
@@ -242,14 +255,14 @@
         </div>
         <div>
           <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Client skypeId</mat-label>
-            <input type="text" formControlName="skype" matInput>
+            <mat-label>Skype Id</mat-label>
+            <input type="text" formControlName="skypeId" matInput>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field appearance="outline" class="example-full-width">
             <mat-label>More info about client</mat-label>
-            <textarea formControlName="info" rows="12" matInput placeholder=""></textarea>
+            <textarea formControlName="moreInfo" rows="12" matInput placeholder=""></textarea>
             <!-- <mat-error *ngIf="projectInfoForm.controls.desc.invalid">
               Project descpription is <strong>required</strong>
             </mat-error> -->
@@ -257,32 +270,213 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-6 col-lg-6">
-        <h3 class="m-auto">Add more info about client <span (click)="addmeta()" class="material-icons mr-2">
+        <h3 class="m-auto">Add more info about client <span (click)="addClientMoreInformations()"
+            class="material-icons mr-2">
             add
           </span></h3>
-        <div formArrayName="meta" class="row">
-          <ng-container *ngFor="let metafield of meta.controls; let i=index; last as last" formGroupName="{{i}}">
-            <div class="col-sm-12 col-md-6 col-lg-6">
-              <mat-form-field appearance="outline">
-                <mat-label>Select Info type</mat-label>
-                <mat-select formControlName="key">
-                  <mat-option *ngFor="let metaType of clientMetaArray" [value]="metaType.key">{{metaType.key}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-6">
-              <div>
-                <mat-form-field appearance="outline" class="example-full-width">
-                  <mat-label>{{metafield.value.key}} info</mat-label>
-                  <input type="text" formControlName="value" matInput>
-                </mat-form-field>
-              </div>
-            </div>
-          </ng-container>
+        <div class="row">
+          <table mat-table [dataSource]="dataSourceForClientInformation" formArrayName="clientInformations" mat-table
+            style="width: 100%">
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsForClientMoreInformation;sticky:true;"></tr>
+            <tr mat-row-responsive mat-row
+              *matRowDef="let row; let i = index; columns: displayedColumnsForClientMoreInformation;"></tr>
+            <ng-container matColumnDef="key">
+              <th mat-header-cell *matHeaderCellDef>
+                Info type
+              </th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <div *ngIf="!row.value.canEdit">
+                  <mat-label [matTooltip]="row.value.key">
+                    {{moreInformationMap[row.value.key]}}
+                  </mat-label>
+                </div>
+                <div *ngIf="row.value.canEdit">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select Info type</mat-label>
+                    <mat-select formControlName="key" (selectionChange)="checkForDuplicate(index, row)">
+                      <mat-option *ngFor="let moreInformation of moreInformationList" [value]="moreInformation.value">
+                        {{moreInformation.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="infoValue">
+              <th mat-header-cell *matHeaderCellDef>
+                Info type
+              </th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <div *ngIf="!row.value.canEdit">
+                  <mat-label [matTooltip]="row.value.key">
+                    {{row.value.value}}
+                  </mat-label>
+                </div>
+                <div *ngIf="row.value.canEdit">
+                  <mat-form-field appearance="outline" class="example-full-width">
+                    <input type="text" formControlName="value" matInput>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                Action
+              </th>
+              <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                <ng-container>
+                  <button type="button" *ngIf="row.value.id != 0 && !row.value.canEdit" matTooltip="Edit"
+                    (click)="editClientMoreinfo(row)">
+                    <div class="d-flex justify-content-center align-items-center" [matTooltip]="Edit">
+                      <span class="material-icons">
+                        edit
+                      </span>
+                    </div>
+                  </button>
+                  <button *ngIf="row.value.id != 0 && row.value.canEdit" matTooltip="Cancel"
+                    (click)="editClientMoreinfo(row)">
+                    <div class="d-flex justify-content-center align-items-center" [matTooltip]="Cancel">
+                      <span class="material-icons">
+                        cancel
+                      </span>
+                    </div>
+                  </button>
+                </ng-container>
+
+                <ng-container>
+                  <button (click)="deleteClientMoreInfo(row.value, index)" [matTooltip]="Delete" mat-button
+                    color="primary">
+                    <div class="d-flex">
+                      <span class="material-icons mr-2">
+                        delete
+                      </span>
+                    </div>
+                  </button>
+                </ng-container>
+              </td>
+            </ng-container>
+          </table>
         </div>
       </div>
     </div>
     <button class="mt-3" (click)="submitStep2()" mat-button>Next</button>
   </form>
+</ng-template>
+
+<ng-template #employeeInfoLayout>
+  <ng-select appendTo="body" [items]="employeeList" placeholder="Employee" bindLabel="fullName" bindValue="id"
+    [searchable]="true" [clearable]="false" [closeOnSelect]="false" (change)="addEmployeeToAssign($event)">
+  </ng-select>
+
+  <div>
+    <form [formGroup]="employeeProjectForm">
+      <table mat-table [dataSource]="dataSource" *ngIf="employeeProjectFormList.length > 0" formArrayName="formArray" mat-table style="width: 100%">
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
+        <tr mat-row-responsive mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+        <ng-container matColumnDef="employeeFullName">
+          <th mat-header-cell *matHeaderCellDef>
+            Employee
+          </th>
+          <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+            <mat-label [matTooltip]="row.controls.employeeFullName.value ">
+              {{row.controls.employeeFullName.value }}
+            </mat-label>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="checkInDate">
+          <th mat-header-cell *matHeaderCellDef>
+            Check-in Date
+          </th>
+          <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+            <div *ngIf="!row.value.canEdit">
+              <mat-label [matTooltip]="row.controls.checkInDate.value | date: 'dd MMM, yyyy'">
+                {{row.controls.checkInDate.value | date: 'dd MMM, yyyy' }}
+              </mat-label>
+            </div>
+            <div *ngIf="row.value.canEdit">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="checkInDate" readonly="true"
+                  (dateChange)="restrictCheckInCheckOutDate(index, row)" required="true" [min]="currentDate"
+                  formControlName="checkInDate">
+                <mat-datepicker-toggle matSuffix [for]="checkInDate">
+                </mat-datepicker-toggle>
+                <mat-datepicker #checkInDate></mat-datepicker>
+                <mat-error *ngIf="row['controls'].checkInDate.invalid && row['controls'].checkInDate.touched">
+                  <span matTooltip="{{getErrorMessage(row['controls'].checkInDate,'project','checkInDate')}}">
+                    {{getErrorMessage(row['controls'].checkInDate,'project','checkInDate')}}</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="checkOutDate">
+          <th mat-header-cell *matHeaderCellDef>
+            Check-out Date
+          </th>
+          <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+            <div *ngIf="!row.value.canEdit">
+              <mat-label [matTooltip]="row.controls.checkOutDate.value | date: 'dd MMM, yyyy'">
+                {{row.controls.checkOutDate.value | date: 'dd MMM, yyyy' }}
+              </mat-label>
+            </div>
+            <div *ngIf="row.value.canEdit">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="checkOutDate" readonly="true"
+                  (dateChange)="restrictCheckInCheckOutDate(index, row)" required="true" [min]="currentDate"
+                  formControlName="checkOutDate">
+                <mat-datepicker-toggle matSuffix [for]="checkOutDate">
+                </mat-datepicker-toggle>
+                <mat-datepicker #checkOutDate></mat-datepicker>
+                <mat-error *ngIf="row['controls'].checkOutDate.invalid && row['controls'].checkOutDate.touched">
+                  <span matTooltip="{{getErrorMessage(row['controls'].checkOutDate,'project','checkOutDate')}}">
+                    {{getErrorMessage(row['controls'].checkOutDate,'project','checkOutDate')}}</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+            Action
+          </th>
+          <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+            <ng-container>
+              <button type="button" *ngIf="row.value.id != 0 && !row.value.canEdit" matTooltip="Edit"
+                [disabled]="row.controls.canDelete.value" (click)="edit(row.value, index)" class="btn-a primary">
+                <div class="d-flex justify-content-center align-items-center" [matTooltip]="Edit">
+                  <span class="material-icons">
+                    edit
+                  </span>
+                </div>
+              </button>
+              <button *ngIf="row.value.id != 0 && row.value.canEdit" matTooltip="Cancel"
+                (click)="edit(row.value, index)" class="btn-a primary">
+                <div class="d-flex justify-content-center align-items-center" [matTooltip]="Edit">
+                  <span class="material-icons">
+                    cancel
+                  </span>
+                </div>
+              </button>
+            </ng-container>
+
+            <ng-container>
+              <button (click)="delete(row.value, 'delete')" [matTooltip]="Delete" mat-button color="primary"
+                class="mb-2">
+                <div class="d-flex justify-content-center align-items-center">
+                  <span class="material-icons mr-2">
+                    delete
+                  </span>
+                </div>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+      </table>
+    </form>
+  </div>
 </ng-template>

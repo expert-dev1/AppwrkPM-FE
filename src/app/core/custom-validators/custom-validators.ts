@@ -67,7 +67,7 @@ export class CustomValidator {
     }
 
     static userNameValidation(control: AbstractControl): ValidationErrors {
-        var reg = /^[0-9a-zA-Z-.]+$/;
+        var reg = /^[0-9a-zA-Z-]+$/;
         if (!control.value) {
             return null;
         }

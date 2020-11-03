@@ -36,6 +36,7 @@
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #beforeMenu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="openPopUpForChangePassword()">Change Password</button>
         <button mat-menu-item (click)="logout()">Logout</button>
         <!-- <button mat-menu-item>Item 2</button> -->
       </mat-menu>

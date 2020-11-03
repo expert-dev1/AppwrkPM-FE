@@ -9,19 +9,26 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { EmployeeMasterComponent } from './employee-master/employee-master.component';
 import { DesignationListComponent } from './designation-list/designation-list.component';
 import { DesignationMasterComponent } from './designation-master/designation-master.component';
+import { OrganizationCalenderComponent } from './organization-calender/organization-calender.component';
+import { AddEditCalendarEventComponent } from './add-edit-calendar-event/add-edit-calendar-event.component';
+import { OrganizationEventListComponent } from './organization-event-list/organization-event-list.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @NgModule({
-  declarations: [RoleListComponent, RoleMasterComponent, EmployeeListComponent, EmployeeMasterComponent, DesignationListComponent, DesignationMasterComponent],
+  declarations: [RoleListComponent, RoleMasterComponent, EmployeeListComponent, EmployeeMasterComponent, DesignationListComponent, DesignationMasterComponent, OrganizationCalenderComponent, AddEditCalendarEventComponent, OrganizationEventListComponent],
   imports: [
     CommonModule,
     MasterSetupRoutingModule,
-    SharedModule
+    SharedModule,
+    NgxMaterialTimepickerModule
   ],
   entryComponents: [
     RoleMasterComponent,
     EmployeeMasterComponent,
-    DesignationMasterComponent
+    DesignationMasterComponent,
+    AddEditCalendarEventComponent,
+    OrganizationEventListComponent
   ],
 })
 export class MasterSetupModule { }

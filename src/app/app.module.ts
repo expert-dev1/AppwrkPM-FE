@@ -9,6 +9,17 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientInterceptor } from './core/_interceptors/http-client-interceptor';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid'; 
+import interactionPlugin from '@fullcalendar/interaction'; 
+
+FullCalendarModule.registerPlugins([ 
+  dayGridPlugin,
+  interactionPlugin
+]);
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
   declarations: [
@@ -22,15 +33,18 @@ import { HttpClientInterceptor } from './core/_interceptors/http-client-intercep
     BrowserAnimationsModule,
     HttpClientModule,
     ToastrModule.forRoot({
-      timeOut: 5000,
+      timeOut: 3000,
       newestOnTop: true,
       // positionClass: 'toast-bottom-right',
       closeButton: true,
       progressBar: true,
       progressAnimation: 'increasing',
       preventDuplicates: true
-    })
+    }),
+    NgxMaskModule.forRoot(options),
+    FontAwesomeModule 
   ],
+  exports: [NgxMaskModule],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: HttpClientInterceptor,
