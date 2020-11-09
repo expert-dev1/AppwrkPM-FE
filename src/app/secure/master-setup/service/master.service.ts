@@ -21,7 +21,11 @@ export class MasterService {
 
   constructor(private http: HttpClient) { }
 
-
+  /**
+    * @author Amit Malik
+    * @description This function throws the error or exception to the method from which it is invoked
+    * @param error Error from backend
+   */
   errorHandler(error) {
     try {
       return throwError(error);
@@ -35,6 +39,11 @@ export class MasterService {
     }
   }
 
+  /**
+   * @author Amit Malik
+   * @description This function sends the data or response of the API
+   * @param response response or data from API
+   */
   successResponse(response) {
     try {
       if (response && response.data) {
@@ -46,6 +55,11 @@ export class MasterService {
     return response;
   }
 
+  /**
+   * @author Amit Malik
+   * @description get Role List By Org Id With Pagination
+   * @param data Search Model
+   */
   getRoleListByOrgIdWithPagination(data): Observable<any> {
     let url = MASTER_API + 'roleMaster/getRoleMasterListByOrgIdWithPage';
     return this.http.post(url, data, httpOptions).pipe(
@@ -56,6 +70,11 @@ export class MasterService {
     );
   }
 
+  /**
+   * @author Amit Malik
+   * @description Save Role Master
+   * @param data Role Master Form
+   */
   saveRoleMaster(data): Observable<any> {
     let url = MASTER_API + 'roleMaster';
     return this.http.post(url, data, httpOptions).pipe(
@@ -66,6 +85,11 @@ export class MasterService {
     );
   }
 
+  /**
+   * @author Amit Malik
+   * @description Update Role Master by role master id
+   * @param data Role Master Form
+   */
   updateRoleMaster(data): Observable<any> {
     let url = MASTER_API + 'roleMaster?roleMasterId=' + data.id;
     return this.http.put(url, data, httpOptions).pipe(
@@ -76,6 +100,11 @@ export class MasterService {
     );
   }
 
+  /**
+   * @author Amit Malik
+   * @description get Role Master Deatils By role master Id
+   * @param roleMasterId Role Master Id
+   */
   getRoleMasterDeatilsById(roleMasterId): Observable<any> {
     let url = MASTER_API + 'roleMaster?roleMasterId=' + roleMasterId;
     return this.http.get(url, httpOptions).pipe(
@@ -86,6 +115,11 @@ export class MasterService {
     );
   }
 
+  /**
+   * @author Amit Malik
+   * @description Delete Role Master Record by Role Master Id
+   * @param roleId Role Master Id
+   */
   deleteRoleById(roleId): Observable<any> {
     let url = MASTER_API + 'roleMaster?roleMasterId=' + roleId;
     return this.http.delete(url, httpOptions).pipe(
@@ -96,8 +130,12 @@ export class MasterService {
     );
   }
 
-  getRoleMasterListByOrgId(orgId): Observable<any> {
-    let url = MASTER_API + 'roleMaster/getRoleMasterListByOrgId?orgId=' + orgId;
+  /**
+   * @author Amit Malik
+   * @description get Role Master list By Organization Id
+   */
+  getRoleMasterListByOrgId(): Observable<any> {
+    let url = MASTER_API + 'roleMaster/getRoleMasterListByOrgId';
     return this.http.get(url, httpOptions).pipe(
       map(response => {
         return this.successResponse(response);
@@ -216,8 +254,8 @@ export class MasterService {
     );
   }
 
-  getDesignationListByOrgId(orgId: any): Observable<any> {
-    let url = MASTER_API + 'designation/getDesignationListByOrgId?orgId=' + orgId;
+  getDesignationListByOrgId(): Observable<any> {
+    let url = MASTER_API + 'designation/getDesignationListByOrgId';
     return this.http.get(url, httpOptions).pipe(
       map(response => {
         return this.successResponse(response);
@@ -251,8 +289,7 @@ export class MasterService {
     if (this.employeeList.length) {
       return of(this.employeeList)
     } else {
-      let orgId = 1
-      let url = MASTER_API + 'employee/getEmployeeListByOrgId?orgId=' + orgId;
+      let url = MASTER_API + 'employee/getEmployeeListByOrgId';
       return this.http.get(url).pipe(
         map((resp: any) => {
           let list = resp.data.data
@@ -278,32 +315,10 @@ export class MasterService {
     }
   }
 
-  // addNewProject(data): Observable<any> {
-  //   let url = MASTER_API + 'projects';
-  //   return this.http.post(url, data, httpOptions);
-  // }
-
   verifyProjectName(name, id): Observable<any> {
-    let orgId = 1
     let url = MASTER_API + 'projects/checkIfProjectNameAlreadyExists?name=' + name + '&projectId=' + id;
     return this.http.get(url);
   }
-
-  // getProjectList(params): Observable<any> {
-  //   // if (this.projectList.length) {
-  //   //   return of(this.projectList)
-  //   // } else {
-  //     let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
-  //     return this.http.post(url, params, httpOptions).pipe(map(
-  //       (resp:any) => {
-  //         this.projectList = resp.data.data.content
-  //         return resp.data.data
-  //       }
-  //     ),
-  //       catchError(this.errorHandler)
-  //     );
-  //   // }
-  // }
 
   getProjectList(data): Observable<any> {
     let url = MASTER_API + 'projects/getProjectListByOrgIdWithPage';
@@ -315,7 +330,7 @@ export class MasterService {
     );
   }
 
-  getOrganisationListWithPagination(data): Observable<any>{
+  getOrganisationListWithPagination(data): Observable<any> {
     let url = MASTER_API + 'organization/getOrganizationListByOrgIdWithPage';
     return this.http.post(url, data, httpOptions).pipe(
       map(response => {
@@ -344,7 +359,7 @@ export class MasterService {
       catchError(this.errorHandler)
     );
   }
-  
+
   saveOrganization(data): Observable<any> {
     let url = MASTER_API + 'organization';
     return this.http.post(url, data, httpOptions).pipe(
@@ -376,8 +391,18 @@ export class MasterService {
   }
 
   saveOrganizationEvent(data): Observable<any> {
-    let url = MASTER_API + 'organizationEvents';
+    let url = MASTER_API + 'organizationCalendar';
     return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getEventsAndHolidaysListForOrganizationCalendar(): Observable<any> {
+    let url = MASTER_API + 'organizationCalendar/getEventsAndHolidaysListForOrganizationCalendar';
+    return this.http.get(url, httpOptions).pipe(
       map(response => {
         return this.successResponse(response);
       }),
@@ -428,6 +453,16 @@ export class MasterService {
   deleteEmployeeProjectById(employeeProjectId): Observable<any> {
     let url = MASTER_API + 'projects/deleteEmployeeProjectById?employeeProjectId=' + employeeProjectId;
     return this.http.delete(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getProjectListByOrgIdAndLoggedInEmployeeId(): Observable<any> {
+    let url = MASTER_API + 'projects/getProjectListByOrgIdAndLoggedInEmployeeId';
+    return this.http.get(url, httpOptions).pipe(
       map(response => {
         return this.successResponse(response);
       }),

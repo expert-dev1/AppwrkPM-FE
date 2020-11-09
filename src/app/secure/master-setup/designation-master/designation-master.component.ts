@@ -13,7 +13,6 @@ import { MasterService } from '../service/master.service';
 })
 export class DesignationMasterComponent implements OnInit {
 
-  public orgId: any;
   public designationId: any;
   public action: any;
   public getErrorMessage = ValidatorErrorMessages.getErrorMessage;
@@ -27,7 +26,6 @@ export class DesignationMasterComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DesignationMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
     private masterService: MasterService, private toaster: ToastrService, private messageService: MessageService) {
     this.designationId = data.designationId;
-    this.orgId = data.orgId;
     this.action = data.action;
     this.openFormBasedOnActions();
   }
@@ -38,15 +36,9 @@ export class DesignationMasterComponent implements OnInit {
   openFormBasedOnActions() {
     this.designationForm.patchValue({
       id: this.designationId,
-    })
-    if (this.action == 'add') {
-      this.designationForm.patchValue({
-        organizationId: this.orgId,
-      })
-    } else if (this.action == 'edit') {
+    });
+    if (this.action == 'edit') {
       this.getDesignationDeatilsById();
-    } else {
-
     }
   }
 

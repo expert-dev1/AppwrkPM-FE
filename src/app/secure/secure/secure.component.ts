@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'src/app/core/services/message/message.service';
+import { PERMISSIONS } from 'src/app/core/modals/permission-model';
 
 @Component({
   selector: 'app-secure',
@@ -18,25 +19,34 @@ export class SecureComponent implements OnInit {
   constructor(private storageService: StorageService, private router: Router,
     private authService: AuthService, public dialog: MatDialog, private toastr: ToastrService, private messageService: MessageService) { }
 
-  menuList = [
+  public menuList = [    
     {
-      title:'Role Master', icon:'person' ,routerLink:'/secure/masterSetup/roles'
+      title:'Dashboard', icon:'dashboard', capsName:'EMPLOYEE_TIME_SHEET', routerLink:'/secure/dashboard/employeeDashboard'
     },
     {
-      title:'Designation', icon:'layers' ,routerLink:'/secure/masterSetup/designation'
+      title:'Organisation', icon:'business', capsName:'ORGANIZATION', routerLink:'/secure/masterSetup/organisation'
     },
     {
-      title:'Employee', icon:'people' ,routerLink:'/secure/masterSetup/employee'
+      title:'Role Master', icon:'person', capsName:'ROLE_MASTER', routerLink:'/secure/masterSetup/roles', 
     },
     {
-      title:'Projects', icon:'assignment_ind' ,routerLink:'/secure/masterSetup/projects'
+      title:'Designation', icon:'layers', capsName:'DESIGNATION', routerLink:'/secure/masterSetup/designation'
     },
     {
-      title:'Organisation', icon:'business' ,routerLink:'/secure/masterSetup/organisation'
+      title:'Employee', icon:'people', capsName:'EMPLOYEE' , routerLink:'/secure/masterSetup/employee'
     },
     {
-      title:'Organization Calender', icon:'date_range' ,routerLink:'/secure/masterSetup/organizationCalender'
-    }
+      title:'Projects', icon:'assignment_ind', capsName:'PROJECT', routerLink:'/secure/masterSetup/projects'
+    },
+    {
+      title:'Organization Calender', icon:'date_range', capsName:'ORGANIZATION_CALENDAR', routerLink:'/secure/masterSetup/organizationCalender'
+    },
+    {
+      title:'Time-sheet', icon:'assignment_turned_in', capsName:'EMPLOYEE_TIME_SHEET', routerLink:'/secure/timeSheet/employeeTimeSheet'
+    },
+    {
+      title:'Time-sheet status change', icon:'supervised_user_circle', capsName:'TIME_SHEET_STATUS_CAHNGE', routerLink:'/secure/timeSheet/statusChange'
+    },
   ]
 
   ngOnInit(): void {
@@ -73,6 +83,17 @@ export class SecureComponent implements OnInit {
           }
       }
     })
+  }
+
+  hideOrShowModuleButton(capsNameOfModule) {
+    let weatherModuleIsVissibleToUserOrNot = false;
+    let userRolesIdsList = this.storageService.getUserRoles();
+    let permissionsOfModule = PERMISSIONS[capsNameOfModule];
+    if (permissionsOfModule && permissionsOfModule != undefined && permissionsOfModule != null) {
+      weatherModuleIsVissibleToUserOrNot = userRolesIdsList.some(item => permissionsOfModule.includes(item));
+      return weatherModuleIsVissibleToUserOrNot;
+    }
+    return weatherModuleIsVissibleToUserOrNot;
   }
 
 }

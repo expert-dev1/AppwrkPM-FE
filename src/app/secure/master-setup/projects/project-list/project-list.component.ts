@@ -37,7 +37,6 @@ export class ProjectListComponent implements OnInit {
   public offset: number = 0;
   public sortDirection: any = "DESC";
   public sortField: any = "id";
-  public orgId: any = 1;
   public projectList: any = [];
   public selectedPage: any;
   public totalPage: any;
@@ -48,10 +47,8 @@ export class ProjectListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private masterService: MasterService, private router: Router) {
-    if (this.orgId && this.orgId != null && this.orgId != undefined) {
-      this.searchModel = new SearchModel(this.limit, this.offset, this.orgId, this.sortDirection, this.sortField);
-      this.getProjectList();
-    }
+    this.searchModel = new SearchModel(this.limit, this.offset, 0, this.sortDirection, this.sortField);
+    this.getProjectList();
   }
 
   ngOnInit(): void {
@@ -62,11 +59,11 @@ export class ProjectListComponent implements OnInit {
     this.masterService.getProjectList(this.searchModel).subscribe(data => {
       this.projectList = data.data.content;
       this.limit = data.data.limit;
-        this.offset = data.data.currentPageNumber;
-        this.totalPage = data.data.totalPages;
-        if (this.offset == 0) {
-          this.selectedPage = this.offset;
-        }
+      this.offset = data.data.currentPageNumber;
+      this.totalPage = data.data.totalPages;
+      if (this.offset == 0) {
+        this.selectedPage = this.offset;
+      }
     }, error => {
       console.log('Error in fetching Employee Master List : ', error);
     })
@@ -95,17 +92,17 @@ export class ProjectListComponent implements OnInit {
   }
 
   doFilter(eventValue) {
-    if (eventValue && eventValue != undefined && eventValue != null) { 
+    if (eventValue && eventValue != undefined && eventValue != null) {
       this.searchModel.searchString = eventValue;
       this.getProjectList();
     } else {
       this.searchModel.searchString = null;
       this.getProjectList();
-    }    
+    }
   }
 
   routeToAddAndEditProject(projectId, action) {
-    this.router.navigate(['secure/masterSetup/projects/'+ action +'/' + projectId]);
+    this.router.navigate(['secure/masterSetup/projects/' + action + '/' + projectId]);
   }
 
 }

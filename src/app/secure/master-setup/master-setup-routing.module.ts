@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { PERMISSIONS } from 'src/app/core/modals/permission-model';
+import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { DesignationListComponent } from './designation-list/designation-list.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { OrganizationCalenderComponent } from './organization-calender/organization-calender.component';
@@ -11,19 +13,35 @@ const routes: Routes = [
     children: [
       {
         path: 'roles',
-        component: RoleListComponent
+        component: RoleListComponent,
+        canActivate: [AuthGuard],
+        data: {
+          role: PERMISSIONS.ROLE_MASTER
+        }
       },
       {
         path: 'employee',
-        component: EmployeeListComponent
+        component: EmployeeListComponent,
+        canActivate: [AuthGuard],
+        data: {
+          role: PERMISSIONS.EMPLOYEE
+        }
       },
       {
         path: 'designation',
-        component: DesignationListComponent
+        component: DesignationListComponent,
+        canActivate: [AuthGuard],
+        data: {
+          role: PERMISSIONS.DESIGNATION
+        }
       },
       {
         path: 'organizationCalender',
-        component: OrganizationCalenderComponent
+        component: OrganizationCalenderComponent,
+        canActivate: [AuthGuard],
+        data: {
+          role: PERMISSIONS.ORGANIZATION_CALENDAR
+        }
       },
       {
         path: 'projects',

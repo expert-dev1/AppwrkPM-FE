@@ -5,123 +5,107 @@
                 cancel
             </span></button>
     </div>
-    <form [formGroup]="organizationEventForm" (ngSubmit)="save()">
+    <form [formGroup]="organizationCalendarForm" (ngSubmit)="save()">
         <div class="row">
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-label>Event For</mat-label>
                 <ng-select [items]="eventForList" placeholder="Event For *" formControlName="eventFor" bindLabel="name"
                     bindValue="value" [searchable]="true" [clearable]="false" required="true" [closeOnSelect]="true">
                 </ng-select>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.eventFor.invalid && organizationEventForm.controls.eventFor.touched">
+                <mat-error
+                    *ngIf="organizationCalendarForm.controls.eventFor.invalid && organizationCalendarForm.controls.eventFor.touched">
                     <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.eventFor,'organizationEvent','eventFor')}}">
-                        {{getErrorMessage(organizationEventForm.controls.eventFor,'organizationEvent','eventFor')}}</span>
-                </label>
+                        matTooltip="{{getErrorMessage(organizationCalendarForm.controls.eventFor,'organizationEvent','eventFor')}}">
+                        {{getErrorMessage(organizationCalendarForm.controls.eventFor,'organizationEvent','eventFor')}}</span>
+                </mat-error>
             </div>
 
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2"
-                *ngIf="organizationEventForm.controls.eventFor.value">
+                *ngIf="organizationCalendarForm.controls.eventFor.value">
                 <mat-form-field appearance="outline">
                     <mat-label>
-                        {{eventForMap[organizationEventForm.controls.eventFor.value]}}
+                        {{eventForMap[organizationCalendarForm.controls.eventFor.value]}}
                     </mat-label>
                     <input formControlName="celebrationFor" matInput type='text' required>
+                    <mat-error
+                        *ngIf="organizationCalendarForm.controls.celebrationFor.invalid && organizationCalendarForm.controls.celebrationFor.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(organizationCalendarForm.controls.celebrationFor,'organizationEvent','celebrationFor')}}">
+                            {{getErrorMessage(organizationCalendarForm.controls.celebrationFor,'organizationEvent','celebrationFor')}}</span>
+                    </mat-error>
                 </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.celebrationFor.invalid && organizationEventForm.controls.celebrationFor.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.celebrationFor,'organizationEvent','celebrationFor')}}">
-                        {{getErrorMessage(organizationEventForm.controls.celebrationFor,'organizationEvent','celebrationFor')}}</span>
-                </label>
+            </div>
+            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Start Date and Time</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="startDateTime" [min]="currentDate" readonly="true"
+                        formControlName="startDateTime" required="true">
+                    <mat-datepicker-toggle matSuffix [for]="startDateTime"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker (closed)="selectedDateTime()" #startDateTime [enableMeridian]="true">
+                    </ngx-mat-datetime-picker>
+                    <mat-error
+                        *ngIf="organizationCalendarForm.controls.startDateTime.invalid && organizationCalendarForm.controls.startDateTime.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(organizationCalendarForm.controls.startDateTime,'organizationEvent','startDateTime')}}">
+                            {{getErrorMessage(organizationCalendarForm.controls.startDateTime,'organizationEvent','startDateTime')}}</span>
+                    </mat-error>
+                </mat-form-field>
             </div>
 
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
-                <mat-form-field>
-                    <mat-label>Celebration Date</mat-label>
-                    <input matInput [matDatepicker]="dateOfEvent" readonly="true" required="true" [min]="currentDate"
-                        formControlName="dateOfEvent">
-                    <mat-datepicker-toggle matSuffix [for]="dateOfEvent">
-                    </mat-datepicker-toggle>
-                    <mat-datepicker #dateOfEvent></mat-datepicker>
+                <mat-form-field appearance="outline">
+                    <mat-label>End Date and Time</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="endDateTime" [min]="organizationCalendarForm.controls.startDateTime.value ? organizationCalendarForm.controls.startDateTime.value : currentDate" readonly="true" formControlName="endDateTime"
+                        required="true">
+                    <mat-datepicker-toggle matSuffix [for]="endDateTime"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker (closed)="selectedDateTime()" #endDateTime [enableMeridian]="true">
+                    </ngx-mat-datetime-picker>
+                    <mat-error
+                        *ngIf="organizationCalendarForm.controls.endDateTime.invalid && organizationCalendarForm.controls.endDateTime.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(organizationCalendarForm.controls.endDateTime,'organizationEvent','endDateTime')}}">
+                            {{getErrorMessage(organizationCalendarForm.controls.endDateTime,'organizationEvent','endDateTime')}}</span>
+                    </mat-error>
                 </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.dateOfEvent.invalid && organizationEventForm.controls.dateOfEvent.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.dateOfEvent,'organizationEvent','dateOfEvent')}}">
-                        {{getErrorMessage(organizationEventForm.controls.dateOfEvent,'organizationEvent','dateOfEvent')}}</span>
-                </label>
-            </div>
-
-            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
-                <mat-form-field>
-                    <mat-label>Start Time</mat-label>
-                    <input matInput required formControlName="startTime" [ngxTimepicker]="startTime"
-                        [disableClick]="true" readonly>
-                    <ngx-material-timepicker-toggle [for]="startTime"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker (closed)="selectedTime()" #startTime></ngx-material-timepicker>
-                </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.startTime.invalid && organizationEventForm.controls.startTime.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.startTime,'organizationEvent','startTime')}}">
-                        {{getErrorMessage(organizationEventForm.controls.startTime,'organizationEvent','startTime')}}</span>
-                </label>
-            </div>
-
-            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
-                <mat-form-field>
-                    <mat-label>End Time</mat-label>
-                    <input matInput required formControlName="endTime" [ngxTimepicker]="endTime" [disableClick]="true"
-                        readonly>
-                    <ngx-material-timepicker-toggle [for]="endTime"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker (closed)="selectedTime()" #endTime></ngx-material-timepicker>
-                </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.endTime.invalid && organizationEventForm.controls.endTime.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.endTime,'organizationEvent','endTime')}}">
-                        {{getErrorMessage(organizationEventForm.controls.endTime,'organizationEvent','endTime')}}</span>
-                </label>
             </div>
 
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Duration (in min.)</mat-label>
                     <input formControlName="eventDuration" matInput type='text' readonly="true" required>
+                    <mat-error
+                        *ngIf="organizationCalendarForm.controls.eventDuration.invalid && organizationCalendarForm.controls.eventDuration.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(organizationCalendarForm.controls.eventDuration,'organizationEvent','eventDuration')}}">
+                            {{getErrorMessage(organizationCalendarForm.controls.eventDuration,'organizationEvent','eventDuration')}}</span>
+                    </mat-error>
                 </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.eventDuration.invalid && organizationEventForm.controls.eventDuration.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.eventDuration,'organizationEvent','eventDuration')}}">
-                        {{getErrorMessage(organizationEventForm.controls.eventDuration,'organizationEvent','eventDuration')}}</span>
-                </label>
             </div>
 
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Employee strength in event </mat-label>
                     <input formControlName="employeeStrengthInEvent" matInput type='text' required>
+                    <mat-error
+                        *ngIf="organizationCalendarForm.controls.employeeStrengthInEvent.invalid && organizationCalendarForm.controls.employeeStrengthInEvent.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(organizationCalendarForm.controls.employeeStrengthInEvent,'organizationEvent','employeeStrengthInEvent')}}">
+                            {{getErrorMessage(organizationCalendarForm.controls.employeeStrengthInEvent,'organizationEvent','employeeStrengthInEvent')}}</span>
+                    </mat-error>
                 </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.employeeStrengthInEvent.invalid && organizationEventForm.controls.employeeStrengthInEvent.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.employeeStrengthInEvent,'organizationEvent','employeeStrengthInEvent')}}">
-                        {{getErrorMessage(organizationEventForm.controls.employeeStrengthInEvent,'organizationEvent','employeeStrengthInEvent')}}</span>
-                </label>
             </div>
 
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Venue</mat-label>
                     <input formControlName="venueOfEvent" matInput type='text' required>
+                    <mat-error
+                        *ngIf="organizationCalendarForm.controls.venueOfEvent.invalid && organizationCalendarForm.controls.venueOfEvent.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(organizationCalendarForm.controls.venueOfEvent,'organizationEvent','venueOfEvent')}}">
+                            {{getErrorMessage(organizationCalendarForm.controls.venueOfEvent,'organizationEvent','venueOfEvent')}}</span>
+                    </mat-error>
                 </mat-form-field>
-                <label class="ng-error mat-error"
-                    *ngIf="organizationEventForm.controls.venueOfEvent.invalid && organizationEventForm.controls.venueOfEvent.touched">
-                    <span
-                        matTooltip="{{getErrorMessage(organizationEventForm.controls.venueOfEvent,'organizationEvent','venueOfEvent')}}">
-                        {{getErrorMessage(organizationEventForm.controls.venueOfEvent,'organizationEvent','venueOfEvent')}}</span>
-                </label>
             </div>
         </div>
         <div class="row">

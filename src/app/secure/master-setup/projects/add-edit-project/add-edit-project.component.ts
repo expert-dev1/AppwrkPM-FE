@@ -54,8 +54,9 @@ export class AddEditProjectComponent implements OnInit {
     timeType: ['HOURLY', [Validators.required]], // fixed/hourly
     amount: [''], // fixed/hourly
     status: ['PENDING', [Validators.required]], //yet to start, in process, completed, on hold, delievered
-    // employeeId: [[], [Validators.required]], //list of resources working on this project
-    description: ['', Validators.required]
+    description: ['', Validators.required],
+    organizationId: [''],
+    inChargeId: ['', [Validators.required]],
   });
 
   public clientInfoForm = this.formBuilder.group({
@@ -66,6 +67,7 @@ export class AddEditProjectComponent implements OnInit {
     altEmail: [''],
     skypeId: [''],
     moreInfo: [''],
+    organizationId: [''],
     clientInformations: this.formBuilder.array([]),
   });
   public employeeProjectFormList: FormArray;
@@ -83,11 +85,11 @@ export class AddEditProjectComponent implements OnInit {
       this.employeeProjectForm = this.formBuilder.group({
         'formArray': this.employeeProjectFormList
       });
-      this.openFormAccordingToAction();
+      this.getAllData();
     });
   }
 
-  openFormAccordingToAction() {
+  getAllData() {
     this.masterService.getEmployeeListWithOrgId().subscribe(resp => {
       this.employeeList = resp;
     });
@@ -101,6 +103,9 @@ export class AddEditProjectComponent implements OnInit {
     this.secondFormGroup = this.formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+  }
+
+  openFormAccordingToAction() {    
     if (this.action == 'edit') {
       this.getProjectDetailsById();
     } else if (this.action != 'add') {
@@ -112,7 +117,7 @@ export class AddEditProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.openFormAccordingToAction();
   }
 
   getProjectDetailsById() {
@@ -128,6 +133,9 @@ export class AddEditProjectComponent implements OnInit {
   }
 
   patchProjectForm(projectDetails) {
+    console.log('Platform List : ', this.platformList);
+    console.log('Employee List : ', this.employeeList);
+    console.log('projectDetails : ', projectDetails);
     this.projectInfoForm.patchValue({
       id: projectDetails.id,
       name: projectDetails.name,
@@ -139,7 +147,9 @@ export class AddEditProjectComponent implements OnInit {
       status: projectDetails.status,
       organizationId: projectDetails.organizationId,
       description: projectDetails.description,
+      inChargeId: projectDetails.inChargeId
     });
+    console.log('projectInfoForm : ', this.projectInfoForm.value);
   }
 
   patchClientAndClientMoreInfoForm(clientInfo, clientMoreInformationList) {
@@ -200,6 +210,7 @@ export class AddEditProjectComponent implements OnInit {
       id: '0',
       key: '',
       value: '',
+      organizationId: [''],
       canEdit: [true]
     }));
     this.dataSourceForClientInformation.next(this.clientInformations.controls);
@@ -239,7 +250,7 @@ export class AddEditProjectComponent implements OnInit {
         this.projectInfoForm.controls.endDate.reset();
         let messageObj = this.messageService.getMessage("END_DATE_NOT_LESS_THAN_START_DATE");
         if (messageObj) {
-          this.toaster.success(messageObj.description, messageObj.type);
+          this.toaster.error(messageObj.description, messageObj.type);
         }
       }
     }
@@ -283,7 +294,7 @@ export class AddEditProjectComponent implements OnInit {
               this.toaster.error(messageObj.description, messageObj.type);
             }
           }
-        }        
+        }
         indexOfFormArray++;
       });
     }
@@ -294,6 +305,7 @@ export class AddEditProjectComponent implements OnInit {
       id: ['0'],
       employeeId: ['', [Validators.required]],
       employeeFullName: [''],
+      organizationId: [''],
       projectId: [''],
       checkInDate: ['', [Validators.required]],
       checkOutDate: ['', [Validators.required]],
@@ -330,7 +342,7 @@ export class AddEditProjectComponent implements OnInit {
         (row as FormGroup).controls.checkOutDate.reset();
         let messageObj = this.messageService.getMessage("CHECK_IN_DATE_NOT_LESS_THAN_CHECK_OUT_DATE");
         if (messageObj) {
-          this.toaster.success(messageObj.description, messageObj.type);
+          this.toaster.error(messageObj.description, messageObj.type);
         }
       }
     }
@@ -404,7 +416,10 @@ export class AddEditProjectComponent implements OnInit {
       if (data && data.data) {
         this.clientInformations.removeAt(index);
         this.dataSourceForClientInformation.next(this.clientInformations.controls);
-        this.toaster.success("Some of client info deleted successfully.", "SUCCESS");
+        let messageObj = this.messageService.getMessage("SOME_CLIENT_INFO_DELETE_SUCCESS");
+        if (messageObj) {
+          this.toaster.success(messageObj.description, messageObj.type);
+        }
       }
     }, error => {
       console.log("Error in deleting client more info : ", error);
@@ -415,8 +430,11 @@ export class AddEditProjectComponent implements OnInit {
     this.masterService.deleteEmployeeProjectById(employeeProjectId).subscribe(data => {
       if (data && data.data) {
         this.employeeProjectFormList.removeAt(index);
-      this.dataSource.next(this.employeeProjectFormList.controls);
-        this.toaster.success("Employee Successfully removed from this project.", "SUCCESS");
+        this.dataSource.next(this.employeeProjectFormList.controls);
+        let messageObj = this.messageService.getMessage("EMPLOYEE_REMOVED_FROM_PROJECT_SUCCESS");
+        if (messageObj) {
+          this.toaster.success(messageObj.description, messageObj.type);
+        }
       }
     }, error => {
       console.log("Error in deleting client more info : ", error);
@@ -425,14 +443,17 @@ export class AddEditProjectComponent implements OnInit {
 
   clearFormList() {
     while (this.employeeProjectFormList.length !== 0) {
-      this.employeeProjectFormList.removeAt(0)
+      this.employeeProjectFormList.removeAt(0);
     }
     this.dataSource.next(this.employeeProjectFormList.controls);
   }
 
   save() {
     if (this.projectInfoForm.invalid || this.clientInfoForm.invalid || this.employeeProjectFormList.invalid) {
-      this.toaster.error("Please fill all the required fields.", "ERROE");
+      let messageObj = this.messageService.getMessage("PLEASE_FILL_ALL_REQUIRED_FIELDS");
+        if (messageObj) {
+          this.toaster.error(messageObj.description, messageObj.type);
+        }
       this.projectInfoForm.markAllAsTouched();
       this.clientInfoForm.markAllAsTouched();
       this.employeeProjectFormList.markAllAsTouched();
@@ -465,7 +486,7 @@ export class AddEditProjectComponent implements OnInit {
 
   update() {
     if (this.projectInfoForm.invalid || this.clientInfoForm.invalid || this.employeeProjectFormList.invalid) {
-      let messageObj = this.messageService.getMessage("FILL_ALL_DETAILS");
+      let messageObj = this.messageService.getMessage("PLEASE_FILL_ALL_REQUIRED_FIELDS");
       if (messageObj) {
         this.toaster.error(messageObj.description, messageObj.type);
       }

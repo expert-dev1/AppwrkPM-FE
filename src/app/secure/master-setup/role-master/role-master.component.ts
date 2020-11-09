@@ -13,7 +13,6 @@ import { MasterService } from '../service/master.service';
 })
 export class RoleMasterComponent implements OnInit {
 
-  public orgId: any;
   public roleMasterId: any;
   public action: any;
   public getErrorMessage = ValidatorErrorMessages.getErrorMessage;
@@ -27,7 +26,6 @@ export class RoleMasterComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<RoleMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
     private masterService: MasterService, private toaster: ToastrService, private messageService: MessageService) {
     this.roleMasterId = data.roleMasterId;
-    this.orgId = data.orgId;
     this.action = data.action;
     this.openFormBasedOnActions();
   }
@@ -39,14 +37,8 @@ export class RoleMasterComponent implements OnInit {
     this.roleMasterForm.patchValue({
       id: this.roleMasterId,
     })
-    if (this.action == 'add') {
-      this.roleMasterForm.patchValue({
-        organizationId: this.orgId,
-      })
-    } else if (this.action == 'edit') {
+    if (this.action == 'edit') {
       this.getRoleMasterDeatilsById();
-    } else {
-
     }
   }
 

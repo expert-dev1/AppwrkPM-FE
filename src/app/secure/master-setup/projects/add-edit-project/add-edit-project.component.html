@@ -152,6 +152,17 @@
             </mat-error>
           </mat-form-field>
         </div>
+        <div>
+          <mat-label>In-Charge</mat-label>
+          <ng-select appendTo="body" [items]="employeeList" required="true" placeholder="In-Charge" formControlName="inChargeId" bindLabel="fullName" bindValue="id"
+            [searchable]="true" [clearable]="false" [closeOnSelect]="true">
+          </ng-select>
+          <mat-error *ngIf="projectInfoForm.controls.inChargeId.invalid">
+            <span
+              matTooltip="{{getErrorMessage(projectInfoForm.controls.inChargeId,'project','inChargeId')}}">
+              {{getErrorMessage(projectInfoForm.controls.inChargeId,'project','inChargeId')}}</span>
+          </mat-error>
+        </div>
       </div>
       <div class="col-sm-12 col-md-6 col-lg-6">
         <!-- <div>
@@ -372,7 +383,8 @@
 
   <div>
     <form [formGroup]="employeeProjectForm">
-      <table mat-table [dataSource]="dataSource" *ngIf="employeeProjectFormList.length > 0" formArrayName="formArray" mat-table style="width: 100%">
+      <table mat-table [dataSource]="dataSource" *ngIf="employeeProjectFormList.length > 0" formArrayName="formArray"
+        mat-table style="width: 100%">
         <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
         <tr mat-row-responsive mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
         <ng-container matColumnDef="employeeFullName">

@@ -73,15 +73,15 @@ export const messageList = [
         "type": "SUCCESS"
     },
     {
-        "messageKey": "FILL_ALL_DETAILS",
-        "language": "en",
-        "description": "Please fill all the required fields.",
-        "type": "ERROR"
-    },
-    {
         "messageKey": "END_DATE_NOT_LESS_THAN_START_DATE",
         "language": "en",
         "description": "End Date should not be greator than start date.",
+        "type": "ERROR"
+    },
+    {
+        "messageKey": "END_DATE_TIME_NOT_LESS_THAN_START_DATE_TIME",
+        "language": "en",
+        "description": "End Date and time should not be greator than start date and time.",
         "type": "ERROR"
     },
     {
@@ -95,5 +95,47 @@ export const messageList = [
         "language": "en",
         "description": "Check-in date should be greater than check-out date.",
         "type": "ERROR"
+    },
+    {
+        "messageKey": "SOME_CLIENT_INFO_DELETE_SUCCESS",
+        "language": "en",
+        "description": "Some of client info deleted successfully.",
+        "type": "SUCCESS"
+    },
+    {
+        "messageKey": "EMPLOYEE_REMOVED_FROM_PROJECT_SUCCESS",
+        "language": "en",
+        "description": "Employee Successfully removed from this project.",
+        "type": "SUCCESS"
+    },
+    {
+        "messageKey": "PLEASE_FILL_ALL_REQUIRED_FIELDS",
+        "language": "en",
+        "description": "Please fill all the required fields.",
+        "type": "ERROR"
+    },
+    {
+        "messageKey": "UN_AUTHORIZED_USER",
+        "language": "en",
+        "description": "Un-authorized user logged in.",
+        "type": "ERROR"
+    },
+    {
+        "messageKey": "USER_NOT_AUTHORIZED_TO_ACCESS_THESE_MODULES",
+        "language": "en",
+        "description": "User have no access to this module. Please contact to administrator for the access.",
+        "type": "ERROR"
+    },
+    {
+        "messageKey": "POP_UP_CONFIRMATION_MESSAGE",
+        "language": "en",
+        "description": "You have unsaved changes. Do you want to leave without saving?",
+        "type": "SUCCESS"
+    },
+    {
+        "messageKey": "TIME_SHEET_SAVED_SUCCESSFULLY",
+        "language": "en",
+        "description": "Time sheet successfully saved.",
+        "type": "SUCCESS"
     },
 ]    

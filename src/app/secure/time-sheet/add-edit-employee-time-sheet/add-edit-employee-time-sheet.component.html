@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <strong>Task Details</strong>
+        <button (click)="close()" mat-button color="primary"><span class="material-icons">
+                cancel
+            </span></button>
+    </div>
+    <form [formGroup]="timeSheetForm" (ngSubmit)="save()">
+        <div class="row">
+            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Task Name</mat-label>
+                    <input formControlName="taskName" matInput type='text' required>
+                    <mat-error
+                        *ngIf="timeSheetForm.controls.taskName.invalid && timeSheetForm.controls.taskName.touched">
+                        <span matTooltip="{{getErrorMessage(timeSheetForm.controls.taskName,'timeSheet','taskName')}}">
+                            {{getErrorMessage(timeSheetForm.controls.taskName,'timeSheet','taskName')}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                <mat-label>Project</mat-label>
+                <ng-select [items]="projectList" formControlName="projectId" bindLabel="project.name"
+                    (change)="setProjectName($event)" bindValue="project.id" [searchable]="true" [clearable]="false"
+                    required="true" [closeOnSelect]="true">
+                </ng-select>
+                <mat-error *ngIf="timeSheetForm.controls.projectId.invalid && timeSheetForm.controls.projectId.touched">
+                    <span matTooltip="{{getErrorMessage(timeSheetForm.controls.projectId,'timeSheet','projectId')}}">
+                        {{getErrorMessage(timeSheetForm.controls.projectId,'timeSheet','projectId')}}</span>
+                </mat-error>
+            </div>
+
+            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                <mat-form-field>
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="taskDate" readonly="true" required="true" [max]="currentDate"
+                        formControlName="taskDate">
+                    <mat-datepicker-toggle matSuffix [for]="taskDate">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #taskDate></mat-datepicker>
+                    <mat-error
+                        *ngIf="timeSheetForm.controls.taskDate.invalid && timeSheetForm.controls.taskDate.touched">
+                        <span matTooltip="{{getErrorMessage(timeSheetForm.controls.taskDate,'timeSheet','taskDate')}}">
+                            {{getErrorMessage(timeSheetForm.controls.taskDate,'timeSheet','taskDate')}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
+                <mat-form-field>
+                    <mat-label>Working hours</mat-label>
+                    <input matInput type="time" required="true" formControlName="numberOfHours">
+                    <mat-error
+                        *ngIf="timeSheetForm.controls.numberOfHours.invalid && timeSheetForm.controls.numberOfHours.touched">
+                        <span
+                            matTooltip="{{getErrorMessage(timeSheetForm.controls.numberOfHours,'timeSheet','numberOfHours')}}">
+                            {{getErrorMessage(timeSheetForm.controls.numberOfHours,'timeSheet','numberOfHours')}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>        
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea formControlName="taskDescription" rows="12" matInput placeholder=""></textarea>
+            <mat-error
+                *ngIf="timeSheetForm.controls.taskDescription.invalid && timeSheetForm.controls.taskDescription.touched">
+                <span
+                    matTooltip="{{getErrorMessage(timeSheetForm.controls.taskDescription,'timeSheet','taskDescription')}}">
+                    {{getErrorMessage(timeSheetForm.controls.taskDescription,'timeSheet','taskDescription')}}</span>
+            </mat-error>
+        </mat-form-field>
+        <div class="row">
+            <div class="col-xl-12 col-md-12 text-right pt-3 pb-3">
+                <button type="submit" mat-raised-button>Save</button>
+            </div>
+        </div>
+    </form>
+</div>

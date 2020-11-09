@@ -1,4 +1,6 @@
-
+/**
+ * This file is use for Constant fields, List or Map
+ */
 
 export const STATUS_MAP = {
     "ACTIVE": "Active",
@@ -14,6 +16,7 @@ export const EVENT_FOR_LIST = [
     { value: 'BIRTHDAY', name: 'Birthday' },
     { value: 'WORK_ANNIVERSARY', name: 'Work Anniversary' },
     { value: 'OFFICIAL_EVENT', name: 'Official Event' },
+    { value: 'HOLIDAY', name: 'Holiday' },
     { value: 'OTHERS', name: 'Other' },
 ];
 
@@ -21,6 +24,7 @@ export const EVENT_FOR_MAP = {
     "BIRTHDAY": "Birthday of",
     "WORK_ANNIVERSARY": "Work Anniversary of",
     "OFFICIAL_EVENT": "Official Event for",
+    "HOLIDAY": "Holiday for",
     "OTHERS": "Please mention purpose of event",
 }
 

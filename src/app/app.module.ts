@@ -12,13 +12,16 @@ import { HttpClientInterceptor } from './core/_interceptors/http-client-intercep
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import dayGridPlugin from '@fullcalendar/daygrid'; 
-import interactionPlugin from '@fullcalendar/interaction'; 
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list';
 
-FullCalendarModule.registerPlugins([ 
+FullCalendarModule.registerPlugins([
   dayGridPlugin,
-  interactionPlugin
+  interactionPlugin,
+  listPlugin
 ]);
+
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
@@ -32,6 +35,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FullCalendarModule,
+    // use this if you want to use native javascript dates and INTL API if available
+    // MatNativeDatetimeModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       newestOnTop: true,
@@ -42,7 +48,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
       preventDuplicates: true
     }),
     NgxMaskModule.forRoot(options),
-    FontAwesomeModule 
+    FontAwesomeModule
   ],
   exports: [NgxMaskModule],
   providers: [{

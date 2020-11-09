@@ -19,7 +19,6 @@ export class DesignationListComponent implements OnInit {
   public columnsToBeDisplayed: string[] = ["name", "description", "action"];
   public limit: number = 10;
   public offset: number = 0;
-  public orgId: any = 1;
   public designationList: any = [];
   public sortDirection: any = "DESC";
   public sortField: any = "id";
@@ -29,11 +28,8 @@ export class DesignationListComponent implements OnInit {
 
   constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService,
     private messageService: MessageService) {
-    // this.orgId = this.storageService.getUser().employee.organization.id;
-    if (this.orgId && this.orgId != null && this.orgId != undefined) {
-      this.searchModel = new SearchModel(this.limit, this.offset, this.orgId, this.sortDirection, this.sortField);
+      this.searchModel = new SearchModel(this.limit, this.offset, 0, this.sortDirection, this.sortField);
       this.getDesignationListByOrgIdWithPagination();
-    }
   }
 
   ngOnInit(): void {
@@ -92,7 +88,7 @@ export class DesignationListComponent implements OnInit {
     } else {
       const dialogRef = this.dialog.open(DesignationMasterComponent, {
         width: '500px',
-        data: { designationId: designationId, orgId: this.orgId, action: action },
+        data: { designationId: designationId, action: action },
         disableClose: true
       });
       dialogRef.afterClosed().subscribe(result => {

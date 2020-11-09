@@ -15,7 +15,6 @@ import { MasterService } from '../service/master.service';
 export class EmployeeMasterComponent implements OnInit {
   public employeeId: any;
   public employeeDetails: any;
-  public orgId: any;
   public action: any;
   public getErrorMessage = ValidatorErrorMessages.getErrorMessage;
   public statusList = STATUS_LIST;
@@ -46,14 +45,13 @@ export class EmployeeMasterComponent implements OnInit {
     imagePath: [null],
     roleMasterId: ['', [Validators.required]],
     dateOfJoining: ['', [Validators.required]],
-    organizationId: ['', [Validators.required]],
+    organizationId: [''],
     designationId: ['', [Validators.required]]
   })
 
   constructor(public dialogRef: MatDialogRef<EmployeeMasterComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder,
     private masterService: MasterService, private toaster: ToastrService, private messageService: MessageService) {
     this.employeeId = data.employeeId;
-    this.orgId = data.orgId;
     this.action = data.action;
     this.openFormBasedOnActions();
   }
@@ -68,40 +66,30 @@ export class EmployeeMasterComponent implements OnInit {
     this.getRoleMasterListByOrgId();
     this.getAllCountryList();
     this.getDesignationListByOrgId();
-    if (this.action == 'add') {
-      this.employeeForm.patchValue({
-        organizationId: this.orgId,
-      })
-    } else if (this.action == 'edit') {
+    if (this.action == 'edit') {
       this.getEmployeeDeatilsById();
       this.employeeForm.controls.emailId.disable();
-    } else {
-
     }
   }
 
   getRoleMasterListByOrgId() {
-    if (this.orgId && this.orgId != undefined && this.orgId != null) {
-      this.masterService.getRoleMasterListByOrgId(this.orgId).subscribe(data => {
+      this.masterService.getRoleMasterListByOrgId().subscribe(data => {
         if (data && data.data) {
           this.roleMasterList = data.data;
         }
       }, error => {
         console.log('error in fetching role master list inside employee master component : ', error);
       })
-    }
   }
 
   getDesignationListByOrgId() {
-    if (this.orgId && this.orgId != undefined && this.orgId != null) {
-      this.masterService.getDesignationListByOrgId(this.orgId).subscribe(data => {
+      this.masterService.getDesignationListByOrgId().subscribe(data => {
         if (data && data.data) {
           this.designationList = data.data;
         }
       }, error => {
         console.log('error in fetching role master list inside employee master component : ', error);
       })
-    }
   }
 
   getAllCountryList() {
@@ -186,9 +174,12 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   saveEmployee() {
+    console.log('Inside save employee');
     if (this.employeeForm.invalid) {
+      console.log('Inside save employee if');
       this.markFormAsTouched();
     } else {
+      console.log('Inside save employee else');
       this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
         if (data && data.data) {
           this.dialogRef.close({ success: true, action: this.action });

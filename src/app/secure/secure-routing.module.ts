@@ -14,6 +14,14 @@ const routes: Routes = [
         path: 'masterSetup',
         loadChildren: () => import('../secure/master-setup/master-setup.module').then(m => m.MasterSetupModule)
       },
+      {
+        path: 'timeSheet',
+        loadChildren: () => import('../secure/time-sheet/time-sheet.module').then(m => m.TimeSheetModule)
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('../secure/dashboard/dashboard.module').then(m => m.DashboardModule)
+      },
     ]
   }
 ];

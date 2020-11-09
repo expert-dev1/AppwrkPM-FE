@@ -1,0 +1,157 @@
+<Appwrk-layout-div [title]="'Employee Time Sheet'">
+    <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+    <!-- <label class="m-0 note"><b>Note:</b> Time sheet is not fixed before save
+    </label> -->
+    <div rightButton>
+        <button (click)="openPopUp(formList.length, 'add', null)" mat-button color="primary" class="mb-2">
+            <div class="d-flex justify-content-center align-items-center">
+                <span class="material-icons mr-2">
+                    add
+                </span>
+                <span>
+                    Add
+                </span>
+            </div>
+        </button>
+    </div>
+</Appwrk-layout-div>
+
+<ng-template #mainLayout>
+    <div class="col-md-12 col-lg-12 col-sm-12 shadow bg-white m-bg">
+        <form [formGroup]="form">
+            <div class="row pt-3 pb-3">
+                <div class="col-xl-12 t-c">
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSource" matSort formArrayName="formArray" mat-table
+                            class="mat-elevation-z8" style="width: 100%">
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
+                            <tr mat-row-responsive mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <ng-container matColumnDef="taskName">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Task Name
+                                </th>
+                                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                    <mat-label [matTooltip]="(row.controls.taskName.value)">
+                                        {{row.controls.taskName.value}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="projectName">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Project
+                                </th>
+                                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                    <mat-label [matTooltip]="(row.controls.projectName.value)">
+                                        {{row.controls.projectName.value}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="taskDescription">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Task Description
+                                </th>
+                                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                    <mat-label [matTooltip]="(row.controls.taskDescription.value)">
+                                        {{row.controls.taskDescription.value}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="taskDate">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Date
+                                </th>
+                                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                    <mat-label [matTooltip]="(row.controls.taskDate.value | date: 'dd MMM, yyyy')">
+                                        {{row.controls.taskDate.value | date: 'dd MMM, yyyy'}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="numberOfHours">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Number Of Hours
+                                </th>
+                                <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                                    <mat-label [matTooltip]="(row.controls.numberOfHours.value)">
+                                        {{row.controls.numberOfHours.value}}
+                                    </mat-label>
+                                </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                                <td style="vertical-align: middle;" mat-cell *matCellDef="let row; let index = index"
+                                    [formGroupName]="index">
+                                    <ng-container>
+                                        <button (click)="openPopUp(index, 'edit', row.value)" mat-button color="primary"
+                                            class="mb-2">
+                                            <div class="d-flex justify-content-center align-items-center"
+                                                [matTooltip]="Edit">
+                                                <span class="material-icons">
+                                                    edit
+                                                </span>
+                                            </div>
+                                        </button>
+                                        <button (click)="openPopUp(index, 'delete', row.value)" [matTooltip]="Delete"
+                                            mat-button color="primary" class="mb-2">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <span class="material-icons mr-2">
+                                                    delete
+                                                </span>
+                                            </div>
+                                        </button>
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+                        </table>
+                        <div *ngIf="formList.length > 0" class="no-records">
+                            <strong>Total hours : </strong> {{sumOfMinutes | timeFormat}}
+                        </div>
+                        <div class="d-flex flex-column justify-content-center align-items-center min-height"
+                            *ngIf="formList.length===0">
+                            <div class="mt-5 pt-5 mb-2">
+                                <img height="200" src="assets/images/nodata.jpg">
+                            </div>
+                            <h5>No data found!</h5>
+                        </div>
+                        <ng-container>
+                            <div class="row" *ngIf="employeeTimeSheetList.length> 0">
+                                <div class="col-xl-7 col-md-6 col-sm-6 col-12 button-right pt-2">
+                                    <div class="pagination shadow">
+                                        <button (click)="pageChanges(0)" class="border-right"
+                                            [disabled]="selectedPage==0"><i
+                                                class="fas fa-angle-double-left"></i></button>
+                                        <button class="border-right" (click)="pageChanges(selectedPage-1)"
+                                            [disabled]="selectedPage==0">Prev</button>
+                                        <button class="page-no" *ngFor="let p of (totalPage | pagination: selectedPage)"
+                                            (click)="pageChanges(p)" [ngClass]="{'active':p==selectedPage}"
+                                            [disabled]="selectedPage == p"><label>{{p+1}}</label></button>
+                                        <button class="border-right border-left" (click)="pageChanges(selectedPage+1)"
+                                            [disabled]="selectedPage==(totalPage-1)">Next</button>
+                                        <button (click)="pageChanges(totalPage-1)"
+                                            [disabled]="selectedPage==(totalPage-1)"><i
+                                                class="fas fa-angle-double-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <button *ngIf="formList.length > 0" [disabled]="!unSavedChangesCheckOnApply()" (click)="save()" mat-button color="primary" class="mb-2">
+                <div class="d-flex justify-content-center align-items-center">
+                    <span class="material-icons mr-2">
+                        save
+                    </span>
+                    <span>
+                        Save & Send for approval
+                    </span>
+                </div>
+            </button>
+        </form>
+    </div>
+</ng-template>

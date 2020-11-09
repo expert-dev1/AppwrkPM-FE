@@ -1,0 +1,174 @@
+<Appwrk-layout-div [title]="'Time-sheet status change'">
+    <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+    <div rightButton>
+        <button (click)="bulkUpdateTimeSheetStatus('APPROVE')" [matTooltip]="'Approve'" mat-button color="primary" class="mb-2">
+            <div class="d-flex justify-content-center align-items-center">
+                <span>
+                    Approve Selected
+                </span>
+            </div>
+        </button>
+
+        <button (click)="bulkUpdateTimeSheetStatus('REJECT')" [matTooltip]="'Reject'" mat-button color="primary" class="mb-2">
+            <div class="d-flex justify-content-center align-items-center">
+                <span>
+                    Reject Selected
+                </span>
+            </div>
+        </button>
+    </div>
+</Appwrk-layout-div>
+
+<ng-template #mainLayout>
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (change)="doFilter($event.target.value)" placeholder="Ex. Admin" #input>
+    </mat-form-field>
+    <div style="position: relative;">
+        <div class="example-loading-shade" *ngIf="isLoadingResults">
+            <Appwrk-loader [diameter]="50" *ngIf="isLoadingResults"></Appwrk-loader>
+        </div>
+        <div>
+            <form [formGroup]="form">
+                <table mat-table [dataSource]="dataSource" matSort formArrayName="formArray" mat-table
+                    (matSortChange)="sortData($event)" class="mat-elevation-z8" style="width: 100%">
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"></tr>
+                    <tr mat-row-responsive mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <ng-container matColumnDef="employee.firstName">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Employee
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-checkbox *ngIf="row.value.isPending" formControlName="isMultiSelectChecked"
+                                class="pr-2" style="vertical-align: super;">
+                            </mat-checkbox>
+
+                            <mat-label [matTooltip]="(row.controls.employeeFullName.value)">
+                                {{row.controls.employeeFullName.value}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="project.name">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Project
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-label [matTooltip]="(row.controls.projectName.value)">
+                                {{row.controls.projectName.value}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="taskName">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Task
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-label [matTooltip]="(row.controls.taskName.value)">
+                                {{row.controls.taskName.value}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="taskDescription">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Task Description
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-label [matTooltip]="(row.controls.taskDescription.value)">
+                                {{row.controls.taskDescription.value}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="taskDate">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Date
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-label [matTooltip]="(row.controls.taskDate.value | date: 'dd MMM, yyyy')">
+                                {{row.controls.taskDate.value | date: 'dd MMM, yyyy'}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="numberOfHours">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                            Number Of Hours
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-label [matTooltip]="(row.controls.numberOfHours.value)">
+                                {{row.controls.numberOfHours.value}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Status
+                        </th>
+                        <td mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                            <mat-label *ngIf="row.value.isPending" [matTooltip]="('Pending')">
+                                {{'Pending'}}
+                            </mat-label>
+                            <mat-label *ngIf="row.value.isApproved" [matTooltip]="('Approved')">
+                                {{'Approved'}}
+                            </mat-label>
+                            <mat-label *ngIf="row.value.isRejected" [matTooltip]="('Rejected')">
+                                {{'Rejected'}}
+                            </mat-label>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td style="vertical-align: middle;" mat-cell *matCellDef="let row; let index = index"
+                            [formGroupName]="index">
+                            <ng-container>
+                                <button type="button" *ngIf="row.value.isPending" mat-button color="primary" matTooltip="Approve"
+                                    (click)="changeStatusOfSingleTaskInTimeSheet(row, 'APPROVE')">
+                                    <div class="d-flex justify-content-center align-items-center" [matTooltip]="Approve">
+                                        Approve
+                                    </div>
+                                </button>
+                                <button *ngIf="row.value.isPending" mat-button color="primary" matTooltip="Reject"
+                                    (click)="changeStatusOfSingleTaskInTimeSheet(row, 'REJECT')">
+                                    <div class="d-flex justify-content-center align-items-center" [matTooltip]="Reject">
+                                        Reject
+                                    </div>
+                                </button>
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                </table>
+                <div class="d-flex flex-column justify-content-center align-items-center min-height"
+                    *ngIf="formList.length===0">
+                    <div class="mt-5 pt-5 mb-2">
+                        <img height="200" src="assets/images/nodata.jpg">
+                    </div>
+                    <h5>No data found!</h5>
+                </div>
+                <ng-container>
+                    <div class="row" *ngIf="employeeTimeSheetList.length> 0">
+                        <div class="col-xl-7 col-md-6 col-sm-6 col-12 button-right pt-2">
+                            <div class="pagination shadow">
+                                <button (click)="pageChanges(0)" class="border-right" [disabled]="selectedPage==0"><i
+                                        class="fas fa-angle-double-left"></i></button>
+                                <button class="border-right" (click)="pageChanges(selectedPage-1)"
+                                    [disabled]="selectedPage==0">Prev</button>
+                                <button class="page-no" *ngFor="let p of (totalPage | pagination: selectedPage)"
+                                    (click)="pageChanges(p)" [ngClass]="{'active':p==selectedPage}"
+                                    [disabled]="selectedPage == p"><label>{{p+1}}</label></button>
+                                <button class="border-right border-left" (click)="pageChanges(selectedPage+1)"
+                                    [disabled]="selectedPage==(totalPage-1)">Next</button>
+                                <button (click)="pageChanges(totalPage-1)" [disabled]="selectedPage==(totalPage-1)"><i
+                                        class="fas fa-angle-double-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </form>
+        </div>
+    </div>
+</ng-template>

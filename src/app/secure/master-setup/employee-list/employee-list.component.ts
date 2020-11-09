@@ -20,7 +20,6 @@ export class EmployeeListComponent implements OnInit {
   public columnsToBeDisplayed: string[] = ["empCode", "firstName", "lastName", "status", "designation.name", "emailId", "action"];
   public limit: number = 10;
   public offset: number = 0;
-  public orgId: any = 1;
   public employeeList: any = [];
   public sortDirection: any = "DESC";
   public sortField: any = "id";
@@ -31,10 +30,8 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService,
     private messageService: MessageService) {
-    if (this.orgId && this.orgId != null && this.orgId != undefined) {
-      this.searchModel = new SearchModel(this.limit, this.offset, this.orgId, this.sortDirection, this.sortField);
+      this.searchModel = new SearchModel(this.limit, this.offset, 0, this.sortDirection, this.sortField);
       this.getEmployeeListByOrgIdWithPagination();
-    }
   }
 
   ngOnInit(): void {
@@ -92,7 +89,7 @@ export class EmployeeListComponent implements OnInit {
       const dialogRef = this.dialog.open(EmployeeMasterComponent, {
         width: '1200px',
         height: '600px',
-        data: { employeeId: employeeId, orgId: this.orgId, action: action },
+        data: { employeeId: employeeId, action: action },
         disableClose: true
       });
       dialogRef.afterClosed().subscribe(result => {

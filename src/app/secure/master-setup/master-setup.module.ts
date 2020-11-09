@@ -12,7 +12,6 @@ import { DesignationMasterComponent } from './designation-master/designation-mas
 import { OrganizationCalenderComponent } from './organization-calender/organization-calender.component';
 import { AddEditCalendarEventComponent } from './add-edit-calendar-event/add-edit-calendar-event.component';
 import { OrganizationEventListComponent } from './organization-event-list/organization-event-list.component';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @NgModule({
@@ -21,7 +20,6 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     CommonModule,
     MasterSetupRoutingModule,
     SharedModule,
-    NgxMaterialTimepickerModule
   ],
   entryComponents: [
     RoleMasterComponent,

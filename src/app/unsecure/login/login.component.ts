@@ -46,9 +46,7 @@ export class LoginComponent implements OnInit {
           if (data && data.data) {
             this.isLoginInvalid = false;
             console.log('data inside login kkkkkkkkkkkk after login success : ', data.data);
-            this.storageService.saveAccessToken(data.data.accessToken);
-            this.storageService.saveRefereshToken(data.data.refreshToken);
-            this.storageService.saveUser(data.data.user);
+            this.authService.afterLoginSetSomeDetails(data.data);
             this.afterLoginRouteToRespectiveRoutes();
           }
         }, error => {

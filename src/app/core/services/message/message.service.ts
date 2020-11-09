@@ -8,6 +8,11 @@ export class MessageService {
 
   constructor() { }
 
+  /**
+   * @author Amit Malik
+   * @description this methods is used to get the message with other fields
+   * @param key key to get message from the static list of messages 
+   */
   getMessage(key) {
     //console.log("key1 : ", key);
     let msgObj = null;

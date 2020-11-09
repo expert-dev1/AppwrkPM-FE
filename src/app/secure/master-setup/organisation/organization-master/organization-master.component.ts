@@ -175,7 +175,7 @@ export class OrganizationMasterComponent implements OnInit {
           this.router.navigate(['secure/masterSetup/organisation/edit/'+ data.data.id]);
         }
       }, error => {
-        if (error.error.message == 'RECORD_ALREADY_EXISTS') {
+        if (error.error.message == 'ORG_CODE_ALREADY_EXISTS') {
           let messageObj = this.messageService.getMessage(error.error.message);
           if (messageObj) {
             this.toaster.error(messageObj.description, messageObj.type);

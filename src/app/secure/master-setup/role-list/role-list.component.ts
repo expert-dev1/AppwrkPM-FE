@@ -19,7 +19,6 @@ export class RoleListComponent implements OnInit {
   public columnsToBeDisplayed: string[] = ["name", "description", "action"];
   public limit: number = 10;
   public offset: number = 0;
-  public orgId: any = 1;
   public roleList: any = [];
   public sortDirection: any = "DESC";
   public sortField: any = "id";
@@ -29,11 +28,8 @@ export class RoleListComponent implements OnInit {
 
   constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService, 
     private messageService: MessageService) {
-    // this.orgId = this.storageService.getUser().employee.organization.id;
-    if (this.orgId && this.orgId != null && this.orgId != undefined) {
-      this.searchModel = new SearchModel(this.limit, this.offset, this.orgId, this.sortDirection, this.sortField);
+      this.searchModel = new SearchModel(this.limit, this.offset, 0, this.sortDirection, this.sortField);
       this.getRoleListByOrgIdWithPagination();
-    }  
   }
 
   ngOnInit(): void {
@@ -91,7 +87,7 @@ export class RoleListComponent implements OnInit {
     } else {
       const dialogRef = this.dialog.open(RoleMasterComponent, {
         width: '500px',
-        data: {roleMasterId: roleId, orgId: this.orgId, action: action},
+        data: {roleMasterId: roleId, action: action},
         disableClose: true
       });  
       dialogRef.afterClosed().subscribe(result => {

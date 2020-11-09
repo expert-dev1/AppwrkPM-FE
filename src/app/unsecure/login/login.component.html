@@ -12,13 +12,11 @@
             <mat-label>User Name</mat-label>
             <input matInput type="text" formControlName="username" (keyup)="hideInvalidCredentailsMessageOnKeyUp()"
               required="true" />
+            <mat-error *ngIf="loginForm.controls.username.invalid && loginForm.controls.username.touched">
+              <span matTooltip="{{getErrorMessage(loginForm.controls.username,'login','username')}}">
+                {{getErrorMessage(loginForm.controls.username,'login','username')}}</span>
+            </mat-error>
           </mat-form-field>
-
-          <label class="ng-error mat-error"
-            *ngIf="loginForm.controls.username.invalid && loginForm.controls.username.touched">
-            <span matTooltip="{{getErrorMessage(loginForm.controls.username,'login','username')}}">
-              {{getErrorMessage(loginForm.controls.username,'login','username')}}</span>
-          </label>
         </div>
       </div>
       <mat-form-field appearance="outline">
@@ -28,12 +26,11 @@
         <mat-icon matTooltip="View" style="cursor: pointer; pointer-events: all;" matSuffix (click)="hide = !hide">
           {{hide ? 'visibility_off' : 'visibility'}}
         </mat-icon>
+        <mat-error *ngIf="loginForm.controls.password.invalid && loginForm.controls.password.touched">
+          <span matTooltip="{{getErrorMessage(loginForm.controls.password,'login','password')}}">
+            {{getErrorMessage(loginForm.controls.password,'login','password')}}</span>
+        </mat-error>
       </mat-form-field>
-      <label class="ng-error mat-error"
-        *ngIf="loginForm.controls.password.invalid && loginForm.controls.password.touched">
-        <span matTooltip="{{getErrorMessage(loginForm.controls.password,'login','password')}}">
-          {{getErrorMessage(loginForm.controls.password,'login','password')}}</span>
-      </label>
       <div class="row">
         <button (click)="onSubmit()" matTooltip="Login" type="button" mat-raised-button>Login</button> &nbsp;
         &nbsp;
