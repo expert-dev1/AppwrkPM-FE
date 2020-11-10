@@ -136,9 +136,9 @@
             </div>
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-label>Roles</mat-label>
-                <ng-select appendTo="body" [items]="roleMasterList" placeholder="Roles" formControlName="roleMasterId"
+                <ng-select [items]="roleMasterList" placeholder="Roles" formControlName="roleMasterId"
                     bindLabel="name" bindValue="id" [searchable]="true" [clearable]="false"
-                    [(ngModel)]="selectedListForRoleMaster" [multiple]="true">
+                    [(ngModel)]="selectedListForRoleMaster" [multiple]="true" [closeOnSelect]="false">
                     <ng-template ng-option-tmp let-item="item">
                         <input
                             [checked]="selectedListForRoleMaster && selectedListForRoleMaster.length > 0 && selectedListForRoleMaster.indexOf(item.id) > -1"
@@ -387,8 +387,8 @@
     </ng-template>
 
     <ng-template #employeeSkillSetInfo>
-        <ng-select appendTo="body" [items]="skillMasterList" placeholder="Skills" formControlName="roleMasterId"
-            bindLabel="name" bindValue="id" [searchable]="true" [clearable]="false"
+        <ng-select appendTo="body" [items]="skillMasterList" placeholder="Skills" formControlName="skillMasterIds"
+            bindLabel="name" bindValue="id" [searchable]="true" [clearable]="false" [closeOnSelect]="false"
             [(ngModel)]="selectedListForSkillMaster" [multiple]="true">
             <ng-template ng-option-tmp let-item="item">
                 <input

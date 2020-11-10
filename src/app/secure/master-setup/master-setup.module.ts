@@ -25,10 +25,10 @@ import { SkillMasterComponent } from './skill-master/skill-master.component';
   ],
   entryComponents: [
     RoleMasterComponent,
-    EmployeeMasterComponent,
     DesignationMasterComponent,
     AddEditCalendarEventComponent,
-    OrganizationEventListComponent
+    OrganizationEventListComponent,
+    SkillMasterComponent
   ],
 })
 export class MasterSetupModule { }

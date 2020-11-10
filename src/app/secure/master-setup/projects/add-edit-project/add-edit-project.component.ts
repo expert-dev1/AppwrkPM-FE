@@ -75,7 +75,7 @@ export class AddEditProjectComponent implements OnInit {
 
 
 
-  constructor(private formBuilder: FormBuilder, private masterService: MasterService, private router: Router, 
+  constructor(private formBuilder: FormBuilder, private masterService: MasterService, private router: Router,
     private activatedRoute: ActivatedRoute,
     private toaster: ToastrService, public dialog: MatDialog, private messageService: MessageService) {
     this.routerSubscription = this.activatedRoute.url.subscribe((params) => {
@@ -106,7 +106,7 @@ export class AddEditProjectComponent implements OnInit {
     });
   }
 
-  openFormAccordingToAction() {    
+  openFormAccordingToAction() {
     if (this.action == 'edit') {
       this.getProjectDetailsById();
     } else if (this.action != 'add') {
@@ -452,9 +452,9 @@ export class AddEditProjectComponent implements OnInit {
   save() {
     if (this.projectInfoForm.invalid || this.clientInfoForm.invalid || this.employeeProjectFormList.invalid) {
       let messageObj = this.messageService.getMessage("PLEASE_FILL_ALL_REQUIRED_FIELDS");
-        if (messageObj) {
-          this.toaster.error(messageObj.description, messageObj.type);
-        }
+      if (messageObj) {
+        this.toaster.error(messageObj.description, messageObj.type);
+      }
       this.projectInfoForm.markAllAsTouched();
       this.clientInfoForm.markAllAsTouched();
       this.employeeProjectFormList.markAllAsTouched();

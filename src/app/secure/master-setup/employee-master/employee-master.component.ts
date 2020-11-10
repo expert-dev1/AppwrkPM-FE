@@ -25,19 +25,19 @@ export class EmployeeMasterComponent implements OnInit {
   public roleMasterList: any = [];
   public skillMasterList: any = [];
   public permanentCountryList: any = [];
-  public permanentStateList: any = [];  
+  public permanentStateList: any = [];
   public permanentCityList: any = [];
   public currentCountryList: any = [];
-  public currentStateList: any = [];  
+  public currentStateList: any = [];
   public currentCityList: any = [];
   public selectedListForRoleMaster: any = [];
-  public selectedListForSkillMaster: [];
+  public selectedListForSkillMaster: any = [];
   public currentDate = new Date();
   public routerSubscription: Subscription;
   public isEditable = true;
   public file: any;
   public photo = "./../../../../assets/small-images/upload-photo.png";
-  
+
 
   public employeeForm = this.formBuilder.group({
     id: ['0'],
@@ -64,7 +64,6 @@ export class EmployeeMasterComponent implements OnInit {
     imagePath: [null],
     roleMasterId: ['', [Validators.required]],
     dateOfJoining: ['', [Validators.required]],
-    organizationId: [''],
     designationId: ['', [Validators.required]],
     skillMasterIds: ['', [Validators.required]],
   })
@@ -73,7 +72,7 @@ export class EmployeeMasterComponent implements OnInit {
     private activatedRoute: ActivatedRoute, private messageService: MessageService) {
     this.routerSubscription = this.activatedRoute.url.subscribe((params) => {
       this.action = this.activatedRoute.snapshot.params.action;
-      this.employeeId = this.activatedRoute.snapshot.params.id;
+      this.employeeId = this.activatedRoute.snapshot.params.employeeId;
       this.employeeForm.patchValue({ id: this.employeeId });
       this.openFormBasedOnActions();
     });
@@ -268,7 +267,6 @@ export class EmployeeMasterComponent implements OnInit {
           this.employeeForm.controls.emailId.updateValueAndValidity();
         } else {
           this.employeeForm.controls.emailId.setErrors({ "emailAlreadyRegistered": true });
-          // this.employeeForm.controls.emailId.updateValueAndValidity();
           let messageObj = this.messageService.getMessage("EMAIL_ALREADY_EXISTS");
           if (messageObj) {
             this.toaster.error(messageObj.description, messageObj.type);
@@ -281,27 +279,32 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   saveEmployee() {
-    console.log('Inside save employee');
+    console.log('data : ', this.employeeForm.getRawValue());
     if (this.employeeForm.invalid) {
-      console.log('Inside save employee if');
       this.markFormAsTouched();
+      let messageObj = this.messageService.getMessage("PLEASE_FILL_ALL_REQUIRED_FIELDS");
+      if (messageObj) {
+        this.toaster.error(messageObj.description, messageObj.type);
+      }
     } else {
       console.log('Inside save employee else');
-      this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
-        if (data && data.data) {
-          // this.dialogRef.close({ success: true, action: this.action });
-        }
-      }, error => {
-        if (error.message == 'EMAIL_ALREADY_EXISTS') {
-          let messageObj = this.messageService.getMessage(error.error.message);
-          if (messageObj) {
-            this.toaster.error(messageObj.description, messageObj.type);
-          }
-        } else {
-          console.log('Error in saving employee records : ', error.message);
-        }
-        // console.log('Error in saving role master records : ', error.error.message);
-      })
+      console.log('data : ', this.employeeForm.getRawValue());
+
+      // this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
+      //   if (data && data.data) {
+      //     // this.dialogRef.close({ success: true, action: this.action });
+      //   }
+      // }, error => {
+      //   if (error.message == 'EMAIL_ALREADY_EXISTS') {
+      //     let messageObj = this.messageService.getMessage(error.error.message);
+      //     if (messageObj) {
+      //       this.toaster.error(messageObj.description, messageObj.type);
+      //     }
+      //   } else {
+      //     console.log('Error in saving employee records : ', error.message);
+      //   }
+      //   // console.log('Error in saving role master records : ', error.error.message);
+      // })
     }
   }
 
@@ -395,11 +398,7 @@ export class EmployeeMasterComponent implements OnInit {
       let data = new FormData();
       data.append("file", this.file);
       data.append("location", "/src/main/resources/images");
+      this.employeeForm.controls.imagePath.setValue(data);
     }
   }
-
-  closePopUp() {
-    // this.dialogRef.close();
-  }
-
 }
