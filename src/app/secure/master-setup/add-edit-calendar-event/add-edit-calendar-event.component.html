@@ -5,7 +5,29 @@
                 cancel
             </span></button>
     </div>
-    <form [formGroup]="organizationCalendarForm" (ngSubmit)="save()">
+
+    <div *ngIf="action == 'edit'">
+        <button *ngIf="!organizationCalendarForm.value.canEdit" (click)="editOrDelete('edit')" mat-button color="primary">
+            <span class="material-icons">
+                edit
+            </span>
+            <label> Edit</label>
+        </button>
+        <button *ngIf="organizationCalendarForm.value.canEdit" (click)="editOrDelete('edit')" mat-button color="primary">
+            <span class="material-icons">
+                cancel
+            </span>
+            <label> Cancel</label>
+        </button>
+
+        <button (click)="editOrDelete('delete')" mat-button color="primary">
+            <span class="material-icons">
+                delete
+            </span>
+            <label> Delete</label>
+        </button>
+    </div>
+    <form [formGroup]="organizationCalendarForm">
         <div class="row">
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-label>Event For</mat-label>
@@ -38,7 +60,7 @@
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Start Date and Time</mat-label>
-                    <input matInput [ngxMatDatetimePicker]="startDateTime" [min]="currentDate" readonly="true"
+                    <input matInput [ngxMatDatetimePicker]="startDateTime" readonly="true"
                         formControlName="startDateTime" required="true">
                     <mat-datepicker-toggle matSuffix [for]="startDateTime"></mat-datepicker-toggle>
                     <ngx-mat-datetime-picker (closed)="selectedDateTime()" #startDateTime [enableMeridian]="true">
@@ -55,8 +77,9 @@
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-form-field appearance="outline">
                     <mat-label>End Date and Time</mat-label>
-                    <input matInput [ngxMatDatetimePicker]="endDateTime" [min]="organizationCalendarForm.controls.startDateTime.value ? organizationCalendarForm.controls.startDateTime.value : currentDate" readonly="true" formControlName="endDateTime"
-                        required="true">
+                    <input matInput [ngxMatDatetimePicker]="endDateTime"
+                        [min]="organizationCalendarForm.controls.startDateTime.value ? organizationCalendarForm.controls.startDateTime.value : currentDate"
+                        readonly="true" formControlName="endDateTime" required="true">
                     <mat-datepicker-toggle matSuffix [for]="endDateTime"></mat-datepicker-toggle>
                     <ngx-mat-datetime-picker (closed)="selectedDateTime()" #endDateTime [enableMeridian]="true">
                     </ngx-mat-datetime-picker>
@@ -109,8 +132,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-12 col-md-12 text-right pt-3 pb-3">
-                <button type="submit" mat-raised-button>Save</button>
+            <div class="col-xl-12 col-md-12 text-right pt-3 pb-3"
+                *ngIf="organizationCalendarForm.controls.canEdit.value && action == 'add'">
+                <button type="buuton" (click)="save()" mat-raised-button>Save</button>
+            </div>
+            <div class="col-xl-12 col-md-12 text-right pt-3 pb-3"
+                *ngIf="organizationCalendarForm.controls.canEdit.value && action == 'edit'">
+                <button type="buuton" (click)="update()" mat-raised-button>Update</button>
             </div>
         </div>
     </form>

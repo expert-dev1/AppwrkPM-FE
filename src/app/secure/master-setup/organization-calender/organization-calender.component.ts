@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/angular';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, FullCalendarComponent } from '@fullcalendar/angular';
 import { ToastrService } from 'ngx-toastr';
 import { EVENT_FOR_MAP } from 'src/app/core/modals/constant';
 import { MessageService } from 'src/app/core/services/message/message.service';
@@ -14,15 +14,39 @@ import { MasterService } from '../service/master.service';
   styleUrls: ['./organization-calender.component.scss']
 })
 export class OrganizationCalenderComponent implements OnInit {
-
+  @ViewChild('fullcalendar') calendarComponent: FullCalendarComponent;
   public calendarVisible = true;
   public eventForMap = EVENT_FOR_MAP;
   public calendarList = [];
   public calendarOptions: CalendarOptions;
 
 
-  handleDateClick(selectInfo: DateSelectArg) {
 
+
+  handleDateSelect(selectInfo) {
+    console.log('selectInfo inside handle date select : ', selectInfo);
+  }
+
+  handleEventClick(selectInfo) {
+    console.log('selectInfo inside handle event click : ', selectInfo.event.start);
+    console.log('selectInfo inside handle event click : ', selectInfo.event.end);
+    let eventDetails = this.calendarList.find(obj => new Date(obj.startDateTime).getTime() == selectInfo.event.start.getTime() && new Date(obj.endDateTime).getTime() == selectInfo.event.end.getTime());
+    console.log('Event details : ', eventDetails);
+    if (eventDetails && eventDetails != undefined && eventDetails != null) {
+      this.openPopUp(eventDetails.id, "edit");
+    }
+  }
+
+  handleEvents(selectInfo: DateSelectArg) {
+    console.log('selectInfo inside handle events : ', selectInfo);
+  }
+
+  handleEventChange(selectInfo: DateSelectArg) {
+    console.log('selectInfo inside handle event change : ', selectInfo);
+  }
+
+  handleEventRemove(selectInfo: DateSelectArg) {
+    console.log('selectInfo inside handle event remove : ', selectInfo);
   }
 
   constructor(private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService,
@@ -31,6 +55,7 @@ export class OrganizationCalenderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   openPopUp(calenderId, action) {
@@ -48,8 +73,13 @@ export class OrganizationCalenderComponent implements OnInit {
             if (messageObj) {
               this.toastr.success(messageObj.description, messageObj.type);
             }
-          } else {
+          } else if (result.action == 'add') {
             let messageObj = this.messageService.getMessage("UPDATE");
+            if (messageObj) {
+              this.toastr.success(messageObj.description, messageObj.type);
+            }
+          } else {
+            let messageObj = this.messageService.getMessage("DELETE");
             if (messageObj) {
               this.toastr.success(messageObj.description, messageObj.type);
             }
@@ -94,9 +124,9 @@ export class OrganizationCalenderComponent implements OnInit {
         right: 'dayGridMonth,listWeek'
       },
       dayMaxEvents: true,
-      events: listOfEvents
+      events: listOfEvents,
+      eventClick: this.handleEventClick.bind(this),
     }
-
   }
 
 }

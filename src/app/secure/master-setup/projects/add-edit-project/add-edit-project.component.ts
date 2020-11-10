@@ -75,9 +75,10 @@ export class AddEditProjectComponent implements OnInit {
 
 
 
-  constructor(private formBuilder: FormBuilder, private masterService: MasterService, private router: Router, private activatedRoute: ActivatedRoute,
+  constructor(private formBuilder: FormBuilder, private masterService: MasterService, private router: Router, 
+    private activatedRoute: ActivatedRoute,
     private toaster: ToastrService, public dialog: MatDialog, private messageService: MessageService) {
-    this.routerSubscription = this.routerSubscription = this.activatedRoute.url.subscribe((params) => {
+    this.routerSubscription = this.activatedRoute.url.subscribe((params) => {
       this.action = this.activatedRoute.snapshot.params.action;
       this.projectId = this.activatedRoute.snapshot.params.id;
       this.projectInfoForm.patchValue({ id: this.projectId });

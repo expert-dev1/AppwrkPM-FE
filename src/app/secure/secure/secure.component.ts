@@ -33,6 +33,9 @@ export class SecureComponent implements OnInit {
       title:'Designation', icon:'layers', capsName:'DESIGNATION', routerLink:'/secure/masterSetup/designation'
     },
     {
+      title:'Skill Master', icon:'school', capsName:'SKILL_MASTER', routerLink:'/secure/masterSetup/skills'
+    },
+    {
       title:'Employee', icon:'people', capsName:'EMPLOYEE' , routerLink:'/secure/masterSetup/employee'
     },
     {

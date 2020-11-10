@@ -14,5 +14,5 @@
     </div>
 </Appwrk-layout-div>
 <ng-template #mainLayout>
-        <full-calendar [options]='calendarOptions'></full-calendar>
+    <full-calendar id="calendar" [options]='calendarOptions' #fullcalendar (datesRender)="onNextOrPrevOnMonthDayCalendar($event)"></full-calendar>
 </ng-template>

@@ -4,8 +4,10 @@ import { PERMISSIONS } from 'src/app/core/modals/permission-model';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { DesignationListComponent } from './designation-list/designation-list.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { EmployeeMasterComponent } from './employee-master/employee-master.component';
 import { OrganizationCalenderComponent } from './organization-calender/organization-calender.component';
 import { RoleListComponent } from './role-list/role-list.component';
+import { SkillMasterListComponent } from './skill-master-list/skill-master-list.component';
 
 const routes: Routes = [
   {
@@ -28,11 +30,27 @@ const routes: Routes = [
         }
       },
       {
+        path: 'employee/:action/:employeeId',
+        component: EmployeeMasterComponent,
+        canActivate: [AuthGuard],
+        data: {
+          role: PERMISSIONS.EMPLOYEE
+        }
+      },
+      {
         path: 'designation',
         component: DesignationListComponent,
         canActivate: [AuthGuard],
         data: {
           role: PERMISSIONS.DESIGNATION
+        }
+      },
+      {
+        path: 'skills',
+        component: SkillMasterListComponent,
+        canActivate: [AuthGuard],
+        data: {
+          role: PERMISSIONS.SKILL_MASTER
         }
       },
       {

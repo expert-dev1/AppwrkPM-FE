@@ -12,10 +12,12 @@ import { DesignationMasterComponent } from './designation-master/designation-mas
 import { OrganizationCalenderComponent } from './organization-calender/organization-calender.component';
 import { AddEditCalendarEventComponent } from './add-edit-calendar-event/add-edit-calendar-event.component';
 import { OrganizationEventListComponent } from './organization-event-list/organization-event-list.component';
+import { SkillMasterListComponent } from './skill-master-list/skill-master-list.component';
+import { SkillMasterComponent } from './skill-master/skill-master.component';
 
 
 @NgModule({
-  declarations: [RoleListComponent, RoleMasterComponent, EmployeeListComponent, EmployeeMasterComponent, DesignationListComponent, DesignationMasterComponent, OrganizationCalenderComponent, AddEditCalendarEventComponent, OrganizationEventListComponent],
+  declarations: [RoleListComponent, RoleMasterComponent, EmployeeListComponent, EmployeeMasterComponent, DesignationListComponent, DesignationMasterComponent, OrganizationCalenderComponent, AddEditCalendarEventComponent, OrganizationEventListComponent, SkillMasterListComponent, SkillMasterComponent],
   imports: [
     CommonModule,
     MasterSetupRoutingModule,

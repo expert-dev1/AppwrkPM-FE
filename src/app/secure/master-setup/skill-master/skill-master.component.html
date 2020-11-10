@@ -1,0 +1,28 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <strong>Skill Master Details</strong>
+        <button (click)="close()" mat-button color="primary"><span class="material-icons">
+                cancel
+            </span></button>
+    </div>
+    <form [formGroup]="skillMasterForm">
+        <div class="input-group">
+            <div class="col-xl-4 col-md-4 pb-3">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name" required="true" />
+                    <mat-error *ngIf="skillMasterForm.controls.name.invalid && skillMasterForm.controls.name.touched">
+                        <span matTooltip="{{getErrorMessage(skillMasterForm.controls.name,'skillMaster','name')}}">
+                            {{getErrorMessage(skillMasterForm.controls.name,'skillMaster','name')}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-xl-12 col-md-12 text-right pt-3 pb-3">
+            <button *ngIf="action =='add'" (click)="save()" matTooltip="Save" type="button"
+                mat-raised-button>Save</button>
+            <button *ngIf="action =='edit'" (click)="update()" matTooltip="Update" type="button"
+                mat-raised-button>Update</button>
+        </div>
+    </form>
+</div>

@@ -469,4 +469,95 @@ export class MasterService {
       catchError(this.errorHandler)
     );
   }
+
+  getOrganizationEventDeatils(orgCalId): Observable<any> {
+    let url = MASTER_API + 'organizationCalendar?orgCalId=' + orgCalId;
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  
+  updateOrganizationEvent(data): Observable<any> {
+    let url = MASTER_API + 'organizationCalendar'
+    return this.http.put(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+  
+  deleteOrganizationEventsById(orgCalId): Observable<any> {
+    let url = MASTER_API + 'organizationCalendar?orgCalId=' + orgCalId;
+    return this.http.delete(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getSkillMasterListByOrgIdWithPage(data): Observable<any> {
+    let url = MASTER_API + 'skillMaster/getSkillMasterListByOrgIdWithPage';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getSkillMasterDeatilsById(skillMasterId): Observable<any> {
+    let url = MASTER_API + 'skillMaster?skillMasterId=' + skillMasterId;
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  saveSkillMaster(data): Observable<any> {
+    let url = MASTER_API + 'skillMaster';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  updateSkillMaster(data): Observable<any> {
+    let url = MASTER_API + 'skillMaster';
+    return this.http.put(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  getSkillMasterListByOrgId(): Observable<any> {
+    let url = MASTER_API + 'skillMaster/getSkillMasterListByOrgId';
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  deleteSkillMasterById(skillMasterId): Observable<any> {
+    let url = MASTER_API + 'skillMaster?skillMasterId=' + skillMasterId;
+    return this.http.delete(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
 }

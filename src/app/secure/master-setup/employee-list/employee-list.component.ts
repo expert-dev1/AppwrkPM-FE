@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { STATUS_MAP } from 'src/app/core/modals/constant';
 import { MessageService } from 'src/app/core/services/message/message.service';
@@ -28,8 +29,8 @@ export class EmployeeListComponent implements OnInit {
   public totalPage: any;
   public statusMap = STATUS_MAP;
 
-  constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, private toastr: ToastrService,
-    private messageService: MessageService) {
+  constructor(private storageService: StorageService, private masterService: MasterService, public dialog: MatDialog, 
+    private toastr: ToastrService, private messageService: MessageService, private router: Router) {
       this.searchModel = new SearchModel(this.limit, this.offset, 0, this.sortDirection, this.sortField);
       this.getEmployeeListByOrgIdWithPagination();
   }
@@ -86,32 +87,37 @@ export class EmployeeListComponent implements OnInit {
         }
       })
     } else {
-      const dialogRef = this.dialog.open(EmployeeMasterComponent, {
-        width: '1200px',
-        height: '600px',
-        data: { employeeId: employeeId, action: action },
-        disableClose: true
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('result after save : ', result)
-        if (result) {
-          if (result.success) {
-            if (result.action == 'add') {
-              let messageObj = this.messageService.getMessage("SAVE");
-              if (messageObj) {
-                this.toastr.success(messageObj.description, messageObj.type);
-              }
-            } else {
-              let messageObj = this.messageService.getMessage("UPDATE");
-              if (messageObj) {
-                this.toastr.success(messageObj.description, messageObj.type);
-              }
-            }
-            this.getEmployeeListByOrgIdWithPagination();
-          }
-        }
-      });
+      this.routeEmployeeToAddOrEdit(employeeId, action);
+      // const dialogRef = this.dialog.open(EmployeeMasterComponent, {
+      //   width: '1200px',
+      //   height: '600px',
+      //   data: { employeeId: employeeId, action: action },
+      //   disableClose: true
+      // });
+      // dialogRef.afterClosed().subscribe(result => {
+      //   console.log('result after save : ', result)
+      //   if (result) {
+      //     if (result.success) {
+      //       if (result.action == 'add') {
+      //         let messageObj = this.messageService.getMessage("SAVE");
+      //         if (messageObj) {
+      //           this.toastr.success(messageObj.description, messageObj.type);
+      //         }
+      //       } else {
+      //         let messageObj = this.messageService.getMessage("UPDATE");
+      //         if (messageObj) {
+      //           this.toastr.success(messageObj.description, messageObj.type);
+      //         }
+      //       }
+      //       this.getEmployeeListByOrgIdWithPagination();
+      //     }
+      //   }
+      // });
     }
+  }
+
+  routeEmployeeToAddOrEdit(employeeId, action) {
+    this.router.navigate(['secure/masterSetup/employee/' + action + "/" + employeeId]);
   }
 
   changeStatusOfEmployee(employeeId) {
