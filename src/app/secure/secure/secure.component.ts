@@ -17,7 +17,8 @@ export class SecureComponent implements OnInit {
   events: string[] = [];
   opened: boolean = true;
   constructor(private storageService: StorageService, private router: Router,
-    private authService: AuthService, public dialog: MatDialog, private toastr: ToastrService, private messageService: MessageService) { }
+    private authService: AuthService, public dialog: MatDialog, private toastr: ToastrService, 
+    private messageService: MessageService) { }
 
   public menuList = [    
     {
@@ -37,6 +38,9 @@ export class SecureComponent implements OnInit {
     },
     {
       title:'Employee', icon:'people', capsName:'EMPLOYEE' , routerLink:'/secure/masterSetup/employee'
+    },    
+    {
+      title:'Mark Attendance', icon:'published_with_changes', capsName:'MARK_UNMARK_ATTENDANCE', routerLink:'/secure/timeSheet/attendance'
     },
     {
       title:'Projects', icon:'assignment_ind', capsName:'PROJECT', routerLink:'/secure/masterSetup/projects'
@@ -49,6 +53,9 @@ export class SecureComponent implements OnInit {
     },
     {
       title:'Time-sheet status change', icon:'supervised_user_circle', capsName:'TIME_SHEET_STATUS_CAHNGE', routerLink:'/secure/timeSheet/statusChange'
+    },
+    {
+      title:'Employee Attendance Report', icon:'grading', capsName:'EMPLOYEE_ATTENDANCE_REPORT', routerLink:'/secure/timeSheet/attendanceReport'
     },
   ]
 

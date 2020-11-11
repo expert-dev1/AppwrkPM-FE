@@ -4,6 +4,7 @@ const ACCESS_TOKEN_KEY = 'access-token';
 const REFERESH_TOKEN_KEY = 'referesh_token';
 const USER_KEY = 'auth-user';
 const USER_ROLE_LIST_KEY = 'auth-user-role-list';
+const USER_CHECK_IN_CHECK_OUT = 'user-check-in-check-out';
 
 @Injectable({
   providedIn: 'root'
@@ -125,6 +126,24 @@ export class StorageService {
    */
   public getUser() {
     return JSON.parse(sessionStorage.getItem(USER_KEY));
+  }  
+
+  /**
+   * @author Amit Malik
+   * @description Save the user check-in / check-out status for attendance
+   * @param attendanceRecord User Attendance record weather user is check-in or check out
+   */
+  public saveUserCheckInCheckOutStatus(attendanceRecord) {
+    window.sessionStorage.removeItem(USER_CHECK_IN_CHECK_OUT);
+    window.sessionStorage.setItem(USER_CHECK_IN_CHECK_OUT, JSON.stringify(attendanceRecord));
+  }
+
+  /**
+   * @author Amit Malik
+   * @description Get user check-in / check-out status
+   */
+  public getUserCheckInCheckOutStatus() {
+    return JSON.parse(sessionStorage.getItem(USER_CHECK_IN_CHECK_OUT));
   }
 
   /**
@@ -158,4 +177,5 @@ export class StorageService {
   public clearAll() {
     window.localStorage.clear();
   }
+  
 }

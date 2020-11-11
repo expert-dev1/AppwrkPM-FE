@@ -1,36 +1,41 @@
-<h2>Role Master</h2>
-<form [formGroup]="roleMasterForm">
-    <div class="input-group">
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <strong>Role Master</strong>
+        <button (click)="close()" mat-button color="primary"><span class="material-icons">
+                cancel
+            </span></button>
+    </div>
+    <form [formGroup]="roleMasterForm">
+        <div class="input-group">
+            <div class="col-xl-4 col-md-4 pb-3">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name" required="true" />
+                    <mat-error *ngIf="roleMasterForm.controls.name.invalid && roleMasterForm.controls.name.touched">
+                        <span matTooltip="{{getErrorMessage(roleMasterForm.controls.name,'roleMasterForm','name')}}">
+                            {{getErrorMessage(roleMasterForm.controls.name,'roleMaster','name')}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
         <div class="col-xl-4 col-md-4 pb-3">
             <mat-form-field appearance="outline">
-                <mat-label>Name</mat-label>
-                <input matInput type="text" formControlName="name" required="true" />
-                <mat-error *ngIf="roleMasterForm.controls.name.invalid && roleMasterForm.controls.name.touched">
-                    <span matTooltip="{{getErrorMessage(roleMasterForm.controls.name,'roleMasterForm','name')}}">
-                        {{getErrorMessage(roleMasterForm.controls.name,'roleMaster','name')}}</span>
+                <mat-label>Description</mat-label>
+                <input matInput formControlName="description">
+                <mat-error
+                    *ngIf="roleMasterForm.controls.description.invalid && roleMasterForm.controls.description.touched">
+                    <span
+                        matTooltip="{{getErrorMessage(roleMasterForm.controls.roleMasterForm,'designation','description')}}">
+                        {{getErrorMessage(roleMasterForm.controls.description,'roleMaster','description')}}</span>
                 </mat-error>
             </mat-form-field>
-        </div>
-    </div>
-    <div class="col-xl-4 col-md-4 pb-3">
-        <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
-            <input matInput formControlName="description">
-            <mat-error
-                *ngIf="roleMasterForm.controls.description.invalid && roleMasterForm.controls.description.touched">
-                <span
-                    matTooltip="{{getErrorMessage(roleMasterForm.controls.roleMasterForm,'designation','description')}}">
-                    {{getErrorMessage(roleMasterForm.controls.description,'roleMaster','description')}}</span>
-            </mat-error>
-        </mat-form-field>
 
-    </div>
-    <div class="row text-right">
-        <button *ngIf="action =='add'" (click)="save()" matTooltip="Save" type="button" mat-raised-button>Save</button>
-        &nbsp;
-        <button *ngIf="action =='edit'" (click)="update()" matTooltip="Save" type="button"
-            mat-raised-button>Update</button> &nbsp;
-        &nbsp;
-        <button (click)="close()" matTooltip="Close" type="button" mat-raised-button>Cancel</button>
-    </div>
-</form>
+        </div>
+        <div class="col-xl-12 col-md-12 text-right pt-3 pb-3">
+            <button *ngIf="action =='add'" (click)="save()" matTooltip="Save" type="button"
+                mat-raised-button>Save</button>
+            <button *ngIf="action =='edit'" (click)="update()" matTooltip="Save" type="button"
+                mat-raised-button>Update</button>
+        </div>
+    </form>
+</div>

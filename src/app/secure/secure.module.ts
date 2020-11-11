@@ -12,8 +12,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
   imports: [
     SharedModule,
     CommonModule,
-    SecureRoutingModule,
-    
-  ]
+    SecureRoutingModule,    
+  ],
 })
 export class SecureModule { }

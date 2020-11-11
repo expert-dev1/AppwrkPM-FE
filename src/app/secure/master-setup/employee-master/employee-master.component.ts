@@ -279,7 +279,6 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   saveEmployee() {
-    console.log('data : ', this.employeeForm.getRawValue());
     if (this.employeeForm.invalid) {
       this.markFormAsTouched();
       let messageObj = this.messageService.getMessage("PLEASE_FILL_ALL_REQUIRED_FIELDS");
@@ -287,24 +286,22 @@ export class EmployeeMasterComponent implements OnInit {
         this.toaster.error(messageObj.description, messageObj.type);
       }
     } else {
-      console.log('Inside save employee else');
       console.log('data : ', this.employeeForm.getRawValue());
-
-      // this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
-      //   if (data && data.data) {
-      //     // this.dialogRef.close({ success: true, action: this.action });
-      //   }
-      // }, error => {
-      //   if (error.message == 'EMAIL_ALREADY_EXISTS') {
-      //     let messageObj = this.messageService.getMessage(error.error.message);
-      //     if (messageObj) {
-      //       this.toaster.error(messageObj.description, messageObj.type);
-      //     }
-      //   } else {
-      //     console.log('Error in saving employee records : ', error.message);
-      //   }
-      //   // console.log('Error in saving role master records : ', error.error.message);
-      // })
+      this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
+        if (data && data.data) {
+          // this.dialogRef.close({ success: true, action: this.action });
+        }
+      }, error => {
+        if (error.message == 'EMAIL_ALREADY_EXISTS') {
+          let messageObj = this.messageService.getMessage(error.error.message);
+          if (messageObj) {
+            this.toaster.error(messageObj.description, messageObj.type);
+          }
+        } else {
+          console.log('Error in saving employee records : ', error.message);
+        }
+        // console.log('Error in saving role master records : ', error.error.message);
+      })
     }
   }
 
@@ -342,6 +339,7 @@ export class EmployeeMasterComponent implements OnInit {
   patchEmployeeForm(employee) {
     let employeeDetails = employee.employee;
     let roleMasterId = employee.roleEmployeeList;
+    let skillMasterIds = employee.skillEmployeeList;
     this.employeeForm.patchValue({
       id: employeeDetails.id,
       empCode: employeeDetails.empCode,
@@ -351,22 +349,31 @@ export class EmployeeMasterComponent implements OnInit {
       status: employeeDetails.status,
       mobileNumber: employeeDetails.mobileNumber,
       emailId: employeeDetails.emailId,
-      addressLine1: employeeDetails.addressLine1,
-      addressLine2: employeeDetails.addressLine2,
-      pincode: employeeDetails.pincode,
-      country: employeeDetails.country,
-      roleMaster: employeeDetails.roleMaster,
-      dateOfJoining: new Date(employeeDetails.dateOfJoining),
-      organizationId: employeeDetails.organizationId,
+      permanentAddressLine1: employeeDetails.permanentAddressLine1,
+      permanentAddressLine2: employeeDetails.permanentAddressLine2,
+      permanentCountry: employeeDetails.permanentCountry,
+      permanentPincode: employeeDetails.permanentPincode,
+      sameAsPermanentAddress: employeeDetails.sameAsPermanentAddress,
+      currentAddressLine1: employeeDetails.currentAddressLine1,
+      currentAddressLine2: employeeDetails.currentAddressLine2,
+      currentCountry: employeeDetails.currentCountry,
+      currentPincode: employeeDetails.currentPincode,
+      imagePath: [null],
+      dateOfJoining: employeeDetails.dateOfJoining,
       designationId: employeeDetails.designationId
+      // skillMasterIds: ['', [Validators.required]],
     });
-    // this.getStateListByCountryId();
+    this.getStateListByCountryIdForPerState();
+    this.getStateListByCountryIdForCurState();
     this.employeeForm.patchValue({
-      state: employeeDetails.state,
+      permanentState: employeeDetails.permanentState,
+      currentState: employeeDetails.currentState,
     });
-    // this.getCityListByStateId();
+    this.getCityListByStateIdForPerCity();
+    this.getCityListByStateIdForCurCity();
     this.employeeForm.patchValue({
-      city: employeeDetails.city
+      permanentCity: employeeDetails.permanentCity,
+      currentCity: employeeDetails.currentCity
     });
     if (roleMasterId && roleMasterId != null && roleMasterId != undefined && roleMasterId.length > 0) {
       let sectionsIdsArray = [];
@@ -374,6 +381,14 @@ export class EmployeeMasterComponent implements OnInit {
         sectionsIdsArray.push(parseInt(element.roleMasterId));
       });
       this.employeeForm.controls.roleMasterId.patchValue(sectionsIdsArray);
+    }
+
+    if (skillMasterIds && skillMasterIds != null && skillMasterIds != undefined && skillMasterIds.length > 0) {
+      let sectionsIdsArray = [];
+      skillMasterIds.forEach(element => {
+        sectionsIdsArray.push(parseInt(element.skillMasterId));
+      });
+      this.employeeForm.controls.skillMasterIds.patchValue(sectionsIdsArray);
     }
   }
 
@@ -395,10 +410,19 @@ export class EmployeeMasterComponent implements OnInit {
         }
         return;
       }
-      let data = new FormData();
-      data.append("file", this.file);
-      data.append("location", "/src/main/resources/images");
-      this.employeeForm.controls.imagePath.setValue(data);
+      this.employeeForm.patchValue({
+        imagePath: this.file
+      });
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.photo = reader.result as string;
+      }
+      reader.readAsDataURL(this.file);
+      // let data = new FormData();
+      // data.append("file", this.file);
+      // // data.append("location", "/src/main/resources/images");
+      // this.employeeForm.controls.imagePath.setValue(data);
+      // this.employeeForm.get('imagePath').updateValueAndValidity();
     }
   }
 }

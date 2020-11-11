@@ -1,7 +1,7 @@
 <Appwrk-layout-div [title]="'Employee Details'">
     <ng-container *ngTemplateOutlet="steperLayout"></ng-container>
     <div rightButton>
-        <button routerLink="/secure/masterSetup/employee" mat-button color="primary"><span class="material-icons">
+        <button routerLink="/secure/masterSetup/employee"  [matTooltip]="'Back'"  mat-button color="primary"><span class="material-icons">
                 keyboard_backspace
             </span>Back</button>
     </div>
@@ -19,27 +19,23 @@
         <mat-step [stepControl]="employeeForm" [editable]="isEditable">
             <ng-template matStepLabel>Address Details</ng-template>
             <ng-container *ngTemplateOutlet="employeeAddressInfo"></ng-container>
-            <div class="row">
-                <button mat-button matStepperPrevious>Back</button>
-                <button id="step2next" style="display:none;" mat-button matStepperNext>Next</button>
-            </div>
+            <button mat-button color="primary" [matTooltip]="'Back'" matStepperPrevious>Back</button>
+            <button id="step2next" style="display:none;" mat-button matStepperNext>Next</button>
         </mat-step>
         <mat-step [stepControl]="employeeForm" [editable]="isEditable">
             <ng-template matStepLabel>Skill-Set</ng-template>
             <ng-container *ngTemplateOutlet="employeeSkillSetInfo"></ng-container>
-            <div class="row">
-                <button mat-button matStepperPrevious>Back</button>
-                <button id="step3next" style="display:none;" mat-button matStepperNext>Next</button>
-            </div>
+            <button mat-button color="primary" [matTooltip]="'Back'" matStepperPrevious>Back</button>
+            <button id="step3next" style="display:none;" mat-button matStepperNext>Next</button>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Done</ng-template>
             <p>You are now done.</p>
             <div class="row">
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button (click)="stepper.reset()">Reset</button>
-                <button mat-button *ngIf="action == 'add'" (click)="saveEmployee()">Save</button>
-                <button mat-button *ngIf="action == 'edit'" (click)="updateEmployee()">Update</button>
+                <button mat-button color="primary" [matTooltip]="'Back'" matStepperPrevious>Back</button>
+                <button mat-button color="primary" [matTooltip]="'Reset'" (click)="stepper.reset()">Reset</button>
+                <button mat-button color="primary" [matTooltip]="'Save'" *ngIf="action == 'add'" (click)="saveEmployee()">Save</button>
+                <button mat-button color="primary" [matTooltip]="'Update'" *ngIf="action == 'edit'" (click)="updateEmployee()">Update</button>
             </div>
         </mat-step>
     </mat-horizontal-stepper>
@@ -136,9 +132,9 @@
             </div>
             <div class="col-xl-4 col-md-4 col-sm-4 col-12 pt-1 pb-2">
                 <mat-label>Roles</mat-label>
-                <ng-select [items]="roleMasterList" placeholder="Roles" formControlName="roleMasterId"
-                    bindLabel="name" bindValue="id" [searchable]="true" [clearable]="false"
-                    [(ngModel)]="selectedListForRoleMaster" [multiple]="true" [closeOnSelect]="false">
+                <ng-select [items]="roleMasterList" placeholder="Roles" formControlName="roleMasterId" bindLabel="name"
+                    bindValue="id" [searchable]="true" [clearable]="false" [(ngModel)]="selectedListForRoleMaster"
+                    [multiple]="true" [closeOnSelect]="false">
                     <ng-template ng-option-tmp let-item="item">
                         <input
                             [checked]="selectedListForRoleMaster && selectedListForRoleMaster.length > 0 && selectedListForRoleMaster.indexOf(item.id) > -1"
@@ -196,7 +192,7 @@
                 </mat-form-field>
             </div>
         </div>
-        <button class="mt-3" (click)="submitStep1()" mat-button>Next</button>
+        <button class="mt-3" mat-button color="primary" [matTooltip]="'Next'"  (click)="submitStep1()" mat-button>Next</button>
     </ng-template>
 
     <ng-template #employeeAddressInfo>
@@ -235,7 +231,7 @@
                             <mat-label>Country</mat-label>
                             <ng-select [items]="permanentCountryList" (change)="getStateListByCountryIdForPerState()"
                                 placeholder="Country *" formControlName="permanentCountry" bindLabel="name"
-                              bindValue="id" [searchable]="true" [clearable]="false" required="true"
+                                bindValue="id" [searchable]="true" [clearable]="false" required="true"
                                 [closeOnSelect]="true">
                             </ng-select>
                             <mat-error
@@ -383,7 +379,7 @@
                 </div>
             </div>
         </div>
-        <button class="mt-3" (click)="submitStep2()" mat-button>Next</button>
+        <button class="mt-3" mat-button [matTooltip]="'Next'"  color="primary" (click)="submitStep2()" mat-button>Next</button>
     </ng-template>
 
     <ng-template #employeeSkillSetInfo>
@@ -401,7 +397,7 @@
             <span matTooltip="{{getErrorMessage(employeeForm.controls.roleMasterId,'employee','roleMasterId')}}">
                 {{getErrorMessage(employeeForm.controls.roleMasterId,'employee','roleMasterId')}}</span>
         </mat-error>
-        <button class="mt-3" (click)="submitStep3()" mat-button>Next</button>
+        <button class="mt-3" mat-button color="primary" [matTooltip]="'Next'"  (click)="submitStep3()" mat-button>Next</button>
     </ng-template>
 </form>
 

@@ -1,0 +1,42 @@
+<Appwrk-layout-div [title]="'Mark Check-in / Check-out'">
+    <ng-container *ngTemplateOutlet="mainLayout"></ng-container>
+</Appwrk-layout-div>
+
+<ng-template #mainLayout>
+    <div class="col-md-12 col-lg-12 col-sm-12 shadow bg-white m-bg">
+        <form [formGroup]="employeeAttendanceForm">
+            <div class="row pt-3 pb-3">
+                <div class="col-xl-12 t-c">
+                    <div class="mt-3 mb-3">
+                        <mat-radio-group aria-label="Select an option" formControlName="status"
+                            (change)="onSelectionOfRadioButton()">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <mat-radio-button value="CHECK_IN">Check-In</mat-radio-button>
+                                </div>
+                                <div class="col-xl-4">
+                                    <mat-radio-button value="CHECK_OUT">Check-Out</mat-radio-button>
+                                </div>
+                            </div>
+                        </mat-radio-group>
+                    </div>
+                    <div *ngIf="employeeAttendanceForm.controls.status.value == 'CHECK_OUT'">
+                        <mat-form-field>
+                            <mat-label>Break (In mins.)</mat-label>
+                            <input matInput type="text" required="true" formControlName="breakTimeInMin">
+                            <mat-error
+                                *ngIf="employeeAttendanceForm.controls.breakTimeInMin.invalid && employeeAttendanceForm.controls.breakTimeInMin.touched">
+                                <span
+                                    matTooltip="{{getErrorMessage(employeeAttendanceForm.controls.breakTimeInMin,'employeeAttendance','breakTimeInMin')}}">
+                                    {{getErrorMessage(employeeAttendanceForm.controls.breakTimeInMin,'employeeAttendance','breakTimeInMin')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="col-xl-12 col-md-12 text-right pt-3 pb-3">
+                            <button type="button" mat-raised-button (click)="markAttendanceOfLoggedInEmployee()">Check-Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

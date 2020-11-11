@@ -110,4 +110,35 @@ export class TimeSheetService {
       catchError(this.errorHandler)
     );
   }
+
+  getEmployeeAttendanceListByOrgIdWithPage(data): Observable<any> {
+    let url = TIME_SHEET_API + 'employeeAttendance/getEmployeeAttendanceListByOrgIdWithPage';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  
+  markAttendanceOfLoggedInEmployee(data): Observable<any> {
+    let url = TIME_SHEET_API + 'employeeAttendance';
+    return this.http.post(url, data, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
+
+  checkIfUserCheckedInOrNot(): Observable<any> {
+    let url = TIME_SHEET_API + 'employeeAttendance/checkIfUserCheckedInOrNot';
+    return this.http.get(url, httpOptions).pipe(
+      map(response => {
+        return this.successResponse(response);
+      }),
+      catchError(this.errorHandler)
+    );
+  }
 }

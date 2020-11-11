@@ -15,13 +15,14 @@
     <div class="list-div">
       <mat-list>
         <div *ngFor="let item of menuList">
-          <mat-list-item routerLinkActive="active-link" *ngIf="hideOrShowModuleButton(item.capsName)" routerLink="{{item.routerLink}}">
+          <mat-list-item routerLinkActive="active-link" *ngIf="hideOrShowModuleButton(item.capsName)"
+            routerLink="{{item.routerLink}}">
             <mat-icon class="sidenav-icon">{{item.icon}}</mat-icon> {{item.title}}
           </mat-list-item>
-        </div>        
+        </div>
       </mat-list>
       <div>
-        <small >Version 0.0.1</small>
+        <small>Version 0.0.1</small>
       </div>
     </div>
   </mat-sidenav>

@@ -138,4 +138,16 @@ export const messageList = [
         "description": "Time sheet successfully saved.",
         "type": "SUCCESS"
     },
+    {
+        "messageKey": "SUCCESSFULLY_CHECKED_IN",
+        "language": "en",
+        "description": "You are successfully checked in.",
+        "type": "SUCCESS"
+    },
+    {
+        "messageKey": "SUCCESSFULLY_CHECKED_OUT",
+        "language": "en",
+        "description": "You are successfully checked out.",
+        "type": "SUCCESS"
+    },
 ]    
