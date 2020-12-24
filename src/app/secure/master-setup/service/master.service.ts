@@ -166,7 +166,7 @@ export class MasterService {
 
   saveEmployee(data): Observable<any> {
     let url = MASTER_API + 'employee';
-    return this.http.post(url, data, httpOptions).pipe(
+    return this.http.post(url, data).pipe(
       map(response => {
         return this.successResponse(response);
       }),
@@ -176,7 +176,7 @@ export class MasterService {
 
   updateEmployee(data): Observable<any> {
     let url = MASTER_API + 'employee';
-    return this.http.put(url, data, httpOptions).pipe(
+    return this.http.put(url, data).pipe(
       map(response => {
         return this.successResponse(response);
       }),

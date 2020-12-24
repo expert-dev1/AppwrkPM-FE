@@ -10,7 +10,7 @@ import { TimeSheetService } from '../service/time-sheet.service';
 })
 export class AttendanceListComponent implements OnInit {
 
-  public columnsToBeDisplayed: string[] = ["employee.firstName", "employee.designation.name", "checkInDate", "checkOutDate", "breakTimeInMin", "id"];
+  public columnsToBeDisplayed: string[] = ["employee.firstName", "employee->designation.name", "checkInDate", "checkOutDate", "breakTimeInMin", "id"];
   public limit: number = 10;
   public offset: number = 0;
   public attendanceList: any = [];

@@ -1,13 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { STATUS_LIST } from 'src/app/core/modals/constant';
 import { MessageService } from 'src/app/core/services/message/message.service';
+import { environment } from 'src/environments/environment';
 import { CustomValidator, ValidatorErrorMessages } from '../../../core';
 import { MasterService } from '../service/master.service';
+const CONTEXT_PATH = environment.CONTEXT_PATH;
 
 @Component({
   selector: 'app-employee-master',
@@ -61,7 +63,7 @@ export class EmployeeMasterComponent implements OnInit {
     currentState: ['', [Validators.required]],
     currentCity: ['', [Validators.required]],
     currentPincode: ['', [Validators.required, Validators.maxLength(6), Validators.minLength(6)]],
-    imagePath: [null],
+    imagePath: [null, [Validators.required]],
     roleMasterId: ['', [Validators.required]],
     dateOfJoining: ['', [Validators.required]],
     designationId: ['', [Validators.required]],
@@ -69,7 +71,7 @@ export class EmployeeMasterComponent implements OnInit {
   })
 
   constructor(private formBuilder: FormBuilder, private masterService: MasterService, private toaster: ToastrService,
-    private activatedRoute: ActivatedRoute, private messageService: MessageService) {
+    private activatedRoute: ActivatedRoute, private messageService: MessageService, private router: Router) {
     this.routerSubscription = this.activatedRoute.url.subscribe((params) => {
       this.action = this.activatedRoute.snapshot.params.action;
       this.employeeId = this.activatedRoute.snapshot.params.employeeId;
@@ -286,10 +288,39 @@ export class EmployeeMasterComponent implements OnInit {
         this.toaster.error(messageObj.description, messageObj.type);
       }
     } else {
-      console.log('data : ', this.employeeForm.getRawValue());
-      this.masterService.saveEmployee(this.employeeForm.getRawValue()).subscribe(data => {
+      let formData = new FormData();
+      formData.append("id", this.employeeForm.get('id').value);
+      formData.append("imagePath", this.employeeForm.get('imagePath').value);
+      formData.append("firstName", this.employeeForm.get('firstName').value);
+      formData.append("middleName", this.employeeForm.get('middleName').value);
+      formData.append("lastName", this.employeeForm.get('lastName').value);
+      formData.append("status", this.employeeForm.get('status').value);
+      formData.append("mobileNumber", this.employeeForm.get('mobileNumber').value);
+      formData.append("emailId", this.employeeForm.get('emailId').value);
+      formData.append("permanentAddressLine1", this.employeeForm.get('permanentAddressLine1').value);
+      formData.append("permanentAddressLine2", this.employeeForm.get('permanentAddressLine2').value);
+      formData.append("permanentCountry", this.employeeForm.get('permanentCountry').value);
+      formData.append("permanentState", this.employeeForm.get('permanentState').value);
+      formData.append("permanentCity", this.employeeForm.get('permanentCity').value);
+      formData.append("permanentPincode", this.employeeForm.get('permanentPincode').value);
+      formData.append("sameAsPermanentAddress", this.employeeForm.get('sameAsPermanentAddress').value);
+      formData.append("currentAddressLine1", this.employeeForm.get('currentAddressLine1').value);
+      formData.append("currentAddressLine2", this.employeeForm.get('currentAddressLine2').value);
+      formData.append("currentCountry", this.employeeForm.get('currentCountry').value);
+      formData.append("currentState", this.employeeForm.get('currentState').value);
+      formData.append("currentCity", this.employeeForm.get('currentCity').value);
+      formData.append("currentPincode", this.employeeForm.get('currentPincode').value);
+      formData.append("roleMasterId", this.employeeForm.get('roleMasterId').value);
+      formData.append("dateOfJoining", this.employeeForm.get('dateOfJoining').value);
+      formData.append("designationId", this.employeeForm.get('designationId').value);
+      formData.append("skillMasterIds", this.employeeForm.get('skillMasterIds').value);
+      this.masterService.saveEmployee(formData).subscribe(data => {
         if (data && data.data) {
-          // this.dialogRef.close({ success: true, action: this.action });
+          let messageObj = this.messageService.getMessage("SAVE");
+          if (messageObj) {
+            this.toaster.success(messageObj.description, messageObj.type);
+          }
+          this.router.navigate(['secure/masterSetup/employee/edit/' + data.data.id]);
         }
       }, error => {
         if (error.message == 'EMAIL_ALREADY_EXISTS') {
@@ -309,9 +340,39 @@ export class EmployeeMasterComponent implements OnInit {
     if (this.employeeForm.invalid) {
       this.markFormAsTouched();
     } else {
-      this.masterService.updateEmployee(this.employeeForm.getRawValue()).subscribe(data => {
+      let formData = new FormData();
+      formData.append("id", this.employeeForm.get('id').value);
+      formData.append("imagePath", this.employeeForm.get('imagePath').value);
+      formData.append("firstName", this.employeeForm.get('firstName').value);
+      formData.append("middleName", this.employeeForm.get('middleName').value);
+      formData.append("lastName", this.employeeForm.get('lastName').value);
+      formData.append("status", this.employeeForm.get('status').value);
+      formData.append("mobileNumber", this.employeeForm.get('mobileNumber').value);
+      formData.append("emailId", this.employeeForm.get('emailId').value);
+      formData.append("permanentAddressLine1", this.employeeForm.get('permanentAddressLine1').value);
+      formData.append("permanentAddressLine2", this.employeeForm.get('permanentAddressLine2').value);
+      formData.append("permanentCountry", this.employeeForm.get('permanentCountry').value);
+      formData.append("permanentState", this.employeeForm.get('permanentState').value);
+      formData.append("permanentCity", this.employeeForm.get('permanentCity').value);
+      formData.append("permanentPincode", this.employeeForm.get('permanentPincode').value);
+      formData.append("sameAsPermanentAddress", this.employeeForm.get('sameAsPermanentAddress').value);
+      formData.append("currentAddressLine1", this.employeeForm.get('currentAddressLine1').value);
+      formData.append("currentAddressLine2", this.employeeForm.get('currentAddressLine2').value);
+      formData.append("currentCountry", this.employeeForm.get('currentCountry').value);
+      formData.append("currentState", this.employeeForm.get('currentState').value);
+      formData.append("currentCity", this.employeeForm.get('currentCity').value);
+      formData.append("currentPincode", this.employeeForm.get('currentPincode').value);
+      formData.append("roleMasterId", this.employeeForm.get('roleMasterId').value);
+      formData.append("dateOfJoining", this.employeeForm.get('dateOfJoining').value);
+      formData.append("designationId", this.employeeForm.get('designationId').value);
+      formData.append("skillMasterIds", this.employeeForm.get('skillMasterIds').value);
+      this.masterService.updateEmployee(formData).subscribe(data => {
         if (data && data.data) {
-          // this.dialogRef.close({ success: true, action: this.action });
+          let messageObj = this.messageService.getMessage("UPDATE");
+          if (messageObj) {
+            this.toaster.success(messageObj.description, messageObj.type);
+          }
+          this.getEmployeeDeatilsById();
         }
       }, error => {
         if (error.error.message == 'EMAIL_ALREADY_EXISTS') {
@@ -358,11 +419,12 @@ export class EmployeeMasterComponent implements OnInit {
       currentAddressLine2: employeeDetails.currentAddressLine2,
       currentCountry: employeeDetails.currentCountry,
       currentPincode: employeeDetails.currentPincode,
-      imagePath: [null],
+      imagePath: employeeDetails.imagePath,
       dateOfJoining: employeeDetails.dateOfJoining,
       designationId: employeeDetails.designationId
-      // skillMasterIds: ['', [Validators.required]],
     });
+    this.photo = CONTEXT_PATH + employeeDetails.imagePath;
+    console.log('this.photo : ', this.photo);
     this.getStateListByCountryIdForPerState();
     this.getStateListByCountryIdForCurState();
     this.employeeForm.patchValue({
@@ -410,19 +472,14 @@ export class EmployeeMasterComponent implements OnInit {
         }
         return;
       }
-      this.employeeForm.patchValue({
-        imagePath: this.file
-      });
       const reader = new FileReader();
       reader.onload = () => {
         this.photo = reader.result as string;
       }
       reader.readAsDataURL(this.file);
-      // let data = new FormData();
-      // data.append("file", this.file);
-      // // data.append("location", "/src/main/resources/images");
-      // this.employeeForm.controls.imagePath.setValue(data);
-      // this.employeeForm.get('imagePath').updateValueAndValidity();
+      this.employeeForm.controls.imagePath.setValue(this.file);
+      this.employeeForm.get('imagePath').updateValueAndValidity();
+      console.log('photo : ', this.photo);
     }
   }
 }
